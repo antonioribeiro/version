@@ -1,0 +1,68 @@
+<?php
+
+namespace PragmaRX\TestsWatcher\Tests;
+
+use Orchestra\Testbench\TestCase as OrchestraTestCase;
+use PragmaRX\TestsWatcher\Package\ServiceProvider as TestsWatcherServiceProvider;
+
+abstract class TestCase extends OrchestraTestCase
+{
+    protected $database;
+
+    protected function config($key, $value = '---not-set---')
+    {
+        if ($value !== '---not-set---') {
+            $this->app['config']->set("version.{$key}", $value);
+        }
+
+        return $this->app['config']->get("version.{$key}");
+    }
+
+    private function configureDatabase()
+    {
+        if (!file_exists($path = __DIR__.'/databases')) {
+            mkdir($path);
+        }
+
+        touch($this->database = tempnam($path, 'database.sqlite.'));
+
+        app()->config->set(
+            'database.connections.testbench',
+            [
+                'driver'   => 'sqlite',
+                'database' => $this->database,
+                'prefix'   => '',
+            ]
+        );
+    }
+
+    private function deleteDatabase()
+    {
+        @unlink($this->database);
+    }
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->configureDatabase();
+
+        $this->artisan('migrate:fresh', ['--database' => 'testbench']);
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $this->deleteDatabase();
+    }
+
+    protected function getPackageProviders($app)
+    {
+        $this->app = $app;
+
+        return [
+            TestsWatcherServiceProvider::class,
+        ];
+    }
+}

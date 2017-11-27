@@ -1,0 +1,48 @@
+{
+    "name": "pragmarx/version",
+
+    "description": "A Tests Watcher Service & Dashboard Package",
+
+    "keywords": [
+        "laravel", "version", "versioning"
+    ],
+
+    "license": "MIT",
+
+    "authors": [
+        {
+            "name": "Antonio Carlos Ribeiro",
+            "email": "acr@antoniocarlosribeiro.com",
+            "role": "Creator & Designer"
+        }
+    ],
+
+    "require": {
+        "php": ">=7.0",
+        "laravel/framework": ">=5.5"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": ">=5.7",
+        "orchestra/testbench": "~3.5"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "PragmaRX\\Version\\Package\\": "src/package",
+            "PragmaRX\\Version\\Tests\\": "tests/"
+        }
+    },
+
+    "extra": {
+        "component": "package",
+        "laravel": {
+            "providers": [
+                "PragmaRX\\Version\\Package\\ServiceProvider"
+            ],
+            "aliases": {
+                "Version": "PragmaRX\\Version\\Package\\Facade"
+            }
+        }
+    }
+}
