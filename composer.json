@@ -45,5 +45,7 @@
                 "Version": "PragmaRX\\Version\\Package\\Facade"
             }
         }
-    }
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
 }
