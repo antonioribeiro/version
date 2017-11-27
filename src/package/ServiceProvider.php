@@ -3,7 +3,6 @@
 namespace PragmaRX\Version\Package;
 
 use PragmaRX\Version\Package\Service as Version;
-use PragmaRX\YamlConf\Package\Service as YamlConf;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 class ServiceProvider extends IlluminateServiceProvider
@@ -41,8 +40,6 @@ class ServiceProvider extends IlluminateServiceProvider
     public function register()
     {
         $this->registerService();
-
-        $this->registerConfig();
     }
 
     /**
@@ -62,16 +59,6 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $this->app->singleton('pragmarx.version', function ($app) {
             return $app->make(Version::class);
-        });
-    }
-
-    /**
-     * Register service service.
-     */
-    private function registerConfig()
-    {
-        $this->app->singleton('pragmarx.yaml-conf', function ($app) {
-            return $app->make(YamlConf::class);
         });
     }
 }

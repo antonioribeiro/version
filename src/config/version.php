@@ -8,6 +8,8 @@ return [
         'minor' => '0',
 
         'patch' => '0',
+
+        'format' => '{$major}.{$minor}.{$patch}'
     ],
 
     'git' => [
@@ -21,7 +23,7 @@ return [
     'display' => [
         'full' => 'version {$version} (build {$commit})',
 
-        'compact' => 'v. {$major}.{$major}.{$build}',
+        'compact' => 'v. {$major}.{$minor}.{$patch}-{$build}',
     ],
 
 ];

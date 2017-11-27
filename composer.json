@@ -19,7 +19,8 @@
 
     "require": {
         "php": ">=7.0",
-        "laravel/framework": ">=5.5"
+        "laravel/framework": ">=5.5",
+        "pragmarx/yaml-conf": "dev-master"
     },
 
     "require-dev": {

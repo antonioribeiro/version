@@ -1,23 +1,33 @@
 <?php
 
-namespace PragmaRX\TestsWatcher\Tests;
+namespace PragmaRX\Version\Tests;
 
-use PHPUnit\Framework\TestCase;
-use PragmaRX\TestsWatcher\Package\Services\Watcher;
+use PragmaRX\Version\Package\Facade as Version;
+use PragmaRX\Version\Package\Service as VersionService;
 
-class DashboardTest extends TestCase
+class VersionTest extends TestCase
 {
-    private $watcher;
+    /**
+     * @var Version
+     */
+    private $version;
+
+    const currentVersion = '1.0.0';
 
     public function setUp()
     {
         parent::setup();
 
-        $this->watcher = app(Watcher::class);
+        $this->version = Version::instance();
     }
 
-    public function test_can_instantiate_watcher()
+    public function test_can_instantiate_service()
     {
-        $this->assertInstanceOf(Watcher::class, $this->watcher);
+        $this->assertInstanceOf(VersionService::class, $this->version);
+    }
+
+    public function test_can_get_version()
+    {
+        $this->assertEquals(static::currentVersion, $this->version->current());
     }
 }
