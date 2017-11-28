@@ -6,7 +6,6 @@ current:
 cache:
   enabled: true
   key: pragmarx-version
-  manager: cache # Illuminate\Support\Facades\Cache
 build:
   value: # if set overrides command
   command: "git ls-remote {$repository} refs/heads/master"

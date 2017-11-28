@@ -2,15 +2,10 @@
 
 namespace PragmaRX\Version\Package\Support;
 
+use Illuminate\Support\Facades\Cache as IlluminateCache;
+
 trait Cache
 {
-    /**
-     * Cache manager instance.
-     *
-     * @var
-     */
-    protected $cache;
-
     /**
      * Add something to the cache.
      *
@@ -20,7 +15,7 @@ trait Cache
      */
     protected function cachePut($key, $value, $minutes = 10)
     {
-        $this->cache->put($key, $value, $minutes);
+        IlluminateCache::put($key, $value, $minutes);
     }
 
     /**
@@ -32,7 +27,7 @@ trait Cache
     protected function cacheGet($key)
     {
         if ($this->config('cache.enabled')) {
-            return $this->cache->get($key);
+            return IlluminateCache::get($key);
         }
 
         return null;
@@ -54,7 +49,7 @@ trait Cache
      */
     public function clearCache()
     {
-        $this->cache->forget($this->key(static::BUILD_CACHE_KEY));
+        IlluminateCache::forget($this->key(static::BUILD_CACHE_KEY));
     }
 
     /**

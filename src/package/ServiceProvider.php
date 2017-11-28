@@ -4,6 +4,7 @@ namespace PragmaRX\Version\Package;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
+use PragmaRX\Version\Package\Console\Commands\Build;
 
 class ServiceProvider extends IlluminateServiceProvider
 {
@@ -26,7 +27,7 @@ class ServiceProvider extends IlluminateServiceProvider
 
     private function getConfigFile()
     {
-        return config_path('version.yaml');
+        return config_path('version.yml');
     }
 
     /**
@@ -45,7 +46,7 @@ class ServiceProvider extends IlluminateServiceProvider
     private function publishConfiguration()
     {
         $this->publishes([
-            __DIR__.'/../config/version.yaml' => $this->getConfigFile(),
+            __DIR__.'/../config/version.yml' => $this->getConfigFile(),
         ]);
     }
 
@@ -59,12 +60,40 @@ class ServiceProvider extends IlluminateServiceProvider
         $this->registerService();
 
         $this->registerBlade();
+
+        $this->registerCommands();
     }
 
+    /**
+     * Register Blade directives
+     */
     private function registerBlade()
     {
         Blade::directive('version', function ($format) {
             return "<?php echo app('pragmarx.version')->format($format); ?>";
+        });
+    }
+
+    /**
+     * Register command.
+     *
+     * @param $name
+     * @param \Closure $command
+     */
+    private function registerCommand($name, \Closure $command)
+    {
+        $this->app->singleton($name, $command);
+
+        $this->commands($name);
+    }
+
+    /**
+     * Register Artisan commands
+     */
+    private function registerCommands()
+    {
+        $this->registerCommand('pragmarx.version.build.command', function () {
+            return new Build();
         });
     }
 

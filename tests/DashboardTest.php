@@ -40,6 +40,11 @@ class VersionTest extends TestCase
         $this->assertInstanceOf(VersionService::class, $this->version);
     }
 
+    public function test_config_is_properly_loaded()
+    {
+        $this->assertEquals('version {$major}.{$minor}.{$patch} (build {$build})', config('version.format.full'));
+    }
+
     public function test_can_get_version()
     {
         $this->assertEquals(static::currentVersion, $this->version->version());
@@ -98,6 +103,20 @@ class VersionTest extends TestCase
         $result = $this->render(Blade::compileString("This is my @version('full')"));
 
         $this->assertEquals("This is my version 1.0.0 (build {$build})", $result);
+    }
+
+    public function test_direct_from_app()
+    {
+        $build = $this->getBuild();
+
+        $result = app('pragmarx.version')->format('full');
+
+        $this->assertEquals("version 1.0.0 (build {$build})", $result);
+    }
+
+    public function test_config()
+    {
+        $this->assertEquals('version {$major}.{$minor}.{$patch} (build {$build})', config('version.format.full'));
     }
 
     function render($view)

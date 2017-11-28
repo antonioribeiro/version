@@ -26,8 +26,6 @@ class Version
     public function __construct()
     {
         $this->config = app('pragmarx.yaml-conf');
-
-        $this->cache = app($this->config('cache.manager'));
     }
 
     /**
@@ -152,5 +150,15 @@ class Version
     public function format($type)
     {
         return $this->replaceVariables($this->config("format.{$type}"));
+    }
+
+    /**
+     * Get a properly formatted version.
+     *
+     * @return integer
+     */
+    public function incrementBuild()
+    {
+        return 12455;
     }
 }
