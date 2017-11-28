@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Version\Package;
 
-use PragmaRX\Version\Package\Service as Version;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 class ServiceProvider extends IlluminateServiceProvider
@@ -20,6 +19,23 @@ class ServiceProvider extends IlluminateServiceProvider
     public function boot()
     {
         $this->publishConfiguration();
+
+        $this->loadConfig();
+    }
+
+    private function getConfigFile()
+    {
+        return config_path('version.yaml');
+    }
+
+    /**
+     * Load config file to Laravel config
+     */
+    private function loadConfig()
+    {
+        $this->app
+            ->make('pragmarx.yaml-conf')
+            ->loadToConfig($this->getConfigFile(), 'version');
     }
 
     /**
@@ -28,7 +44,7 @@ class ServiceProvider extends IlluminateServiceProvider
     private function publishConfiguration()
     {
         $this->publishes([
-            __DIR__.'/../config/version.php' => config_path('version.php'),
+            __DIR__.'/../config/version.yaml' => $this->getConfigFile(),
         ]);
     }
 

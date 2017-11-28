@@ -47,5 +47,29 @@
         }
     },
     "prefer-stable": true,
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+
+
+
+
+
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/antonioribeiro/fullcontact-api-php.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/antonioribeiro/version.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/antonioribeiro/yaml-conf.git"
+        }
+    ]
+
+
+
+
+
 }

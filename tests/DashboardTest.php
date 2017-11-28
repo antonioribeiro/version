@@ -2,8 +2,8 @@
 
 namespace PragmaRX\Version\Tests;
 
-use PragmaRX\Version\Package\Facade as Version;
-use PragmaRX\Version\Package\Service as VersionService;
+use PragmaRX\Version\Package\Facade as VersionFacade;
+use PragmaRX\Version\Package\Version as VersionService;
 
 class VersionTest extends TestCase
 {
@@ -18,7 +18,7 @@ class VersionTest extends TestCase
     {
         parent::setup();
 
-        $this->version = Version::instance();
+        $this->version = VersionFacade::instance();
     }
 
     public function test_can_instantiate_service()
@@ -28,6 +28,6 @@ class VersionTest extends TestCase
 
     public function test_can_get_version()
     {
-        $this->assertEquals(static::currentVersion, $this->version->current());
+        $this->assertEquals(static::currentVersion, $this->version->version());
     }
 }
