@@ -13,6 +13,7 @@ build:
   repository: "{{ env('APP_GIT_REPOSITORY') }}"
   length: 6
 format:
-  full: "version {$major}.{$minor}.{$patch} (build {$build})"
+  version: "{$major}.{$minor}.{$patch} (build {$build})"
+  full: "version {{'format.version'}}"
   compact: "v. {$major}.{$minor}.{$patch}-{$build}"
   ## add as many formats as you need
