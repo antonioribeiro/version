@@ -3,9 +3,16 @@ current:
   minor: 0
   patch: 0
   format: "{$major}.{$minor}.{$patch}"
+cache:
+  enabled: true
+  key: pragmarx-version
+  manager: cache # Illuminate\Support\Facades\Cache
 build:
-  command: "git ls-remote %s refs/heads/master"
+  value: # if set overrides command
+  command: "git ls-remote {$repository} refs/heads/master"
   repository: "{{ env('APP_GIT_REPOSITORY') }}"
-display:
-  full: "version {$version} (build {$commit})"
+  length: 6
+format:
+  full: "version {$major}.{$minor}.{$patch} (build {$build})"
   compact: "v. {$major}.{$minor}.{$patch}-{$build}"
+  ## add as many formats as you need

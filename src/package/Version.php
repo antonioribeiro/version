@@ -4,26 +4,72 @@ namespace PragmaRX\Version\Package;
 
 class Version
 {
+    const BUILD_CACHE_KEY = 'build';
+
     /**
-     * @var \PragmaRX\YamlConf\Package\Service
+     * The config loader.
+     *
+     * @var \PragmaRX\YamlConf\Package\YamlConf
      */
     protected $config;
 
+    /**
+     * @var
+     */
+    private $cache;
+
+    /**
+     * Version constructor.
+     */
     public function __construct()
     {
         $this->config = app('pragmarx.yaml-conf');
+
+        $this->cache = app($this->config('cache.manager'));
     }
 
+    private function cache($key, $value)
+    {
+        $this->cache->put($key, $value);
+    }
+
+    private function cached($key)
+    {
+        if ($this->config('cache.enabled')) {
+            return $this->cache->get($key);
+        }
+
+        return null;
+    }
+
+    /**
+     * Get config value.
+     *
+     * @param $string
+     * @return \Illuminate\Config\Repository|mixed
+     */
     protected function config($string)
     {
         return config("version.{$string}");
     }
 
-    private function getCurrentBuild()
+    /**
+     * Make the cache key.
+     *
+     * @param $string
+     * @return string
+     */
+    private function key($string)
     {
-        return 'h34F12a';
+        return $this->config('cache.enabled').'-'.$string;
     }
 
+    /**
+     * Replace text variables with their values.
+     *
+     * @param $string
+     * @return mixed
+     */
     protected function replaceVariables($string)
     {
         return str_replace(
@@ -31,13 +77,15 @@ class Version
                 '{$major}',
                 '{$minor}',
                 '{$patch}',
+                '{$repository}',
                 '{$build}',
             ],
             [
                 $this->config('current.major'),
                 $this->config('current.minor'),
                 $this->config('current.patch'),
-                $this->getCurrentBuild(),
+                $this->config('build.repository'),
+                $this->build(),
             ],
             $string
         );
@@ -50,7 +98,7 @@ class Version
      */
     public function version()
     {
-        return $this->makeVersion();
+        return $this->replaceVariables($this->makeVersion());
     }
 
     /**
@@ -60,7 +108,25 @@ class Version
      */
     public function build()
     {
-        return $this->config->get('version.current');
+        if (!is_null($value = $this->config('build.value'))) {
+            return $value;
+        }
+
+        if ($value = $this->cached($key = $this->key(static::BUILD_CACHE_KEY))) {
+            return $value;
+        }
+
+        $command = str_replace(
+            '{$repository}',
+            $this->config('build.repository'),
+            $this->config('build.command')
+        );
+
+        $value = substr(@exec($command), 0, $this->config('build.length'));
+
+        $this->cache($key, $value);
+
+        return $value;
     }
 
     /**
@@ -70,11 +136,45 @@ class Version
      */
     protected function makeVersion()
     {
-        return $this->replaceVariables(config('version.current.format'));
+        return $this->config('current.format');
     }
 
+    /**
+     * Get the current object instance.
+     *
+     * @return $this
+     */
     public function instance()
     {
         return $this;
+    }
+
+    /**
+     * Get the current object instance.
+     */
+    public function clearCache()
+    {
+        $this->cache->forget($this->key(static::BUILD_CACHE_KEY));
+    }
+
+    /**
+     * Get the current object instance.
+     */
+    public function refreshBuild()
+    {
+        $this->clearCache();
+
+        return $this->build();
+    }
+
+    /**
+     * Get a properly formatted version.
+     *
+     * @param $type
+     * @return mixed
+     */
+    public function format($type)
+    {
+        return $this->replaceVariables($this->config("format.{$type}"));
     }
 }
