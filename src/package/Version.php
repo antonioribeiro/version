@@ -27,6 +27,13 @@ class Version
     protected $config;
 
     /**
+     * The config file.
+     *
+     * @var string
+     */
+    private $configFile;
+
+    /**
      * Version constructor.
      */
     public function __construct()
@@ -123,6 +130,13 @@ class Version
         );
     }
 
+    private function updateConfig($config)
+    {
+        config(['version' => $config]);
+
+        $this->config->saveAsYaml($config, $this->configFile);
+    }
+
     /**
      * Get the current version.
      *
@@ -185,6 +199,17 @@ class Version
      */
     public function incrementBuild()
     {
-        return 12455;
+        $config = config('version');
+
+        $config['build']['number']++;
+
+        $this->updateConfig($config);
+
+        return $config['build']['number'];
+    }
+
+    public function setConfigFile($file)
+    {
+        $this->configFile = $file;
     }
 }

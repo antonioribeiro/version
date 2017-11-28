@@ -119,6 +119,15 @@ class VersionTest extends TestCase
         $this->assertEquals('version {$major}.{$minor}.{$patch} (build {$build})', config('version.format.full'));
     }
 
+    public function test_increment_build()
+    {
+        $this->version->incrementBuild();
+
+        config(['version.build.mode' => 'number']);
+
+        $this->assertEquals('701032', $this->version->build());
+    }
+
     function render($view)
     {
         ob_get_level();
