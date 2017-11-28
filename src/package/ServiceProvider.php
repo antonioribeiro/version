@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Version\Package;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 class ServiceProvider extends IlluminateServiceProvider
@@ -56,6 +57,15 @@ class ServiceProvider extends IlluminateServiceProvider
     public function register()
     {
         $this->registerService();
+
+        $this->registerBlade();
+    }
+
+    private function registerBlade()
+    {
+        Blade::directive('version', function ($format) {
+            return "<?php echo app('pragmarx.version')->format($format); ?>";
+        });
     }
 
     /**

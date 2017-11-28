@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Version\Tests;
 
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Blade;
 use PragmaRX\Version\Package\Facade as VersionFacade;
 use PragmaRX\Version\Package\Version as VersionService;
 
@@ -15,9 +15,15 @@ class VersionTest extends TestCase
 
     const currentVersion = '1.0.0';
 
+    static $build;
+
     private function getBuild()
     {
-        return substr(exec('git ls-remote https://github.com/antonioribeiro/version.git refs/heads/master'), 0, 6);
+        if (!static::$build) {
+            static::$build = substr(exec('git ls-remote https://github.com/antonioribeiro/version.git refs/heads/master'), 0, 6);
+        }
+
+        return static::$build;
     }
 
     public function setUp()
@@ -68,6 +74,15 @@ class VersionTest extends TestCase
         $this->assertEquals($this->getBuild(), $this->version->refreshBuild());
     }
 
+    public function test_add_format()
+    {
+        $build = $this->getBuild();
+
+        config(['version.format.mine' => $value = '{$major}-{$build}']);
+
+        $this->assertEquals("1-{$build}", $this->version->format('mine'));
+    }
+
     public function test_format()
     {
         $build = $this->getBuild();
@@ -76,12 +91,23 @@ class VersionTest extends TestCase
         $this->assertEquals("v. 1.0.0-{$build}", $this->version->format('compact'));
     }
 
-    public function test_add_format()
+    public function test_blade()
     {
         $build = $this->getBuild();
 
-        config(['version.format.mine' => $value = '{$major}-{$build}']);
+        $result = $this->render(Blade::compileString("This is my @version('full')"));
 
-        $this->assertEquals("1-{$build}", $this->version->format('mine'));
+        $this->assertEquals("This is my version 1.0.0 (build {$build})", $result);
+    }
+
+    function render($view)
+    {
+        ob_get_level();
+
+        ob_start();
+
+        eval('?' . '>' . $view);
+
+        return ob_get_clean();
     }
 }

@@ -2,8 +2,15 @@
 
 namespace PragmaRX\Version\Package;
 
+use PragmaRX\Version\Package\Support\Cache;
+
 class Version
 {
+    use Cache;
+
+    /**
+     * The cache key suffix for build.
+     */
     const BUILD_CACHE_KEY = 'build';
 
     /**
@@ -14,11 +21,6 @@ class Version
     protected $config;
 
     /**
-     * @var
-     */
-    private $cache;
-
-    /**
      * Version constructor.
      */
     public function __construct()
@@ -26,20 +28,6 @@ class Version
         $this->config = app('pragmarx.yaml-conf');
 
         $this->cache = app($this->config('cache.manager'));
-    }
-
-    private function cache($key, $value)
-    {
-        $this->cache->put($key, $value);
-    }
-
-    private function cached($key)
-    {
-        if ($this->config('cache.enabled')) {
-            return $this->cache->get($key);
-        }
-
-        return null;
     }
 
     /**
@@ -54,23 +42,29 @@ class Version
     }
 
     /**
-     * Make the cache key.
-     *
-     * @param $string
-     * @return string
-     */
-    private function key($string)
-    {
-        return $this->config('cache.enabled').'-'.$string;
-    }
-
-    /**
      * Replace text variables with their values.
      *
      * @param $string
      * @return mixed
      */
     protected function replaceVariables($string)
+    {
+        do {
+            $original = $string;
+
+            $string = $this->searchAndReplaceVariables($string);
+        } while ($original !== $string);
+
+        return $string;
+    }
+
+    /**
+     * Search and replace variables ({$var}) in a string.
+     *
+     * @param $string
+     * @return mixed
+     */
+    protected function searchAndReplaceVariables($string)
     {
         return str_replace(
             [
@@ -112,7 +106,7 @@ class Version
             return $value;
         }
 
-        if ($value = $this->cached($key = $this->key(static::BUILD_CACHE_KEY))) {
+        if ($value = $this->cacheGet($key = $this->key(static::BUILD_CACHE_KEY))) {
             return $value;
         }
 
@@ -124,7 +118,7 @@ class Version
 
         $value = substr(@exec($command), 0, $this->config('build.length'));
 
-        $this->cache($key, $value);
+        $this->cachePut($key, $value);
 
         return $value;
     }
@@ -147,24 +141,6 @@ class Version
     public function instance()
     {
         return $this;
-    }
-
-    /**
-     * Get the current object instance.
-     */
-    public function clearCache()
-    {
-        $this->cache->forget($this->key(static::BUILD_CACHE_KEY));
-    }
-
-    /**
-     * Get the current object instance.
-     */
-    public function refreshBuild()
-    {
-        $this->clearCache();
-
-        return $this->build();
     }
 
     /**
