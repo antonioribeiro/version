@@ -7,12 +7,14 @@ cache:
   enabled: true
   key: pragmarx-version
 build:
-  value: # if set overrides command
-  command: "git ls-remote {$repository} refs/heads/master"
+  mode: git-local # git-remote or number
+  number: 701031
+  git-local: "git rev-parse --verify HEAD"
+  git-remote: "git ls-remote {$repository} refs/heads/master"
   repository: "{{ env('APP_GIT_REPOSITORY') }}"
   length: 6
 format:
   version: "{$major}.{$minor}.{$patch} (build {$build})"
   full: "version {{'format.version'}}"
-  compact: "v. {$major}.{$minor}.{$patch}-{$build}"
+  compact: "v{$major}.{$minor}.{$patch}-{$build}"
   ## add as many formats as you need

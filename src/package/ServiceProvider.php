@@ -5,6 +5,7 @@ namespace PragmaRX\Version\Package;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use PragmaRX\Version\Package\Console\Commands\Build;
+use PragmaRX\Version\Package\Console\Commands\Show;
 
 class ServiceProvider extends IlluminateServiceProvider
 {
@@ -94,6 +95,10 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $this->registerCommand('pragmarx.version.build.command', function () {
             return new Build();
+        });
+
+        $this->registerCommand('pragmarx.version.show.command', function () {
+            return new Show();
         });
     }
 

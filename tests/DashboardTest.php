@@ -52,26 +52,26 @@ class VersionTest extends TestCase
 
     public function test_can_get_build()
     {
-        $value = $this->getBuild();
+        $number = $this->getBuild();
 
-        $this->assertEquals($value, $this->version->build());
-        $this->assertEquals($value, $this->version->build());
+        $this->assertEquals($number, $this->version->build());
+        $this->assertEquals($number, $this->version->build());
     }
 
     public function test_uncache()
     {
-        $value = $this->getBuild();
+        $number = $this->getBuild();
 
         config(['version.cache.enabled' => false]);
 
-        $this->assertEquals($value, $this->version->build());
+        $this->assertEquals($number, $this->version->build());
     }
 
-    public function test_get_build_by_value()
+    public function test_get_build_by_number()
     {
-        config(['version.build.value' => $value = 'anyval']);
+        config(['version.build.mode' => 'number']);
 
-        $this->assertEquals($value, $this->version->build());
+        $this->assertEquals('701031', $this->version->build());
     }
 
     public function test_refresh_build()
@@ -83,7 +83,7 @@ class VersionTest extends TestCase
     {
         $build = $this->getBuild();
 
-        config(['version.format.mine' => $value = '{$major}-{$build}']);
+        config(['version.format.mine' => $number = '{$major}-{$build}']);
 
         $this->assertEquals("1-{$build}", $this->version->format('mine'));
     }
@@ -93,7 +93,7 @@ class VersionTest extends TestCase
         $build = $this->getBuild();
 
         $this->assertEquals("version 1.0.0 (build {$build})", $this->version->format('full'));
-        $this->assertEquals("v. 1.0.0-{$build}", $this->version->format('compact'));
+        $this->assertEquals("v1.0.0-{$build}", $this->version->format('compact'));
     }
 
     public function test_blade()
