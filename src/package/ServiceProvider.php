@@ -97,28 +97,8 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     private function registerCommands()
     {
-        $this->registerCommand('pragmarx.version.build.command', function () {
-            return new Build();
-        });
-
-        $this->registerCommand('pragmarx.version.show.command', function () {
-            return new Show();
-        });
-
-        $this->registerCommand('pragmarx.version.major.command', function () {
-            return new Major();
-        });
-
-        $this->registerCommand('pragmarx.version.minor.command', function () {
-            return new Minor();
-        });
-
-        $this->registerCommand('pragmarx.version.patch.command', function () {
-            return new Patch();
-        });
-
-        $this->registerCommand('pragmarx.version.refresh.command', function () {
-            return new Refresh();
+        collect($this->getCommandList())->each(function ($commandBuilder, $key) {
+            $this->registerCommand($key, $commandBuilder);
         });
     }
 
@@ -134,5 +114,34 @@ class ServiceProvider extends IlluminateServiceProvider
 
             return $version;
         });
+    }
+
+    public function getCommandList()
+    {
+        return [
+            'pragmarx.version.build.command' => function () {
+                return new Build();
+            },
+
+            'pragmarx.version.show.command' => function () {
+                return new Show();
+            },
+
+            'pragmarx.version.major.command' => function () {
+                return new Major();
+            },
+
+            'pragmarx.version.minor.command' => function () {
+                return new Minor();
+            },
+
+            'pragmarx.version.patch.command' => function () {
+                return new Patch();
+            },
+
+            'pragmarx.version.refresh.command' => function () {
+                return new Refresh();
+            },
+        ];
     }
 }
