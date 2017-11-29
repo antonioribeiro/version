@@ -1,12 +1,12 @@
 # Version
-### A Laravel app versioning package
+### Take control over your Laravel app version
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/pragmarx/version.svg?style=flat-square)](https://packagist.org/packages/pragmarx/version)
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md) 
 [![Downloads](https://img.shields.io/packagist/dt/pragmarx/version.svg?style=flat-square)](https://packagist.org/packages/pragmarx/version) 
 [![Code Quality](https://img.shields.io/scrutinizer/g/antonioribeiro/version.svg?style=flat-square)](https://scrutinizer-version.com/g/antonioribeiro/version/?branch=master) 
 [![Build](https://img.shields.io/scrutinizer/build/g/antonioribeiro/version.svg?style=flat-square)](https://scrutinizer-version.com/g/antonioribeiro/version/?branch=master) 
-[![StyleCI](https://styleversion.io/repos/27037779/shield)](https://styleversion.io/repos/27037779)
+[![StyleCI](https://styleversion.io/repos/112244465/shield)](https://styleversion.io/repos/112244465)
 
 ## What is it?
 
