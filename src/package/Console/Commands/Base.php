@@ -19,4 +19,14 @@ class Base extends Command
 
         $this->line(str_repeat('-', max($len, 80)));
     }
+
+    /**
+     * Display the current app version.
+     *
+     * @param string $format
+     */
+    public function displayAppVersion($format = 'full')
+    {
+        $this->info(config('app.name').' '.app('pragmarx.version')->format($format));
+    }
 }

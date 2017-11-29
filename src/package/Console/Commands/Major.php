@@ -2,21 +2,21 @@
 
 namespace PragmaRX\Version\Package\Console\Commands;
 
-class Show extends Base
+class Major extends Base
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'version:show {--format= : Use a different format (default: full)}';
+    protected $signature = 'version:major';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Show current app version and build';
+    protected $description = 'Increment app major version';
 
     /**
      * Create a new command instance.
@@ -31,6 +31,10 @@ class Show extends Base
      */
     public function handle()
     {
-        $this->displayAppVersion($this->option('format') ?: 'full');
+        $number = app('pragmarx.version')->incrementMajor();
+
+        $this->info("New major version: {$number}");
+
+        $this->displayAppVersion();
     }
 }

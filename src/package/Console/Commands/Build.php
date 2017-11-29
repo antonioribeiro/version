@@ -9,7 +9,7 @@ class Build extends Base
      *
      * @var string
      */
-    protected $signature = 'version:build';
+    protected $signature = 'version:build {--increment-by= : Increment by a different amount than config }';
 
     /**
      * The console command description.
@@ -31,10 +31,10 @@ class Build extends Base
      */
     public function handle()
     {
-        $build = app('pragmarx.version')->incrementBuild();
+        $build = app('pragmarx.version')->incrementBuild($this->option('increment-by'));
 
         $this->info("New build: {$build}");
 
-        $this->info(config('app.name').' '.app('pragmarx.version')->format('full'));
+        $this->displayAppVersion();
     }
 }

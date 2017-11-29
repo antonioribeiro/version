@@ -3,10 +3,11 @@
 namespace PragmaRX\Version\Package;
 
 use PragmaRX\Version\Package\Support\Cache;
+use PragmaRX\Version\Package\Support\Increment;
 
 class Version
 {
-    use Cache;
+    use Cache, Increment;
 
     const BUILD_CACHE_KEY = 'build';
 
@@ -132,13 +133,6 @@ class Version
         );
     }
 
-    private function updateConfig($config)
-    {
-        config(['version' => $config]);
-
-        $this->config->saveAsYaml($config, $this->configFile);
-    }
-
     /**
      * Get the current version.
      *
@@ -198,21 +192,10 @@ class Version
     }
 
     /**
-     * Get a properly formatted version.
+     * Set the current config file.
      *
-     * @return int
+     * @param $file
      */
-    public function incrementBuild()
-    {
-        $config = config('version');
-
-        $config['build']['number']++;
-
-        $this->updateConfig($config);
-
-        return $config['build']['number'];
-    }
-
     public function setConfigFile($file)
     {
         $this->configFile = $file;

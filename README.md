@@ -104,6 +104,29 @@ Or choose the format:
 @version('full')
 @version('compact')
 ```
+### Artisan commands
+
+Those are the commands you have at your disposal:
+
+``` php
+  version:show     Show current app version and build
+
+  version:major    Increment app major version
+
+  version:minor    Increment app minor version
+
+  version:patch    Increment app patch version
+
+  version:build    Increment app build number
+```
+
+Here's an example of `version:minor`:
+
+``` php
+$ php artisan version:minor
+New minor version: 5
+MyApp version 1.5.0 (build 701045)
+```
 
 ## Install
 

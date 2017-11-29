@@ -13,6 +13,7 @@ build:
   git-remote: "git ls-remote {$repository} refs/heads/master"
   repository: "{{ env('VERSION_GIT_REMOTE_REPOSITORY') }}"
   length: 6
+  increment_by: 1
 format:
   version: "{$major}.{$minor}.{$patch} (build {$build})"
   full: "version {{'format.version'}}"

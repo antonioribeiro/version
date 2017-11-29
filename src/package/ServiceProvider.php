@@ -5,6 +5,9 @@ namespace PragmaRX\Version\Package;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use PragmaRX\Version\Package\Console\Commands\Build;
+use PragmaRX\Version\Package\Console\Commands\Major;
+use PragmaRX\Version\Package\Console\Commands\Minor;
+use PragmaRX\Version\Package\Console\Commands\Patch;
 use PragmaRX\Version\Package\Console\Commands\Show;
 
 class ServiceProvider extends IlluminateServiceProvider
@@ -99,6 +102,18 @@ class ServiceProvider extends IlluminateServiceProvider
 
         $this->registerCommand('pragmarx.version.show.command', function () {
             return new Show();
+        });
+
+        $this->registerCommand('pragmarx.version.major.command', function () {
+            return new Major();
+        });
+
+        $this->registerCommand('pragmarx.version.minor.command', function () {
+            return new Minor();
+        });
+
+        $this->registerCommand('pragmarx.version.patch.command', function () {
+            return new Patch();
         });
     }
 
