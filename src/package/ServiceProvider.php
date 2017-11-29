@@ -20,6 +20,20 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected $defer = false;
 
+    protected $commandList = [
+        'pragmarx.version.build.command' => Build::class,
+
+        'pragmarx.version.show.command' => Show::class,
+
+        'pragmarx.version.major.command' => Major::class,
+
+        'pragmarx.version.minor.command' => Minor::class,
+
+        'pragmarx.version.patch.command' => Patch::class,
+
+        'pragmarx.version.refresh.command' => Refresh::class,
+    ];
+
     /**
      * Boot Service Provider.
      */
@@ -83,11 +97,13 @@ class ServiceProvider extends IlluminateServiceProvider
      * Register command.
      *
      * @param $name
-     * @param \Closure $command
+     * @param $commandClass string
      */
-    private function registerCommand($name, \Closure $command)
+    private function registerCommand($name, $commandClass)
     {
-        $this->app->singleton($name, $command);
+        $this->app->singleton($name, function () use ($commandClass) {
+            return new $commandClass();
+        });
 
         $this->commands($name);
     }
@@ -97,8 +113,8 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     private function registerCommands()
     {
-        collect($this->getCommandList())->each(function ($commandBuilder, $key) {
-            $this->registerCommand($key, $commandBuilder);
+        collect($this->commandList)->each(function ($commandClass, $key) {
+            $this->registerCommand($key, $commandClass);
         });
     }
 
@@ -114,34 +130,5 @@ class ServiceProvider extends IlluminateServiceProvider
 
             return $version;
         });
-    }
-
-    public function getCommandList()
-    {
-        return [
-            'pragmarx.version.build.command' => function () {
-                return new Build();
-            },
-
-            'pragmarx.version.show.command' => function () {
-                return new Show();
-            },
-
-            'pragmarx.version.major.command' => function () {
-                return new Major();
-            },
-
-            'pragmarx.version.minor.command' => function () {
-                return new Minor();
-            },
-
-            'pragmarx.version.patch.command' => function () {
-                return new Patch();
-            },
-
-            'pragmarx.version.refresh.command' => function () {
-                return new Refresh();
-            },
-        ];
     }
 }

@@ -18,7 +18,7 @@ class Refresh extends Base
      *
      * @var string
      */
-    protected $description = 'Clear build cache and refresh it';
+    protected $description = 'Clear cache and refresh versions';
 
     /**
      * Create a new command instance.

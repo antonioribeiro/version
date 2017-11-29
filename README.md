@@ -140,7 +140,7 @@ Those are the commands you have at your disposal:
 
   version:build    Increment app build number
   
-  version:refresh  Clear build cache and refresh it
+  version:refresh  Clear cache and refresh versions
 ```
 
 Here's an example of `version:minor`:
