@@ -54,6 +54,27 @@ class Version
     }
 
     /**
+     * Get a cached value or execute a shell command to retrieve it.
+     *
+     * @param $command
+     * @param $cacheKey
+     * @param int $length
+     * @return bool|mixed|null|string
+     */
+    private function getCachedOrShellExecute($command, $cacheKey, $length = 256)
+    {
+        if ($value = $this->cacheGet($key = $this->key($cacheKey))) {
+            return $value;
+        }
+
+        $value = substr($this->shell($command), 0, $length);
+
+        $this->cachePut($key, $value);
+
+        return $value;
+    }
+
+    /**
      * Execute an shell command.
      *
      * @param $command
@@ -74,15 +95,11 @@ class Version
      */
     private function getGitCommit()
     {
-        if ($value = $this->cacheGet($key = $this->key(static::VERSION_CACHE_KEY))) {
-            return $value;
-        }
-
-        $value = substr($this->shell($this->makeGitHashRetrieverCommand()), 0, $this->config('build.length'));
-
-        $this->cachePut($key, $value);
-
-        return $value;
+        return $this->getCachedOrShellExecute(
+            $this->makeGitHashRetrieverCommand(),
+            static::VERSION_CACHE_KEY,
+            $this->config('build.length')
+        );
     }
 
     /**
@@ -116,17 +133,10 @@ class Version
      */
     private function getVersionFromGit()
     {
-        if ($value = $this->cacheGet($key = $this->key(static::VERSION_CACHE_KEY))) {
-            return $value;
-        }
-
-        $value = substr($this->shell($this->config('git.version.command')), 0, 64);
-
-        if (!empty($value)) {
-            $this->cachePut($key, $value);
-        }
-
-        return $value;
+        return $this->getCachedOrShellExecute(
+            $this->config('git.version.command'),
+            static::VERSION_CACHE_KEY
+        );
     }
 
     /**
