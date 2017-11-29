@@ -15,7 +15,7 @@ class VersionTest extends TestCase
 
     const currentVersion = '1.0.0';
 
-    static $build;
+    public static $build;
 
     private function getBuild()
     {
@@ -128,13 +128,13 @@ class VersionTest extends TestCase
         $this->assertEquals('701032', $this->version->build());
     }
 
-    function render($view)
+    public function render($view)
     {
         ob_get_level();
 
         ob_start();
 
-        eval('?' . '>' . $view);
+        eval('?'.'>'.$view);
 
         return ob_get_clean();
     }

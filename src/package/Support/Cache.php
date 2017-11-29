@@ -22,6 +22,7 @@ trait Cache
      * Retrieve something from cache.
      *
      * @param $key
+     *
      * @return null
      */
     protected function cacheGet($key)
@@ -29,19 +30,18 @@ trait Cache
         if ($this->config('cache.enabled')) {
             return IlluminateCache::get($key);
         }
-
-        return null;
     }
 
     /**
      * Make the cache key.
      *
      * @param $string
+     *
      * @return string
      */
     protected function key($string)
     {
-        return $this->config('cache.enabled') . '-' . $string;
+        return $this->config('cache.enabled').'-'.$string;
     }
 
     /**
