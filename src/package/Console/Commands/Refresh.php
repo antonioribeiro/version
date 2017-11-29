@@ -21,14 +21,6 @@ class Refresh extends Base
     protected $description = 'Clear cache and refresh versions';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle()

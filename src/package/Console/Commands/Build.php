@@ -19,14 +19,6 @@ class Build extends Base
     protected $description = 'Increment app build number';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle()

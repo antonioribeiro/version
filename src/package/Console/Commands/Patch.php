@@ -19,14 +19,6 @@ class Patch extends Base
     protected $description = 'Increment app patch version';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle()

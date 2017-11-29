@@ -19,14 +19,6 @@ class Show extends Base
     protected $description = 'Show current app version and build';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle()
