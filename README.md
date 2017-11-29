@@ -14,6 +14,10 @@
     <a href="https://styleci.io/repos/112244465"><img alt="StyleCI" src="https://styleci.io/repos/112244465/shield"></a>
 </p>
 
+## Description
+
+It helps you to keep and manage your application version, increment version numbers (major, minor, patch, build), and can also use your last commit hash as build number.
+
 ## Key features
 
 ### Easily control you app version using a YAML config file
