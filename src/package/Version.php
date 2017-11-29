@@ -34,13 +34,6 @@ class Version
     protected $config;
 
     /**
-     * The config file.
-     *
-     * @var string
-     */
-    private $configFile;
-
-    /**
      * Version constructor.
      */
     public function __construct()
@@ -294,15 +287,5 @@ class Version
         $type = $type ?: static::DEFAULT_FORMAT;
 
         return $this->replaceVariables($this->config("format.{$type}"));
-    }
-
-    /**
-     * Set the current config file.
-     *
-     * @param $file
-     */
-    public function setConfigFile($file)
-    {
-        $this->configFile = $file;
     }
 }

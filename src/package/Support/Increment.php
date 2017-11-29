@@ -5,6 +5,13 @@ namespace PragmaRX\Version\Package\Support;
 trait Increment
 {
     /**
+     * The config file.
+     *
+     * @var string
+     */
+    private $configFile;
+
+    /**
      * Get a properly formatted version.
      *
      * @param \Closure $incrementer
@@ -95,5 +102,15 @@ trait Increment
         config(['version' => $config]);
 
         $this->config->saveAsYaml($config, $this->configFile);
+    }
+
+    /**
+     * Set the current config file.
+     *
+     * @param $file
+     */
+    public function setConfigFile($file)
+    {
+        $this->configFile = $file;
     }
 }
