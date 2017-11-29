@@ -2,9 +2,9 @@
 
 namespace PragmaRX\Version\Tests;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cache;
 use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
 use PragmaRX\Version\Package\Facade as VersionFacade;
 use PragmaRX\Version\Package\Version as VersionService;
@@ -35,7 +35,7 @@ class VersionTest extends TestCase
 
     private function getVersion()
     {
-       return '5.5.23';
+        return '5.5.23';
     }
 
     public function setUp()

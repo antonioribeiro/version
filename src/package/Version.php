@@ -2,9 +2,9 @@
 
 namespace PragmaRX\Version\Package;
 
+use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
 use PragmaRX\Version\Package\Support\Cache;
 use PragmaRX\Version\Package\Support\Increment;
-use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
 
 class Version
 {
@@ -64,6 +64,7 @@ class Version
      * Execute an shell command.
      *
      * @param $command
+     *
      * @return string
      */
     private function shell($command)
@@ -107,6 +108,7 @@ class Version
      * Get a version.
      *
      * @param $type
+     *
      * @return string
      */
     private function getVersion($type)
@@ -138,7 +140,9 @@ class Version
      * Get version from the git repository.
      *
      * @param $type
+     *
      * @throws GitTagNotFound
+     *
      * @return string
      */
     private function gitVersion($type)
