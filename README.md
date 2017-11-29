@@ -129,7 +129,7 @@ Version will use it as your app build number
 
 Those are the commands you have at your disposal:
 
-``` php
+``` text
   version:show     Show current app version and build
 
   version:major    Increment app major version
@@ -145,7 +145,7 @@ Those are the commands you have at your disposal:
 
 Here's an example of `version:minor`:
 
-``` php
+``` text
 $ php artisan version:minor
 New minor version: 5
 MyApp version 1.5.0 (build 701045)
