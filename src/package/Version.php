@@ -190,8 +190,10 @@ class Version
      *
      * @return mixed
      */
-    public function format($type)
+    public function format($type = null)
     {
+        $type = $type ?: static::DEFAULT_FORMAT;
+
         return $this->replaceVariables($this->config("format.{$type}"));
     }
 

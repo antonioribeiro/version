@@ -20,7 +20,7 @@ class VersionTest extends TestCase
     private function getBuild()
     {
         if (!static::$build) {
-            static::$build = substr(exec('git ls-remote https://github.com/antonioribeiro/version.git refs/heads/master'), 0, 6);
+            static::$build = substr(exec('git rev-parse --verify HEAD'), 0, 6);
         }
 
         return static::$build;
@@ -30,7 +30,9 @@ class VersionTest extends TestCase
     {
         parent::setup();
 
-        putenv('APP_GIT_REPOSITORY=https://github.com/antonioribeiro/version.git');
+        putenv('VERSION_GIT_REMOTE_REPOSITORY=https://github.com/antonioribeiro/version.git');
+
+        config(['version.build.mode' => 'git-local']);
 
         $this->version = VersionFacade::instance();
     }
@@ -100,9 +102,14 @@ class VersionTest extends TestCase
     {
         $build = $this->getBuild();
 
-        $result = $this->render(Blade::compileString("This is my @version('full')"));
+        $result = $this->render(Blade::compileString("This is my @version"));
 
         $this->assertEquals("This is my version 1.0.0 (build {$build})", $result);
+
+        $result = $this->render(Blade::compileString("Compact: @version('compact')"));
+
+        $this->assertEquals("Compact: v1.0.0-{$build}", $result);
+
     }
 
     public function test_direct_from_app()

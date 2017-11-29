@@ -11,7 +11,7 @@ build:
   number: 701031
   git-local: "git rev-parse --verify HEAD"
   git-remote: "git ls-remote {$repository} refs/heads/master"
-  repository: "{{ env('APP_GIT_REPOSITORY') }}"
+  repository: "{{ env('VERSION_GIT_REMOTE_REPOSITORY') }}"
   length: 6
 format:
   version: "{$major}.{$minor}.{$patch} (build {$build})"

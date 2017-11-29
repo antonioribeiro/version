@@ -86,9 +86,43 @@ MyApp v1.0.0-701037
 
 ### A Blade directive is also ready to be used in your views
 
-``` bash
+You can use this directive to render a full version format:
+
+``` php
+@version
+```
+
+Or choose the format:
+
+``` php
 @version('full')
 @version('compact')
+```
+
+## Install
+
+Via Composer
+
+``` bash
+composer require pragmarx/version
+```
+
+Then publish the configuration file you'll have to:
+
+``` bash
+php artisan vendor:publish --provider="PragmaRX\Version\Package\ServiceProvider"
+```
+
+And you should be good to use it in your views:
+
+``` php
+@version
+```
+
+If you are using Git commits on your build numbers, you may have to add the git repository to your .env file
+
+``` text
+VERSION_GIT_REMOTE_REPOSITORY=https://github.com/antonioribeiro/version.git
 ```
 
 ## Minimum requirements
