@@ -9,6 +9,7 @@ trait Increment
      *
      * @param \Closure $incrementer
      * @param $returnKey
+     *
      * @return string
      */
     public function increment(\Closure $incrementer, $returnKey)
@@ -27,7 +28,7 @@ trait Increment
      */
     public function incrementBuild($increment = null)
     {
-        return $this->increment(function($config) use ($increment) {
+        return $this->increment(function ($config) use ($increment) {
             $increment = $increment ?: $config['build']['increment_by'];
 
             $config['build']['number'] = $config['build']['number'] + $increment;
@@ -43,7 +44,7 @@ trait Increment
      */
     public function incrementMajor()
     {
-        return $this->increment(function($config) {
+        return $this->increment(function ($config) {
             $config['current']['major']++;
 
             $config['current']['minor'] = 0;
@@ -61,7 +62,7 @@ trait Increment
      */
     public function incrementMinor()
     {
-        return $this->increment(function($config) {
+        return $this->increment(function ($config) {
             $config['current']['minor']++;
 
             $config['current']['patch'] = 0;
@@ -77,7 +78,7 @@ trait Increment
      */
     public function incrementPatch()
     {
-        return $this->increment(function($config) {
+        return $this->increment(function ($config) {
             $config['current']['patch']++;
 
             return $config;
