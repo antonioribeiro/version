@@ -70,7 +70,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     private function registerBlade()
     {
-        Blade::directive('version', function ($format) {
+        Blade::directive('version', function ($format = Version::DEFAULT_FORMAT) {
             return "<?php echo app('pragmarx.version')->format($format); ?>";
         });
     }
