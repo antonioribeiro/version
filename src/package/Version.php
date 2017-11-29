@@ -74,8 +74,8 @@ class Version
     private function getGitHashRetrieverCommand()
     {
         return $this->config('build.mode') === static::BUILD_MODE_GIT_LOCAL
-            ? $this->config('build.git-local')
-            : $this->config('build.git-remote');
+            ? $this->config('git.local')
+            : $this->config('git.remote');
     }
 
     private function makeGitHashRetrieverCommand()
