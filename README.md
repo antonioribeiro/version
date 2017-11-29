@@ -10,7 +10,7 @@
 
 ## Key features
 
-### Easily control you app version using a YAML config file in dir/config/version.yml:
+### Easily control you app version using a YAML config file
 
 ``` yaml
 version: 
