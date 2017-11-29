@@ -3,7 +3,6 @@
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/pragmarx/version.svg?style=flat-square)](https://packagist.org/packages/pragmarx/version)
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md) 
-<!-- [![Downloads](https://img.shields.io/packagist/dt/pragmarx/version.svg?style=flat-square)](https://packagist.org/packages/pragmarx/version) --> 
 [![Code Quality](https://img.shields.io/scrutinizer/g/antonioribeiro/version.svg?style=flat-square)](https://scrutinizer-version.com/g/antonioribeiro/version/?branch=master) 
 [![Build](https://img.shields.io/scrutinizer/build/g/antonioribeiro/version.svg?style=flat-square)](https://scrutinizer-version.com/g/antonioribeiro/version/?branch=master) 
 [![Coverage](https://img.shields.io/scrutinizer/coverage/g/antonioribeiro/version.svg?style=flat-square)](https://scrutinizer-version.com/g/antonioribeiro/version/?branch=master)
@@ -108,3 +107,6 @@ This package is licensed under the MIT License - see the `LICENSE` file for deta
 ## Contributing
 
 Pull requests and issues are welcome.
+
+
+<!-- [![Downloads](https://img.shields.io/packagist/dt/pragmarx/version.svg?style=flat-square)](https://packagist.org/packages/pragmarx/version) --> 
