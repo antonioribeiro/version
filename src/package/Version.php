@@ -8,9 +8,6 @@ class Version
 {
     use Cache;
 
-    /**
-     * The cache key suffix for build.
-     */
     const BUILD_CACHE_KEY = 'build';
 
     const BUILD_MODE_NUMBER = 'number';
@@ -18,6 +15,8 @@ class Version
     const BUILD_MODE_GIT_LOCAL = 'git-local';
 
     const BUILD_MODE_GIT_REMOTE = 'git-remote';
+
+    const DEFAULT_FORMAT = 'full';
 
     /**
      * The config loader.
