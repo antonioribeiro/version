@@ -154,6 +154,8 @@ If you are using Git commits on your build numbers, you may have to add the git 
 VERSION_GIT_REMOTE_REPOSITORY=https://github.com/antonioribeiro/version.git
 ```
 
+**If you are using `git-local` make sure the current folder is a git repository**
+
 ## Minimum requirements
 
 - Laravel 5.5
