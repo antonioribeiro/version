@@ -23,14 +23,23 @@ trait Cache
      *
      * @param $key
      *
-     * @return null
+     * @return null|mixed
      */
     protected function cacheGet($key)
     {
-        if ($this->config('cache.enabled')) {
-            return IlluminateCache::get($key);
-        }
+        return $this->config('cache.enabled')
+            ? IlluminateCache::get($key)
+            : null;
     }
+
+    /**
+     * Get config value.
+     *
+     * @param $string
+     *
+     * @return \Illuminate\Config\Repository|mixed
+     */
+    abstract protected function config($string);
 
     /**
      * Make the cache key.

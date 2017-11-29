@@ -12,6 +12,15 @@ trait Increment
     private $configFile;
 
     /**
+     * Get config value.
+     *
+     * @param $string
+     *
+     * @return \Illuminate\Config\Repository|mixed
+     */
+    abstract protected function config($string);
+
+    /**
      * Get a properly formatted version.
      *
      * @param \Closure $incrementer
