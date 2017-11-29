@@ -32,7 +32,7 @@ class ServiceProvider extends IlluminateServiceProvider
     }
 
     /**
-     * Load config file to Laravel config
+     * Load config file to Laravel config.
      */
     private function loadConfig()
     {
@@ -66,7 +66,7 @@ class ServiceProvider extends IlluminateServiceProvider
     }
 
     /**
-     * Register Blade directives
+     * Register Blade directives.
      */
     private function registerBlade()
     {
@@ -89,7 +89,7 @@ class ServiceProvider extends IlluminateServiceProvider
     }
 
     /**
-     * Register Artisan commands
+     * Register Artisan commands.
      */
     private function registerCommands()
     {

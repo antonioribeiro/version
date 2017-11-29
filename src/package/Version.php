@@ -11,7 +11,7 @@ class Version
     /**
      * The cache key suffix for build.
      */
-    const BUILD_CACHE_KEY  = 'build';
+    const BUILD_CACHE_KEY = 'build';
 
     const BUILD_MODE_NUMBER = 'number';
 
@@ -45,6 +45,7 @@ class Version
      * Get config value.
      *
      * @param $string
+     *
      * @return \Illuminate\Config\Repository|mixed
      */
     protected function config($string)
@@ -90,6 +91,7 @@ class Version
      * Replace text variables with their values.
      *
      * @param $string
+     *
      * @return mixed
      */
     protected function replaceVariables($string)
@@ -107,6 +109,7 @@ class Version
      * Search and replace variables ({$var}) in a string.
      *
      * @param $string
+     *
      * @return mixed
      */
     protected function searchAndReplaceVariables($string)
@@ -185,6 +188,7 @@ class Version
      * Get a properly formatted version.
      *
      * @param $type
+     *
      * @return mixed
      */
     public function format($type)
@@ -195,7 +199,7 @@ class Version
     /**
      * Get a properly formatted version.
      *
-     * @return integer
+     * @return int
      */
     public function incrementBuild()
     {
