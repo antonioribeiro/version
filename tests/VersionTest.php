@@ -102,14 +102,13 @@ class VersionTest extends TestCase
     {
         $build = $this->getBuild();
 
-        $result = $this->render(Blade::compileString("This is my @version"));
+        $result = $this->render(Blade::compileString('This is my @version'));
 
         $this->assertEquals("This is my version 1.0.0 (build {$build})", $result);
 
         $result = $this->render(Blade::compileString("Compact: @version('compact')"));
 
         $this->assertEquals("Compact: v1.0.0-{$build}", $result);
-
     }
 
     public function test_direct_from_app()
