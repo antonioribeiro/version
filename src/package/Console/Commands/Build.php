@@ -35,6 +35,6 @@ class Build extends Base
 
         $this->info("New build: {$build}");
 
-        $this->info(config('app.name') . ' ' . app('pragmarx.version')->format('full'));
+        $this->info(config('app.name').' '.app('pragmarx.version')->format('full'));
     }
 }
