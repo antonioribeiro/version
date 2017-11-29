@@ -20,7 +20,7 @@
     "require": {
         "php": ">=7.0",
         "laravel/framework": ">=5.5",
-        "pragmarx/yaml-conf": "dev-master"
+        "pragmarx/yaml-conf": "~0.1"
     },
 
     "require-dev": {
@@ -45,31 +45,5 @@
                 "Version": "PragmaRX\\Version\\Package\\Facade"
             }
         }
-    },
-    "prefer-stable": true,
-    "minimum-stability": "dev",
-
-
-
-
-
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/antonioribeiro/fullcontact-api-php.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/antonioribeiro/version.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/antonioribeiro/yaml-conf.git"
-        }
-    ]
-
-
-
-
-
+    }
 }
