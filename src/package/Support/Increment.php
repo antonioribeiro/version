@@ -44,7 +44,7 @@ trait Increment
     public function incrementMajor()
     {
         return $this->increment(function($config) {
-            $config['currentt']['major']++;
+            $config['current']['major']++;
 
             $config['current']['minor'] = 0;
 

@@ -3,6 +3,7 @@
 namespace PragmaRX\Version\Tests;
 
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Artisan;
 use PragmaRX\Version\Package\Facade as VersionFacade;
 use PragmaRX\Version\Package\Version as VersionService;
 
@@ -132,6 +133,56 @@ class VersionTest extends TestCase
         config(['version.build.mode' => 'number']);
 
         $this->assertEquals('701032', $this->version->build());
+
+        $this->version->incrementBuild(5);
+
+        config(['version.build.mode' => 'number']);
+
+        $this->assertEquals('701037', $this->version->build());
+    }
+
+    public function test_increment_major()
+    {
+        config(['version.build.mode' => 'number']);
+
+        $this->version->incrementMinor();
+
+        $this->assertEquals("version 1.1.0 (build 701031)", $this->version->format('full'));
+
+        $this->version->incrementPatch();
+
+        $this->assertEquals("version 1.1.1 (build 701031)", $this->version->format('full'));
+
+        $this->version->incrementMajor();
+
+        $this->assertEquals("version 2.0.0 (build 701031)", $this->version->format('full'));
+
+        $this->version->incrementMinor();
+
+        $this->assertEquals("version 2.1.0 (build 701031)", $this->version->format('full'));
+
+        $this->version->incrementPatch();
+
+        $this->assertEquals("version 2.1.1 (build 701031)", $this->version->format('full'));
+
+        $this->assertEquals('701031', $this->version->build());
+    }
+
+    public function test_can_run_commands()
+    {
+        config(['version.build.mode' => 'number']);
+
+        Artisan::call('version:show');
+
+        Artisan::call('version:build');
+
+        Artisan::call('version:patch');
+
+        Artisan::call('version:minor');
+
+        Artisan::call('version:major');
+
+        $this->assertEquals("version 2.0.0 (build 701032)", $this->version->format('full'));
     }
 
     public function render($view)
