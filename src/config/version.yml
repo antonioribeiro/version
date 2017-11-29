@@ -1,3 +1,4 @@
+version_source: config # "config" or "git"
 current:
   major: 1
   minor: 0
@@ -7,15 +8,17 @@ cache:
   enabled: true
   key: pragmarx-version
 build:
-  mode: number # other modes: "git-local" and "git-remote"
+  mode: number # "number", "git-local" or "git-remote"
   number: 701031
   length: 6
   increment_by: 1
 git:
-  version: false
   local: "git rev-parse --verify HEAD"
   remote: "git ls-remote {$repository} refs/heads/master"
   repository: "{{ env('VERSION_GIT_REMOTE_REPOSITORY') }}"
+  version:
+    command: "git describe"
+    matcher: "/[V|v]*[ersion]*\\s*\\.*(\\d+)\\.(\\d+)\\.(\\d+)\\.*(\\w*)/"
 format:
   version: "{$major}.{$minor}.{$patch} (build {$build})"
   full: "version {{'format.version'}}"

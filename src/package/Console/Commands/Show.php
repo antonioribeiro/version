@@ -31,6 +31,8 @@ class Show extends Base
      */
     public function handle()
     {
-        $this->displayAppVersion($this->option('format') ?: 'full');
+        $format = $this->option('format') ?: 'full';
+
+        $this->info(config('app.name').' '.app('pragmarx.version')->format($format));
     }
 }

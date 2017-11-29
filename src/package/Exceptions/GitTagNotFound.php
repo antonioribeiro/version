@@ -1,7 +1,7 @@
 <?php
 
-namespace PragmaRX\YamlConf\Package\Exceptions;
+namespace PragmaRX\Version\Package\Exceptions;
 
-class InvalidYamlFile extends \Exception
+class GitTagNotFound extends \Exception
 {
 }

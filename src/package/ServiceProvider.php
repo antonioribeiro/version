@@ -8,6 +8,7 @@ use PragmaRX\Version\Package\Console\Commands\Build;
 use PragmaRX\Version\Package\Console\Commands\Major;
 use PragmaRX\Version\Package\Console\Commands\Minor;
 use PragmaRX\Version\Package\Console\Commands\Patch;
+use PragmaRX\Version\Package\Console\Commands\Refresh;
 use PragmaRX\Version\Package\Console\Commands\Show;
 
 class ServiceProvider extends IlluminateServiceProvider
@@ -114,6 +115,10 @@ class ServiceProvider extends IlluminateServiceProvider
 
         $this->registerCommand('pragmarx.version.patch.command', function () {
             return new Patch();
+        });
+
+        $this->registerCommand('pragmarx.version.refresh.command', function () {
+            return new Refresh();
         });
     }
 

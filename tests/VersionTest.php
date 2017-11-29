@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Version\Tests;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
+use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
 use PragmaRX\Version\Package\Facade as VersionFacade;
 use PragmaRX\Version\Package\Version as VersionService;
 
@@ -18,18 +20,29 @@ class VersionTest extends TestCase
 
     public static $build;
 
+    public static $gitVersion;
+
     private function getBuild()
     {
         if (!static::$build) {
+            chdir(base_path());
+
             static::$build = substr(exec('git rev-parse --verify HEAD'), 0, 6);
         }
 
         return static::$build;
     }
 
+    private function getVersion()
+    {
+       return '5.5.23';
+    }
+
     public function setUp()
     {
         parent::setup();
+
+        Cache::flush();
 
         putenv('VERSION_GIT_REMOTE_REPOSITORY=https://github.com/antonioribeiro/version.git');
 
@@ -56,6 +69,8 @@ class VersionTest extends TestCase
     public function test_can_get_build()
     {
         $number = $this->getBuild();
+
+        Cache::clear();
 
         $this->assertEquals($number, $this->version->build());
         $this->assertEquals($number, $this->version->build());
@@ -183,6 +198,28 @@ class VersionTest extends TestCase
         Artisan::call('version:major');
 
         $this->assertEquals('version 2.0.0 (build 701032)', $this->version->format('full'));
+    }
+
+    public function test_can_get_version_from_git()
+    {
+        config(['version.version_source' => 'git']);
+
+        chdir(base_path());
+
+        exec('git init');
+        exec('git add -A');
+        exec('git commit -m "First commit"');
+        exec('git tag -a -f v0.1.1.3128 -m "version 0.1.1.3128"');
+
+        $this->assertEquals('version 0.1.1 (build 3128)', $this->version->format('full'));
+
+        exec('git tag -d v0.1.1.3128');
+
+        Cache::flush();
+
+        $this->expectException(GitTagNotFound::class);
+
+        $this->assertEquals('version 0.1.1 (build 3128)', $this->version->format('full'));
     }
 
     public function render($view)

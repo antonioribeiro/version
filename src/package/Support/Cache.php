@@ -50,6 +50,8 @@ trait Cache
     public function clearCache()
     {
         IlluminateCache::forget($this->key(static::BUILD_CACHE_KEY));
+
+        IlluminateCache::forget($this->key(static::VERSION_CACHE_KEY));
     }
 
     /**
