@@ -108,6 +108,23 @@ Or choose the format:
 @version('full')
 @version('compact')
 ```
+
+### Git tags
+
+You can use your git tags as application versions, all you need is to set the version source to "git":
+
+``` yaml
+version_source: git
+```
+
+And if you add a build number to your tags:
+
+``` bash
+git tag -a -f v0.1.1.3128
+```
+
+Version will use it as your app build number
+
 ### Artisan commands
 
 Those are the commands you have at your disposal:
@@ -122,6 +139,8 @@ Those are the commands you have at your disposal:
   version:patch    Increment app patch version
 
   version:build    Increment app build number
+  
+  version:refresh  Clear build cache and refresh it
 ```
 
 Here's an example of `version:minor`:
