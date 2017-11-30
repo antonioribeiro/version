@@ -59,6 +59,7 @@ class Version
      * @param $command
      * @param $cacheKey
      * @param int $length
+     *
      * @return bool|mixed|null|string
      */
     private function getCachedOrShellExecute($command, $cacheKey, $length = 256)
