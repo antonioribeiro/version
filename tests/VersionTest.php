@@ -297,7 +297,7 @@ class VersionTest extends TestCase
 
         config(['version.format.awesome' => 'awesome version {$major}.{$minor}.{$patch}']);
 
-        $this->assertEquals("awesome version 1.0.0", $this->version->awesome());
+        $this->assertEquals('awesome version 1.0.0', $this->version->awesome());
 
         $this->expectException(MethodNotFound::class);
 

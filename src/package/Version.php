@@ -42,8 +42,10 @@ class Version
      *
      * @param $name
      * @param array $arguments
-     * @return mixed
+     *
      * @throws MethodNotFound
+     *
+     * @return mixed
      */
     public function __call($name, array $arguments)
     {
