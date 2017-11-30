@@ -66,7 +66,7 @@ trait Cache
     /**
      * Get the current object instance.
      */
-    public function refreshBuild()
+    public function refresh()
     {
         $this->clearCache();
 

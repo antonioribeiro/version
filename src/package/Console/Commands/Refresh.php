@@ -25,13 +25,7 @@ class Refresh extends Base
      */
     public function handle()
     {
-        if (config('version.build.mode') === Version::BUILD_MODE_NUMBER) {
-            $this->info('You are using the "number" build mode, which does not require you to refresh it.');
-
-            return;
-        }
-
-        app('pragmarx.version')->refreshBuild();
+        app('pragmarx.version')->refresh();
 
         $this->info('App build was refreshed.');
 

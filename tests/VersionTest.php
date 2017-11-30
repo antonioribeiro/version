@@ -94,7 +94,7 @@ class VersionTest extends TestCase
 
     public function test_refresh_build()
     {
-        $this->assertEquals($this->getBuild(), $this->version->refreshBuild());
+        $this->assertEquals($this->getBuild(), $this->version->refresh());
     }
 
     public function test_add_format()
