@@ -26,6 +26,10 @@ class VersionTest extends TestCase
 
     private function createGitTag($version = '0.1.1.3128')
     {
+        if ($this->currentVersion === $version) {
+            return;
+        }
+
         chdir(base_path());
 
         exec('git init');
@@ -61,6 +65,8 @@ class VersionTest extends TestCase
         parent::setup();
 
         Cache::flush();
+
+        $this->createGitTag();
 
         putenv('VERSION_GIT_REMOTE_REPOSITORY=https://github.com/antonioribeiro/version.git');
 
@@ -158,9 +164,9 @@ class VersionTest extends TestCase
     {
         $build = $this->getBuild();
 
-        $result = $this->render(Blade::compileString('This is my @version'));
+        $result = $this->render(Blade::compileString('MyApp @version'));
 
-        $this->assertEquals("This is my version 1.0.0 (build {$build})", $result);
+        $this->assertEquals("MyApp version 1.0.0 (build {$build})", $result);
 
         $result = $this->render(Blade::compileString("Compact: @version('compact')"));
 
@@ -171,9 +177,10 @@ class VersionTest extends TestCase
     {
         $build = $this->getBuild();
 
-        $result = app('pragmarx.version')->format('full');
-
-        $this->assertEquals("version 1.0.0 (build {$build})", $result);
+        $this->assertEquals(
+            "version 1.0.0 (build {$build})",
+            app('pragmarx.version')->format('full')
+        );
     }
 
     public function test_config()
