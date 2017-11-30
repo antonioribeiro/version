@@ -1,7 +1,7 @@
 {
     "name": "pragmarx/version",
 
-    "description": "A Tests Watcher Service & Dashboard Package",
+    "description": "Take control over your Laravel app version",
 
     "keywords": [
         "laravel", "version", "versioning"
