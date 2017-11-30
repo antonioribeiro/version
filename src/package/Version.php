@@ -133,16 +133,10 @@ class Version
      */
     private function getVersionFromGit()
     {
-        $version = $this->getCachedOrShellExecute(
+        return $this->getCachedOrShellExecute(
             $this->config('git.version.command'),
             static::BUILD_CACHE_KEY
         );
-
-        if (strpos($version, 'No names found') !== false) {
-            throw new GitTagNotFound('No git tags were found the in the repository');
-        }
-
-        return $version;
     }
 
     /**
