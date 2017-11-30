@@ -257,8 +257,8 @@ class VersionTest extends TestCase
         config(['version.build.mode' => 'git-remote']);
 
         $this->createGitTag();
-//
-//        $this->assertEquals('version 0.1.1 (build 3128)', $this->version->format('full'));
+
+        $this->assertEquals('version 0.1.1 (build 3128)', $this->version->format('full'));
 //
 //        $this->removeGitTag();
     }
