@@ -40,6 +40,7 @@ trait Increment
     /**
      * Increment the build number.
      *
+     * @param null $increment
      * @return int
      */
     public function incrementBuild($increment = null)
@@ -99,29 +100,5 @@ trait Increment
 
             return $config;
         }, 'current.patch');
-    }
-
-    /**
-     * Update the config file.
-     *
-     * @param $config
-     */
-    private function updateConfig($config)
-    {
-        config(['version' => $config]);
-
-        $this->config->saveAsYaml($config, $this->configFile);
-    }
-
-    /**
-     * Set the current config file.
-     *
-     * @param $file
-     *
-     * @return mixed
-     */
-    public function setConfigFile($file)
-    {
-        return $this->configFile = $file;
     }
 }

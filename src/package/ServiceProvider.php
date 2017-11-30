@@ -49,11 +49,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     private function getConfigFile()
     {
-        if (file_exists($file = config_path('version.yml'))) {
-            return $file;
-        }
-
-        return $this->getConfigFileStub();
+        return config_path('version.yml');
     }
 
     /**
@@ -132,6 +128,8 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $this->app->singleton('pragmarx.version', function ($app) {
             $version = $app->make(Version::class);
+
+            $version->setConfigFileStub($this->getConfigFileStub());
 
             $version->loadConfig($this->getConfigFile());
 

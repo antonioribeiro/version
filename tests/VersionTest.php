@@ -18,11 +18,11 @@ class VersionTest extends TestCase
 
     const currentVersion = '1.0.0';
 
-    public static $build;
-
     public static $gitVersion;
 
     private $currentVersion;
+
+    private $build;
 
     private function createGitTag($version = '0.1.1.3128')
     {
@@ -32,23 +32,20 @@ class VersionTest extends TestCase
 
         chdir(base_path());
 
+        exec('rm -rf .git');
         exec('git init');
         exec('git add -A');
         exec('git commit -m "First commit"');
         exec("git tag -a -f v{$version} -m \"version {$version}\"");
 
         $this->currentVersion = $version;
+
+        $this->build = $this->getBuild();
     }
 
     private function getBuild()
     {
-        if (!static::$build) {
-            chdir(base_path());
-
-            static::$build = substr(exec('git rev-parse --verify HEAD'), 0, 6);
-        }
-
-        return static::$build;
+        return substr(exec('git rev-parse --verify HEAD'), 0, 6);
     }
 
     private function removeGitTag()
@@ -70,9 +67,11 @@ class VersionTest extends TestCase
 
         putenv('VERSION_GIT_REMOTE_REPOSITORY=https://github.com/antonioribeiro/version.git');
 
-        config(['version.build.mode' => 'git-local']);
-
         $this->version = VersionFacade::instance();
+
+        $this->version->current(); // load config
+
+        config(['version.build.mode' => 'git-local']);
     }
 
     public function test_can_instantiate_service()
@@ -92,12 +91,10 @@ class VersionTest extends TestCase
 
     public function test_can_get_build()
     {
-        $number = $this->getBuild();
-
         Cache::clear();
 
-        $this->assertEquals($number, $this->version->build());
-        $this->assertEquals($number, $this->version->build());
+        $this->assertEquals($this->build, $this->version->build());
+        $this->assertEquals($this->build, $this->version->build());
     }
 
     public function test_can_get_version_parts()
@@ -124,11 +121,9 @@ class VersionTest extends TestCase
 
     public function test_uncache()
     {
-        $number = $this->getBuild();
-
         config(['version.cache.enabled' => false]);
 
-        $this->assertEquals($number, $this->version->build());
+        $this->assertEquals($this->build, $this->version->build());
     }
 
     public function test_get_build_by_number()
@@ -140,45 +135,37 @@ class VersionTest extends TestCase
 
     public function test_refresh_build()
     {
-        $this->assertEquals($this->getBuild(), $this->version->refresh());
+        $this->assertEquals($this->build, $this->version->refresh());
     }
 
     public function test_add_format()
     {
-        $build = $this->getBuild();
+        config(['version.format.mine' => '{$major}-{$build}']);
 
-        config(['version.format.mine' => $number = '{$major}-{$build}']);
-
-        $this->assertEquals("1-{$build}", $this->version->format('mine'));
+        $this->assertEquals("1-{$this->build}", $this->version->format('mine'));
     }
 
     public function test_format()
     {
-        $build = $this->getBuild();
-
-        $this->assertEquals("version 1.0.0 (build {$build})", $this->version->format('full'));
-        $this->assertEquals("v1.0.0-{$build}", $this->version->format('compact'));
+        $this->assertEquals("version 1.0.0 (build {$this->build})", $this->version->format('full'));
+        $this->assertEquals("v1.0.0-{$this->build}", $this->version->format('compact'));
     }
 
     public function test_blade()
     {
-        $build = $this->getBuild();
-
         $result = $this->render(Blade::compileString('MyApp @version'));
 
-        $this->assertEquals("MyApp version 1.0.0 (build {$build})", $result);
+        $this->assertEquals("MyApp version 1.0.0 (build {$this->build})", $result);
 
         $result = $this->render(Blade::compileString("Compact: @version('compact')"));
 
-        $this->assertEquals("Compact: v1.0.0-{$build}", $result);
+        $this->assertEquals("Compact: v1.0.0-{$this->build}", $result);
     }
 
     public function test_direct_from_app()
     {
-        $build = $this->getBuild();
-
         $this->assertEquals(
-            "version 1.0.0 (build {$build})",
+            "version 1.0.0 (build {$this->build})",
             app('pragmarx.version')->format('full')
         );
     }
@@ -273,12 +260,32 @@ class VersionTest extends TestCase
         config(['version.version_source' => 'git']);
         config(['version.build.mode' => 'git-local']);
 
-        $this->createGitTag('1.2.35');
+        $this->createGitTag($version = '1.2.35');
 
-        $build = $this->getBuild();
+        $this->assertEquals("version {$version} (build {$this->build})", $this->version->format('full'));
+        $this->assertEquals("v1.2.35-{$this->build}", $this->version->format('compact'));
+    }
 
-        $this->assertEquals("version 1.2.35 (build {$build})", $this->version->format('full'));
-        $this->assertEquals("v1.2.35-{$build}", $this->version->format('compact'));
+    public function test_can_use_default_config()
+    {
+        $this->assertEquals(config('version.build.mode'), 'git-local');
+
+        config(['version.build.mode' => 'git-remote']);
+
+        $this->assertEquals(config('version.build.mode'), 'git-remote');
+
+        $this->version->loadConfig();
+        
+        $this->assertEquals(config('version.build.mode'), 'number');
+    }
+
+    public function test_can_reload_config()
+    {
+        exec('rm '.base_path('config/version.yml'));
+
+        $this->version->loadConfig();
+
+        $this->assertEquals("version 1.0.0 (build 701031)", $this->version->format());
     }
 
     public function tearDown()
@@ -297,3 +304,4 @@ class VersionTest extends TestCase
         return ob_get_clean();
     }
 }
+
