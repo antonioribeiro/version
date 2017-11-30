@@ -261,6 +261,8 @@ class VersionTest extends TestCase
 
     public function test_can_cache_version_and_build()
     {
+        Cache::flush();
+
         config(['version.version_source' => 'git']);
         config(['version.build.mode' => 'git-local']);
 

@@ -46,7 +46,21 @@ class ServiceProvider extends IlluminateServiceProvider
 
     private function getConfigFile()
     {
-        return config_path('version.yml');
+        if (file_exists($file = config_path('version.yml'))) {
+            return $file;
+        }
+
+        return $this->getConfigFileStub();
+    }
+
+    /**
+     * Get the original config file.
+     *
+     * @return string
+     */
+    private function getConfigFileStub()
+    {
+        return __DIR__ . '/../config/version.yml';
     }
 
     /**
@@ -65,7 +79,7 @@ class ServiceProvider extends IlluminateServiceProvider
     private function publishConfiguration()
     {
         $this->publishes([
-            __DIR__.'/../config/version.yml' => $this->getConfigFile(),
+             $this->getConfigFileStub() => $this->getConfigFile(),
         ]);
     }
 
