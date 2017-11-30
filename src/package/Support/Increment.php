@@ -41,6 +41,7 @@ trait Increment
      * Increment the build number.
      *
      * @param null $increment
+     *
      * @return int
      */
     public function incrementBuild($increment = null)

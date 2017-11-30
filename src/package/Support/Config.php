@@ -97,7 +97,6 @@ trait Config
 
     /**
      * Update the config file.
-     *
      */
     private function updateConfig($config)
     {
