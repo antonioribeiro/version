@@ -92,8 +92,10 @@ class Version
      * Load YAML file to Laravel config.
      *
      * @param $path
-     * @return mixed
+     *
      * @throws ConfigurationNotFound
+     *
+     * @return mixed
      */
     private function loadToLaravelConfig($path)
     {
@@ -378,8 +380,10 @@ class Version
      * Load package YAML configuration.
      *
      * @param $path
-     * @return Collection
+     *
      * @throws ConfigurationNotFound
+     *
+     * @return Collection
      */
     public function loadConfig($path)
     {
