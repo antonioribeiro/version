@@ -117,6 +117,7 @@ trait Increment
      * Set the current config file.
      *
      * @param $file
+     *
      * @return mixed
      */
     public function setConfigFile($file)
