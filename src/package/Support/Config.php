@@ -70,35 +70,34 @@ trait Config
      *
      * @param $path
      *
-     * @throws ConfigurationNotFound
-     *
      * @return Collection
      */
     public function loadConfig($path = null)
     {
         return $this->loadToLaravelConfig(
-            $this->setConfigFile($path ?: $this->getConfigFile())
+            $this->setConfigFile($this->getConfigFile($path))
         );
     }
 
     /**
      * Get the config file path.
      *
+     * @param string|null $file
      * @return string
      */
-    public function getConfigFile()
+    public function getConfigFile($file = null)
     {
-        if (file_exists($this->configFile)) {
-            return $this->configFile;
-        }
+        $file = $file ?: $this->configFile;
 
-        return $this->getConfigFileStub();
+        return file_exists($file)
+            ? $file
+            : $this->getConfigFileStub();
     }
 
     /**
      * Update the config file.
      */
-    private function updateConfig($config)
+    protected function updateConfig($config)
     {
         config(['version' => $config]);
 
