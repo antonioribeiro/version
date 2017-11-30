@@ -243,7 +243,7 @@ class Version
      *
      * @return string
      */
-    public function version()
+    public function current()
     {
         return $this->replaceVariables($this->makeVersion());
     }
@@ -264,6 +264,36 @@ class Version
         }
 
         return $this->getGitCommit();
+    }
+
+    /**
+     * Get major version.
+     *
+     * @return mixed
+     */
+    public function major()
+    {
+        return $this->getVersion('major');
+    }
+
+    /**
+     * Get the minor version.
+     *
+     * @return mixed
+     */
+    public function minor()
+    {
+        return $this->getVersion('minor');
+    }
+
+    /**
+     * Get the patch number.
+     *
+     * @return mixed
+     */
+    public function patch()
+    {
+        return $this->getVersion('patch');
     }
 
     /**

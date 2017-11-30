@@ -33,11 +33,6 @@ class VersionTest extends TestCase
         return static::$build;
     }
 
-    private function getVersion()
-    {
-        return '5.5.23';
-    }
-
     public function setUp()
     {
         parent::setup();
@@ -63,7 +58,7 @@ class VersionTest extends TestCase
 
     public function test_can_get_version()
     {
-        $this->assertEquals(static::currentVersion, $this->version->version());
+        $this->assertEquals(static::currentVersion, $this->version->current());
     }
 
     public function test_can_get_build()
@@ -74,6 +69,28 @@ class VersionTest extends TestCase
 
         $this->assertEquals($number, $this->version->build());
         $this->assertEquals($number, $this->version->build());
+    }
+
+    public function test_can_get_version_parts()
+    {
+        $this->version->incrementMajor();
+        $this->version->incrementMajor();
+        $this->version->incrementMinor();
+        $this->version->incrementMinor();
+        $this->version->incrementMinor();
+        $this->version->incrementPatch();
+        $this->version->incrementPatch();
+        $this->version->incrementPatch();
+
+        $this->assertEquals('3', $this->version->major());
+        $this->assertEquals('3', $this->version->minor());
+        $this->assertEquals('3', $this->version->patch());
+
+        $this->version->incrementMajor();
+
+        $this->assertEquals('4', $this->version->major());
+        $this->assertEquals('0', $this->version->minor());
+        $this->assertEquals('0', $this->version->patch());
     }
 
     public function test_uncache()

@@ -94,6 +94,24 @@ MyApp version 1.0.0 (build 701037)
 MyApp v1.0.0-701037
 ```
 
+### A Facade is available
+
+``` php
+Version::version() // 1.2.25
+
+Version::build() // 703110
+
+Version::major() // 1
+
+Version::minor() // 2
+
+Version::patch() // 25
+
+Version::format('full') // version 1.0.0 (build 703110)
+
+Version::format('compact') // v.1.0.0-703110
+```
+
 ### A Blade directive is also ready to be used in your views
 
 You can use this directive to render a full version format:
