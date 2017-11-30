@@ -2,11 +2,10 @@
 
 namespace PragmaRX\Version\Package;
 
-use Symfony\Component\Process\Process;
+use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
 use PragmaRX\Version\Package\Support\Cache;
 use PragmaRX\Version\Package\Support\Increment;
-use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
-use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class Version
 {
