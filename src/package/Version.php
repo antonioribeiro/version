@@ -30,7 +30,7 @@ class Version
     /**
      * The config loader.
      *
-     * @var \PragmaRX\YamlConf\Package\YamlConf
+     * @var \PragmaRX\YamlConf\Package\Yaml
      */
     protected $config;
 
@@ -39,7 +39,7 @@ class Version
      */
     public function __construct()
     {
-        $this->config = app('pragmarx.yaml-conf');
+        $this->config = app('pragmarx.yaml');
     }
 
     /**

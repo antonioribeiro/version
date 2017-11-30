@@ -55,7 +55,7 @@ class ServiceProvider extends IlluminateServiceProvider
     private function loadConfig()
     {
         $this->app
-            ->make('pragmarx.yaml-conf')
+            ->make('pragmarx.yaml')
             ->loadToConfig($this->getConfigFile(), 'version');
     }
 

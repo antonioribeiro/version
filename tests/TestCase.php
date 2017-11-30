@@ -4,7 +4,7 @@ namespace PragmaRX\Version\Tests;
 
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 use PragmaRX\Version\Package\ServiceProvider as VersionServiceProvider;
-use PragmaRX\YamlConf\Package\ServiceProvider as YamlConfServiceProvider;
+use PragmaRX\Yaml\Package\ServiceProvider as YamlServiceProvider;
 
 abstract class TestCase extends OrchestraTestCase
 {
@@ -14,7 +14,7 @@ abstract class TestCase extends OrchestraTestCase
 
         return [
             VersionServiceProvider::class,
-            YamlConfServiceProvider::class,
+            YamlServiceProvider::class,
         ];
     }
 }
