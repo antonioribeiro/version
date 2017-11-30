@@ -54,6 +54,16 @@ class Version
     }
 
     /**
+     * Get the build git repository url.
+     *
+     * @return string
+     */
+    private function getBuildRepository()
+    {
+        return $this->config('build.repository');
+    }
+
+    /**
      * Get a cached value or execute a shell command to retrieve it.
      *
      * @param $command
@@ -187,7 +197,7 @@ class Version
     {
         return str_replace(
             '{$repository}',
-            $this->config('build.repository'),
+            $this->getBuildRepository(),
             $this->getGitHashRetrieverCommand()
         );
     }
@@ -228,10 +238,10 @@ class Version
                 '{$build}',
             ],
             [
-                $this->getVersion('major'),
-                $this->getVersion('minor'),
-                $this->getVersion('patch'),
-                $this->config('build.repository'),
+                $this->major(),
+                $this->minor(),
+                $this->patch(),
+                $this->getBuildRepository(),
                 $this->build(),
             ],
             $string
