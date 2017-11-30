@@ -40,23 +40,16 @@ class ServiceProvider extends IlluminateServiceProvider
     public function boot()
     {
         $this->publishConfiguration();
-
-        $this->loadConfig();
-    }
-
-    private function getConfigFile()
-    {
-        return config_path('version.yml');
     }
 
     /**
-     * Load config file to Laravel config.
+     * Get the config file path.
+     *
+     * @return string
      */
-    private function loadConfig()
+    private function getConfigFile()
     {
-        $this->app
-            ->make('pragmarx.yaml')
-            ->loadToConfig($this->getConfigFile(), 'version');
+        return config_path('version.yml');
     }
 
     /**
@@ -126,7 +119,7 @@ class ServiceProvider extends IlluminateServiceProvider
         $this->app->singleton('pragmarx.version', function ($app) {
             $version = $app->make(Version::class);
 
-            $version->setConfigFile($this->getConfigFile());
+            $version->loadConfig($this->getConfigFile());
 
             return $version;
         });

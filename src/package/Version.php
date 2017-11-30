@@ -2,6 +2,8 @@
 
 namespace PragmaRX\Version\Package;
 
+use Illuminate\Support\Collection;
+use PragmaRX\Version\Package\Exceptions\ConfigurationNotFound;
 use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
 use PragmaRX\Version\Package\Support\Cache;
 use PragmaRX\Version\Package\Support\Increment;
@@ -32,14 +34,14 @@ class Version
      *
      * @var \PragmaRX\YamlConf\Package\Yaml
      */
-    protected $config;
+    protected $yaml;
 
     /**
      * Version constructor.
      */
     public function __construct()
     {
-        $this->config = app('pragmarx.yaml');
+        $this->yaml = app('pragmarx.yaml');
     }
 
     /**
@@ -84,6 +86,25 @@ class Version
         $this->cachePut($key, $value);
 
         return $value;
+    }
+
+    /**
+     * Load YAML file to Laravel config.
+     *
+     * @param $path
+     * @return mixed
+     * @throws ConfigurationNotFound
+     */
+    private function loadToLaravelConfig($path)
+    {
+        $config = app('pragmarx.yaml')
+            ->loadToConfig($path, 'version');
+
+        if ($config->count() === 0) {
+            throw new ConfigurationNotFound("Configration file $path was not found or is empty. Did you published the config?");
+        }
+
+        return $config;
     }
 
     /**
@@ -351,5 +372,17 @@ class Version
         $type = $type ?: static::DEFAULT_FORMAT;
 
         return $this->replaceVariables($this->config("format.{$type}"));
+    }
+
+    /**
+     * Load package YAML configuration.
+     *
+     * @param $path
+     * @return Collection
+     * @throws ConfigurationNotFound
+     */
+    public function loadConfig($path)
+    {
+        return $this->loadToLaravelConfig($this->setConfigFile($path));
     }
 }
