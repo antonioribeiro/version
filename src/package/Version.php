@@ -3,6 +3,7 @@
 namespace PragmaRX\Version\Package;
 
 use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
+use PragmaRX\Version\Package\Exceptions\MethodNotFound;
 use PragmaRX\Version\Package\Support\Cache;
 use PragmaRX\Version\Package\Support\Config;
 use PragmaRX\Version\Package\Support\Increment;
@@ -34,6 +35,23 @@ class Version
     public function __construct()
     {
         $this->yaml = app('pragmarx.yaml');
+    }
+
+    /**
+     * Dinamically call format types.
+     *
+     * @param $name
+     * @param array $arguments
+     * @return mixed
+     * @throws MethodNotFound
+     */
+    public function __call($name, array $arguments)
+    {
+        if ($version = $this->format($name)) {
+            return $version;
+        }
+
+        throw new MethodNotFound("Method '{$name}' doesn't exists in this object.");
     }
 
     /**

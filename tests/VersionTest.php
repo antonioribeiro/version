@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
+use PragmaRX\Version\Package\Exceptions\MethodNotFound;
 use PragmaRX\Version\Package\Facade as VersionFacade;
 use PragmaRX\Version\Package\Version as VersionService;
 
@@ -286,6 +287,21 @@ class VersionTest extends TestCase
         $this->version->loadConfig();
 
         $this->assertEquals('version 1.0.0 (build 701031)', $this->version->format());
+    }
+
+    public function test_can_call_format_types_dinamically()
+    {
+        $this->assertEquals("version 1.0.0 (build {$this->build})", $this->version->full());
+
+        $this->assertEquals("v1.0.0-{$this->build}", $this->version->compact());
+
+        config(['version.format.awesome' => 'awesome version {$major}.{$minor}.{$patch}']);
+
+        $this->assertEquals("awesome version 1.0.0", $this->version->awesome());
+
+        $this->expectException(MethodNotFound::class);
+
+        $this->assertEquals("v1.0.0-{$this->build}", $this->version->inexistentMethod());
     }
 
     public function tearDown()

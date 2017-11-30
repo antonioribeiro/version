@@ -94,6 +94,25 @@ MyApp version 1.0.0 (build 701037)
 MyApp v1.0.0-701037
 ```
 
+It gives you acces to dynamic methods:
+
+``` php
+Version::compact()
+```
+
+And should you create a new one:
+
+``` yaml
+format:
+  awesome: "awesome version {$major}.{$minor}.{$patch}"
+```
+
+It will also become callable:
+
+``` php
+Version::awesome()
+```
+ 
 ### A Facade is available
 
 ``` php
@@ -109,7 +128,11 @@ Version::patch() // 25
 
 Version::format('full') // version 1.0.0 (build 703110)
 
+Version::full() // version 1.0.0 (build 703110) -- dynamic method
+
 Version::format('compact') // v.1.0.0-703110
+
+Version::compact() // v.1.0.0-703110 -- dynamic method
 ```
 
 ### A Blade directive is also ready to be used in your views
