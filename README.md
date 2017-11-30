@@ -63,18 +63,27 @@ To get
 MyApp version 1.0.0 (build 701036)
 ```
 
-### You can easily increment your build number, using this Artisan command
+### Easily increment your version numbers, using Artisan commands
 
 ``` bash
 php artisan version:build
 ```
 
-Which should give you 
+Which should print the new version number 
 
 ``` bash
 New build: 701037
 MyApp version 1.0.0 (build 701037) 
 ```
+
+Available for all of them:
+
+``` bash
+php artisan version:major   
+php artisan version:minor   
+php artisan version:patch   
+php artisan version:build   
+``` 
 
 ### The output format is highly configurable
 
@@ -211,6 +220,15 @@ And you should be good to use it in your views:
 ``` php
 @version
 ```
+
+As git versions are cached, you can tell composer to refresh your version numbers every time an update or install occur, by adding the refresh command to `post-autoload-dump`:  
+
+``` json
+"post-autoload-dump": [
+    ...
+    "@php artisan version:refresh"
+]
+``` 
 
 If you are using Git commits on your build numbers, you may have to add the git repository to your .env file
 
