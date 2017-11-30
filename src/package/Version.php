@@ -67,14 +67,14 @@ class Version
      * Get a cached value or execute a shell command to retrieve it.
      *
      * @param $command
-     * @param $cacheKey
+     * @param $keySuffix
      * @param int $length
      *
      * @return bool|mixed|null|string
      */
-    private function getCachedOrShellExecute($command, $cacheKey, $length = 256)
+    private function getCachedOrShellExecute($command, $keySuffix, $length = 256)
     {
-        if ($value = $this->cacheGet($key = $this->key($cacheKey))) {
+        if ($value = $this->cacheGet($key = $this->key($keySuffix))) {
             return $value;
         }
 

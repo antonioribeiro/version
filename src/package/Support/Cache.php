@@ -50,7 +50,7 @@ trait Cache
      */
     protected function key($string)
     {
-        return $this->config('cache.enabled').'-'.$string;
+        return $this->config('cache.key').'-'.$string;
     }
 
     /**

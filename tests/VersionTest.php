@@ -22,6 +22,14 @@ class VersionTest extends TestCase
 
     public static $gitVersion;
 
+    private function createGitTag()
+    {
+        exec('git init');
+        exec('git add -A');
+        exec('git commit -m "First commit"');
+        exec('git tag -a -f v0.1.1.3128 -m "version 0.1.1.3128"');
+    }
+
     private function getBuild()
     {
         if (!static::$build) {
@@ -31,6 +39,11 @@ class VersionTest extends TestCase
         }
 
         return static::$build;
+    }
+
+    private function removeGitTag()
+    {
+        exec('git tag -d v0.1.1.3128');
     }
 
     public function setUp()
@@ -225,20 +238,29 @@ class VersionTest extends TestCase
 
         chdir(base_path());
 
-        exec('git init');
-        exec('git add -A');
-        exec('git commit -m "First commit"');
-        exec('git tag -a -f v0.1.1.3128 -m "version 0.1.1.3128"');
+        $this->createGitTag();
 
         $this->assertEquals('version 0.1.1 (build 3128)', $this->version->format('full'));
 
-        exec('git tag -d v0.1.1.3128');
+        $this->removeGitTag();
 
         Cache::flush();
 
         $this->expectException(GitTagNotFound::class);
 
         $this->assertEquals('version 0.1.1 (build 3128)', $this->version->format('full'));
+    }
+
+    public function test_can_cache()
+    {
+        config(['version.version_source' => 'git']);
+        config(['version.build.mode' => 'git-remote']);
+
+        $this->createGitTag();
+
+        $this->assertEquals('version 0.1.1 (build 3128)', $this->version->format('full'));
+
+        $this->removeGitTag();
     }
 
     public function render($view)
