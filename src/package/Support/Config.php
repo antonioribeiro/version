@@ -3,7 +3,6 @@
 namespace PragmaRX\Version\Package\Support;
 
 use Illuminate\Support\Collection;
-use PragmaRX\Version\Package\Exceptions\ConfigurationNotFound;
 
 trait Config
 {
@@ -83,6 +82,7 @@ trait Config
      * Get the config file path.
      *
      * @param string|null $file
+     *
      * @return string
      */
     public function getConfigFile($file = null)
