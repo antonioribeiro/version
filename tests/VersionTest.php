@@ -187,6 +187,8 @@ class VersionTest extends TestCase
     {
         config(['version.build.mode' => 'number']);
 
+        Artisan::call('version:refresh');
+
         Artisan::call('version:show');
 
         Artisan::call('version:build');
