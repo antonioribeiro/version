@@ -4,9 +4,9 @@ namespace PragmaRX\Version\Package;
 
 use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
 use PragmaRX\Version\Package\Support\Cache;
+use PragmaRX\Version\Package\Support\Config;
 use PragmaRX\Version\Package\Support\Increment;
 use Symfony\Component\Process\Process;
-use PragmaRX\Version\Package\Support\Config;
 
 class Version
 {

@@ -275,7 +275,7 @@ class VersionTest extends TestCase
         $this->assertEquals(config('version.build.mode'), 'git-remote');
 
         $this->version->loadConfig();
-        
+
         $this->assertEquals(config('version.build.mode'), 'number');
     }
 
@@ -285,7 +285,7 @@ class VersionTest extends TestCase
 
         $this->version->loadConfig();
 
-        $this->assertEquals("version 1.0.0 (build 701031)", $this->version->format());
+        $this->assertEquals('version 1.0.0 (build 701031)', $this->version->format());
     }
 
     public function tearDown()
@@ -304,4 +304,3 @@ class VersionTest extends TestCase
         return ob_get_clean();
     }
 }
-
