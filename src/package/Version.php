@@ -2,15 +2,17 @@
 
 namespace PragmaRX\Version\Package;
 
-use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
+use Symfony\Component\Process\Process;
 use PragmaRX\Version\Package\Support\Cache;
 use PragmaRX\Version\Package\Support\Increment;
+use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class Version
 {
     use Cache, Increment;
 
-    const VERSION_CACHE_KEY = 'build';
+    const VERSION_CACHE_KEY = 'version';
 
     const BUILD_CACHE_KEY = 'build';
 
@@ -94,9 +96,15 @@ class Version
      */
     private function shell($command)
     {
-        chdir(base_path());
+        $process = new Process($command, base_path());
 
-        return @exec($command);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            return '';
+        }
+
+        return $process->getOutput();
     }
 
     /**
@@ -144,10 +152,16 @@ class Version
      */
     private function getVersionFromGit()
     {
-        return $this->getCachedOrShellExecute(
+        $version = $this->getCachedOrShellExecute(
             $this->config('git.version.command'),
-            static::VERSION_CACHE_KEY
+            static::BUILD_CACHE_KEY
         );
+
+        if (strpos($version, 'No names found') !== false) {
+            throw new GitTagNotFound('No git tags were found the in the repository');
+        }
+
+        return $version;
     }
 
     /**

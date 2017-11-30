@@ -22,12 +22,18 @@ class VersionTest extends TestCase
 
     public static $gitVersion;
 
-    private function createGitTag()
+    private $currentVersion;
+
+    private function createGitTag($version = '0.1.1.3128')
     {
+        chdir(base_path());
+
         exec('git init');
         exec('git add -A');
         exec('git commit -m "First commit"');
-        exec('git tag -a -f v0.1.1.3128 -m "version 0.1.1.3128"');
+        exec("git tag -a -f v{$version} -m \"version {$version}\"");
+
+        $this->currentVersion = $version;
     }
 
     private function getBuild()
@@ -43,7 +49,11 @@ class VersionTest extends TestCase
 
     private function removeGitTag()
     {
-        exec('git tag -d v0.1.1.3128');
+        chdir(base_path());
+
+        if (exec('git tag') && $this->currentVersion) {
+            exec("git tag -d v{$this->currentVersion}");
+        }
     }
 
     public function setUp()
@@ -236,31 +246,35 @@ class VersionTest extends TestCase
     {
         config(['version.version_source' => 'git']);
 
-        chdir(base_path());
-
         $this->createGitTag();
 
         $this->assertEquals('version 0.1.1 (build 3128)', $this->version->format('full'));
 
-        $this->removeGitTag();
-
         Cache::flush();
+
+        $this->removeGitTag();
 
         $this->expectException(GitTagNotFound::class);
 
         $this->assertEquals('version 0.1.1 (build 3128)', $this->version->format('full'));
     }
 
-    public function test_can_cache()
+    public function test_can_cache_version_and_build()
     {
         config(['version.version_source' => 'git']);
-        config(['version.build.mode' => 'git-remote']);
+        config(['version.build.mode' => 'git-local']);
 
-        $this->createGitTag();
+        $this->createGitTag('1.2.35');
 
-        $this->assertEquals('version 0.1.1 (build 3128)', $this->version->format('full'));
-//
-//        $this->removeGitTag();
+        $build = $this->getBuild();
+
+        $this->assertEquals("version 1.2.35 (build {$build})", $this->version->format('full'));
+        $this->assertEquals("v1.2.35-{$build}", $this->version->format('compact'));
+    }
+
+    public function tearDown()
+    {
+        $this->removeGitTag();
     }
 
     public function render($view)
