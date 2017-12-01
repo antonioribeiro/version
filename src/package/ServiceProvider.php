@@ -10,6 +10,7 @@ use PragmaRX\Version\Package\Console\Commands\Minor;
 use PragmaRX\Version\Package\Console\Commands\Patch;
 use PragmaRX\Version\Package\Console\Commands\Refresh;
 use PragmaRX\Version\Package\Console\Commands\Show;
+use \Illuminate\Contracts\Foundation\Application;
 
 class ServiceProvider extends IlluminateServiceProvider
 {
@@ -126,7 +127,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     private function registerService()
     {
-        $this->app->singleton('pragmarx.version', function ($app) {
+        $this->app->singleton('pragmarx.version', function (Application $app) {
             $version = $app->make(Version::class);
 
             $version->setConfigFileStub($this->getConfigFileStub());
