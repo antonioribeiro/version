@@ -10,8 +10,11 @@
     <a href="/antonioribeiro/version/blob/master/LICENSE.md"><img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
     <a href="https://scrutinizer-version.com/g/antonioribeiro/version/?branch=master"><img alt="Code Quality" src="https://img.shields.io/scrutinizer/g/antonioribeiro/version.svg?style=flat-square"></a>
     <a href="https://scrutinizer-version.com/g/antonioribeiro/version/?branch=master"><img alt="Build" src="https://img.shields.io/scrutinizer/build/g/antonioribeiro/version.svg?style=flat-square"></a>
+</p>
+<p align="center">
     <a href="https://scrutinizer-version.com/g/antonioribeiro/version/?branch=master"><img alt="Coverage" src="https://img.shields.io/scrutinizer/coverage/g/antonioribeiro/version.svg?style=flat-square"></a>
     <a href="https://styleci.io/repos/112244465"><img alt="StyleCI" src="https://styleci.io/repos/112244465/shield"></a>
+    <a href="https://insight.sensiolabs.com/projects/0fd56820-866c-4f21-a6dd-cdc5db95c651"><img alt="SensioLabsInsight" src="https://img.shields.io/sensiolabs/i/0fd56820-866c-4f21-a6dd-cdc5db95c651.svg?style=flat-square"></a>
 </p>
 
 ## Description
