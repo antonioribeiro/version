@@ -304,6 +304,23 @@ class VersionTest extends TestCase
         $this->assertEquals("v1.0.0-{$this->build}", $this->version->inexistentMethod());
     }
 
+    public function test_dont_load_on_missing_configuration()
+    {
+        $configFile = base_path('config/version.yml');
+
+        $this->assertEquals(config('version.build.mode'), 'git-local');
+
+        $this->version->loadConfig($configFile);
+
+        $this->assertEquals(config('version.build.mode'), 'number');
+
+        exec('rm '.$configFile);
+
+        $this->version->loadConfig($configFile);
+
+        $this->assertEquals(config('version.build.mode'), 'number');
+    }
+
     public function tearDown()
     {
         $this->removeGitTag();

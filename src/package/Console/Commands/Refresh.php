@@ -27,7 +27,7 @@ class Refresh extends Base
     {
         app('pragmarx.version')->refresh();
 
-        $this->info('App build was refreshed.');
+        $this->info('Version was refreshed.');
 
         $this->displayAppVersion();
     }
