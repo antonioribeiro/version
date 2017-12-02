@@ -38,7 +38,7 @@ class Version
     }
 
     /**
-     * Dinamically call format types.
+     * Dynamically call format types.
      *
      * @param $name
      * @param array $arguments
