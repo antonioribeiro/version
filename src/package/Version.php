@@ -59,28 +59,6 @@ class Version
     }
 
     /**
-     * Get a cached value or execute a shell command to retrieve it.
-     *
-     * @param $command
-     * @param $keySuffix
-     * @param int $length
-     *
-     * @return bool|mixed|null|string
-     */
-    private function getCachedOrShellExecute($command, $keySuffix, $length = 256)
-    {
-        if ($value = $this->cacheGet($key = $this->key($keySuffix))) {
-            return $value;
-        }
-
-        $value = substr($this->shell($command), 0, $length);
-
-        $this->cachePut($key, $value);
-
-        return $value;
-    }
-
-    /**
      * Execute an shell command.
      *
      * @param $command

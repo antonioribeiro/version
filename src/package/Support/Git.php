@@ -44,7 +44,7 @@ trait Git
      */
     protected function getGitCommit()
     {
-        return $this->getCachedOrShellExecute(
+        return $this->getFromGit(
             $this->makeGitHashRetrieverCommand(),
             static::VERSION_CACHE_KEY,
             $this->config('build.length')
@@ -61,12 +61,35 @@ trait Git
         return  $this->config('git.'.$this->config('build.mode'));
     }
 
+
+    /**
+     * Get a cached value or execute a shell command to retrieve it.
+     *
+     * @param $command
+     * @param $keySuffix
+     * @param int $length
+     *
+     * @return bool|mixed|null|string
+     */
+    private function getFromGit($command, $keySuffix, $length = 256)
+    {
+        if ($value = $this->cacheGet($key = $this->key($keySuffix))) {
+            return $value;
+        }
+
+        $value = substr($this->shell($command), 0, $length);
+
+        $this->cachePut($key, $value);
+
+        return $value;
+    }
+
     /**
      * Get the current app version from Git.
      */
     protected function getVersionFromGit()
     {
-        return $this->getCachedOrShellExecute(
+        return $this->getFromGit(
             $this->makeGitVersionRetrieverCommand(),
             static::BUILD_CACHE_KEY
         );
