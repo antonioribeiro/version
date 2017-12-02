@@ -60,22 +60,22 @@ class VersionTest extends TestCase
         }
 
         var_dump('1 -------------');
-        var_dump(substr(exec('git ls-remote git@github.com:antonioribeiro/version.git | grep tags/'));
+        var_dump(exec('git ls-remote git@github.com:antonioribeiro/version.git | grep tags/'));
 
         var_dump('2 -------------');
-        var_dump(substr(exec('git ls-remote git@github.com:antonioribeiro/version.git | grep tags/ | grep -v {}'));
+        var_dump(exec('git ls-remote git@github.com:antonioribeiro/version.git | grep tags/ | grep -v {}'));
 
         var_dump('3 -------------');
-        var_dump(substr(exec('git ls-remote git@github.com:antonioribeiro/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3'));
+        var_dump(exec('git ls-remote git@github.com:antonioribeiro/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3'));
 
         var_dump('4 -------------');
-        var_dump(substr(exec('git ls-remote git@github.com:antonioribeiro/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2'));
+        var_dump(exec('git ls-remote git@github.com:antonioribeiro/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2'));
 
         var_dump('5 -------------');
-        var_dump(substr(exec('git ls-remote git@github.com:antonioribeiro/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2 | sort --version-sort'));
+        var_dump(exec('git ls-remote git@github.com:antonioribeiro/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2 | sort --version-sort'));
 
         var_dump('6 -------------');
-        var_dump(substr(exec('git ls-remote git@github.com:antonioribeiro/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2 | sort --version-sort | tail -1'));
+        var_dump(exec('git ls-remote git@github.com:antonioribeiro/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2 | sort --version-sort | tail -1'));
 
         return static::$remoteVersion = substr(exec('git ls-remote git@github.com:antonioribeiro/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2 | sort --version-sort | tail -1'), 0, 6);
     }
