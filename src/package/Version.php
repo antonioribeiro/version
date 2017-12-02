@@ -222,7 +222,5 @@ class Version
         if (!is_null($value = $this->config("format.{$type}"))) {
             return $this->replaceVariables($value);
         }
-
-        return null;
     }
 }

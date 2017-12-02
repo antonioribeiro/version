@@ -126,6 +126,7 @@ trait Git
      * Get git repository.
      *
      * @param $string
+     *
      * @return mixed
      */
     public function searchAndReplaceRepository($string)

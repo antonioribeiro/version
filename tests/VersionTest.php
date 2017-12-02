@@ -207,7 +207,6 @@ class VersionTest extends TestCase
         $this->assertEquals('version {$major}.{$minor}.{$patch} (build {$build})', config('version.format.full'));
     }
 
-
     public function test_increment_build()
     {
         $this->version->incrementBuild();
@@ -355,9 +354,9 @@ class VersionTest extends TestCase
         $this->version->incrementMinor();
         $this->version->incrementMinor(); // 4.2.0
 
-        $this->assertEquals("4", $this->version->major());
-        $this->assertEquals("2", $this->version->minor());
-        $this->assertEquals("0", $this->version->patch());
+        $this->assertEquals('4', $this->version->major());
+        $this->assertEquals('2', $this->version->minor());
+        $this->assertEquals('0', $this->version->patch());
 
         $this->assertEquals($this->build, $this->version->build());
     }
