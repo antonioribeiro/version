@@ -7,7 +7,6 @@ use PragmaRX\Version\Package\Support\Cache;
 use PragmaRX\Version\Package\Support\Config;
 use PragmaRX\Version\Package\Support\Git;
 use PragmaRX\Version\Package\Support\Increment;
-use Symfony\Component\Process\Process;
 
 class Version
 {
