@@ -113,13 +113,13 @@ trait Git
         }
 
         return [
-                   'major' => $matches[1][0],
+                   'major' => isset($matches[1][0]) ? $matches[1][0] : null,
 
-                   'minor' => $matches[2][0],
+                   'minor' => isset($matches[2][0]) ? $matches[2][0] : null,
 
-                   'patch' => $matches[3][0],
+                   'patch' => isset($matches[3][0]) ? $matches[3][0] : null,
 
-                   'build' => $matches[4][0],
+                   'build' => isset($matches[4][0]) ? $matches[4][0] : null,
                ][$type];
     }
 
