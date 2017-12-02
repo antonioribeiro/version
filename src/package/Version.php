@@ -2,16 +2,16 @@
 
 namespace PragmaRX\Version\Package;
 
-use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
 use PragmaRX\Version\Package\Exceptions\MethodNotFound;
 use PragmaRX\Version\Package\Support\Cache;
 use PragmaRX\Version\Package\Support\Config;
+use PragmaRX\Version\Package\Support\Git;
 use PragmaRX\Version\Package\Support\Increment;
 use Symfony\Component\Process\Process;
 
 class Version
 {
-    use Cache, Increment, Config;
+    use Cache, Increment, Config, Git;
 
     const VERSION_CACHE_KEY = 'version';
 
@@ -27,7 +27,9 @@ class Version
 
     const VERSION_SOURCE_CONFIG = 'config';
 
-    const VERSION_SOURCE_GIT = 'git';
+    const VERSION_SOURCE_GIT_LOCAL = 'git-local';
+
+    const VERSION_SOURCE_GIT_REMOTE = 'git-remote';
 
     /**
      * Version constructor.
@@ -49,21 +51,11 @@ class Version
      */
     public function __call($name, array $arguments)
     {
-        if ($version = $this->format($name)) {
+        if (!is_null($version = $this->format($name))) {
             return $version;
         }
 
         throw new MethodNotFound("Method '{$name}' doesn't exists in this object.");
-    }
-
-    /**
-     * Get the build git repository url.
-     *
-     * @return string
-     */
-    private function getBuildRepository()
-    {
-        return $this->config('build.repository');
     }
 
     /**
@@ -109,32 +101,6 @@ class Version
     }
 
     /**
-     * Get the current git commit number, to be used as build number.
-     *
-     * @return string
-     */
-    private function getGitCommit()
-    {
-        return $this->getCachedOrShellExecute(
-            $this->makeGitHashRetrieverCommand(),
-            static::VERSION_CACHE_KEY,
-            $this->config('build.length')
-        );
-    }
-
-    /**
-     * Get the git hash retriever command.
-     *
-     * @return \Illuminate\Config\Repository|mixed
-     */
-    private function getGitHashRetrieverCommand()
-    {
-        return $this->config('build.mode') === static::BUILD_MODE_GIT_LOCAL
-            ? $this->config('git.local')
-            : $this->config('git.remote');
-    }
-
-    /**
      * Get a version.
      *
      * @param $type
@@ -146,69 +112,6 @@ class Version
         return $this->isVersionComingFromGit()
                 ? $this->gitVersion($type)
                 : $this->config("current.{$type}");
-    }
-
-    /**
-     * Get the current app version from Git.
-     */
-    private function getVersionFromGit()
-    {
-        return $this->getCachedOrShellExecute(
-            $this->config('git.version.command'),
-            static::BUILD_CACHE_KEY
-        );
-    }
-
-    /**
-     * Get version from the git repository.
-     *
-     * @param $type
-     *
-     * @throws GitTagNotFound
-     *
-     * @return string
-     */
-    private function gitVersion($type)
-    {
-        preg_match_all($this->config('git.version.matcher'), $this->getVersionFromGit(), $matches);
-
-        if (empty($matches[0])) {
-            throw new GitTagNotFound('No git tags not found in this repository');
-        }
-
-        return [
-            'major' => $matches[1][0],
-
-            'minor' => $matches[2][0],
-
-            'patch' => $matches[3][0],
-
-            'build' => $matches[4][0],
-        ][$type];
-    }
-
-    /**
-     * Check if git is the current version source.
-     *
-     * @return bool
-     */
-    private function isVersionComingFromGit()
-    {
-        return $this->config('version_source') == static::VERSION_SOURCE_GIT;
-    }
-
-    /**
-     * Make the git hash retriever command.
-     *
-     * @return mixed
-     */
-    private function makeGitHashRetrieverCommand()
-    {
-        return str_replace(
-            '{$repository}',
-            $this->getBuildRepository(),
-            $this->getGitHashRetrieverCommand()
-        );
     }
 
     /**
@@ -247,11 +150,11 @@ class Version
                 '{$build}',
             ],
             [
-                $this->major(),
-                $this->minor(),
-                $this->patch(),
-                $this->getBuildRepository(),
-                $this->build(),
+                $this->getVersion('major'),
+                $this->getVersion('minor'),
+                $this->getVersion('patch'),
+                $this->getGitRepository(),
+                $this->getBuild(),
             ],
             $string
         );
@@ -272,7 +175,7 @@ class Version
      *
      * @return mixed
      */
-    public function build()
+    public function getBuild()
     {
         if ($this->isVersionComingFromGit() && $value = $this->gitVersion('build')) {
             return $value;
@@ -283,36 +186,6 @@ class Version
         }
 
         return $this->getGitCommit();
-    }
-
-    /**
-     * Get major version.
-     *
-     * @return mixed
-     */
-    public function major()
-    {
-        return $this->getVersion('major');
-    }
-
-    /**
-     * Get the minor version.
-     *
-     * @return mixed
-     */
-    public function minor()
-    {
-        return $this->getVersion('minor');
-    }
-
-    /**
-     * Get the patch number.
-     *
-     * @return mixed
-     */
-    public function patch()
-    {
-        return $this->getVersion('patch');
     }
 
     /**
@@ -340,12 +213,16 @@ class Version
      *
      * @param $type
      *
-     * @return mixed
+     * @return mixed|null
      */
     public function format($type = null)
     {
         $type = $type ?: static::DEFAULT_FORMAT;
 
-        return $this->replaceVariables($this->config("format.{$type}"));
+        if (!is_null($value = $this->config("format.{$type}"))) {
+            return $this->replaceVariables($value);
+        }
+
+        return null;
     }
 }

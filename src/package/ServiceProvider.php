@@ -11,6 +11,7 @@ use PragmaRX\Version\Package\Console\Commands\Minor;
 use PragmaRX\Version\Package\Console\Commands\Patch;
 use PragmaRX\Version\Package\Console\Commands\Refresh;
 use PragmaRX\Version\Package\Console\Commands\Show;
+use PragmaRX\Version\Package\Console\Commands\Version as VersionCommand;
 
 class ServiceProvider extends IlluminateServiceProvider
 {
@@ -22,6 +23,8 @@ class ServiceProvider extends IlluminateServiceProvider
     protected $defer = false;
 
     protected $commandList = [
+        'pragmarx.version.command' => VersionCommand::class,
+
         'pragmarx.version.build.command' => Build::class,
 
         'pragmarx.version.show.command' => Show::class,

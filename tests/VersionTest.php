@@ -21,6 +21,8 @@ class VersionTest extends TestCase
 
     public static $gitVersion;
 
+    public static $remoteVersion;
+
     private $currentVersion;
 
     private $build;
@@ -42,11 +44,22 @@ class VersionTest extends TestCase
         $this->currentVersion = $version;
 
         $this->build = $this->getBuild();
+
+        $this->retrieveRemoteVersion();
     }
 
     private function getBuild()
     {
         return substr(exec('git rev-parse --verify HEAD'), 0, 6);
+    }
+
+    private function retrieveRemoteVersion()
+    {
+        if (isset(static::$remoteVersion)) {
+            return static::$remoteVersion;
+        }
+
+        return static::$remoteVersion = substr(exec('git ls-remote git@github.com:antonioribeiro/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2 | sort --version-sort | tail -1'), 0, 6);
     }
 
     private function removeGitTag()
@@ -176,6 +189,7 @@ class VersionTest extends TestCase
         $this->assertEquals('version {$major}.{$minor}.{$patch} (build {$build})', config('version.format.full'));
     }
 
+
     public function test_increment_build()
     {
         $this->version->incrementBuild();
@@ -237,9 +251,9 @@ class VersionTest extends TestCase
         $this->assertEquals('version 2.0.0 (build 701032)', $this->version->format('full'));
     }
 
-    public function test_can_get_version_from_git()
+    public function test_can_get_version_from_git_local()
     {
-        config(['version.version_source' => 'git']);
+        config(['version.version_source' => 'git-local']);
 
         $this->createGitTag();
 
@@ -254,11 +268,22 @@ class VersionTest extends TestCase
         $this->assertEquals('version 0.1.1 (build 3128)', $this->version->format('full'));
     }
 
+    public function test_can_get_version_from_git_remote()
+    {
+        config(['version.version_source' => 'git-remote']);
+
+        $this->createGitTag();
+
+        $version = static::$remoteVersion;
+
+        $this->assertEquals("version {$version} (build {$this->build})", $this->version->format('full'));
+    }
+
     public function test_can_cache_version_and_build()
     {
         Cache::flush();
 
-        config(['version.version_source' => 'git']);
+        config(['version.version_source' => 'git-local']);
         config(['version.build.mode' => 'git-local']);
 
         $this->createGitTag($version = '1.2.35');
@@ -302,6 +327,21 @@ class VersionTest extends TestCase
         $this->expectException(MethodNotFound::class);
 
         $this->assertEquals("v1.0.0-{$this->build}", $this->version->inexistentMethod());
+    }
+
+    public function test_can_call_basic_types_dynamically()
+    {
+        $this->version->incrementMajor();
+        $this->version->incrementMajor();
+        $this->version->incrementMajor(); // 4.0.0
+        $this->version->incrementMinor();
+        $this->version->incrementMinor(); // 4.2.0
+
+        $this->assertEquals("4", $this->version->major());
+        $this->assertEquals("2", $this->version->minor());
+        $this->assertEquals("0", $this->version->patch());
+
+        $this->assertEquals($this->build, $this->version->build());
     }
 
     public function test_dont_load_on_missing_configuration()

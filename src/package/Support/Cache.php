@@ -15,7 +15,7 @@ trait Cache
      */
     protected function cachePut($key, $value, $minutes = 10)
     {
-        IlluminateCache::put($key, $value, $minutes);
+        IlluminateCache::put($key, $value, $this->config('cache.time', $minutes));
     }
 
     /**
