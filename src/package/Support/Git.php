@@ -61,7 +61,6 @@ trait Git
         return  $this->config('git.'.$this->config('build.mode'));
     }
 
-
     /**
      * Get a cached value or execute a shell command to retrieve it.
      *
