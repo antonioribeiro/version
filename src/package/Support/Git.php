@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Version\Package\Support;
 
+use Symfony\Component\Process\Process;
 use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
 
 trait Git
