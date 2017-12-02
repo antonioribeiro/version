@@ -156,4 +156,24 @@ trait Git
     {
         return str_replace('{$repository}', $this->getGitRepository(), $string);
     }
+
+    /**
+     * Execute an shell command.
+     *
+     * @param $command
+     *
+     * @return string
+     */
+    private function shell($command)
+    {
+        $process = new Process($command, base_path());
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            return '';
+        }
+
+        return $process->getOutput();
+    }
 }

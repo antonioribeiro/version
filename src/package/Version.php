@@ -59,26 +59,6 @@ class Version
     }
 
     /**
-     * Execute an shell command.
-     *
-     * @param $command
-     *
-     * @return string
-     */
-    private function shell($command)
-    {
-        $process = new Process($command, base_path());
-
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            return '';
-        }
-
-        return $process->getOutput();
-    }
-
-    /**
      * Get a version.
      *
      * @param $type
