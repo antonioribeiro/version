@@ -21,18 +21,19 @@
 
 This package is a Laravel (5.5+) utility which helps you keep and manage your application version, increment version numbers (major, minor, patch, build), and can also use your last commit hash as build number.
 
-#### The two main features of this package are:
+#### The end results of this package are:
 
 - Print a version on a page.
-- Print it in the console, via an artisan command.
+- Print it in the console, via an Artisan command.
 
-#### This way it may help you:
+#### Some use cases for those results could be: 
  
 - Make sure a rollback was successful.
 - Know if an update reached all servers.
 - Check if a user is looking at the last version of your app.
 - Verify if is Travis CI testing the version it is supposed to be testing.
 - You simple love to version your stuff, and you like to see them in all your pages? That's cool too. :)
+- What's your use case? [Tell us!](https://github.com/antonioribeiro/version/issues) 
 
 ## Features
 
