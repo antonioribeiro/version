@@ -178,6 +178,39 @@ git tag -a -f v0.1.1.3128
 
 Version will use it as your app build number
 
+### Matching other version (git tags) formats
+
+You probably only need to change the git version matcher 
+
+``` yaml
+git:
+  ...
+  version:
+    matcher: "/[V|v]*[ersion]*\\s*\\.*(\\d+)\\.(\\d+)\\.(\\d+)\\.*(\\w*)/"
+```
+
+So let's say you tag your releases as 
+
+``` text
+2017120299
+YYYYMMDD##
+```
+
+You can change your matcher to
+
+``` yaml
+git:
+  version:
+    matcher: "/(\d{4})(\d{2})(\d{2})(?:\d{2})/"
+```
+
+And remove dots from your formats:
+
+``` yaml
+format:
+  compact: "v{$major}{$minor}{$patch}-{$build}"
+```
+
 ### Artisan commands
 
 Those are the commands you have at your disposal:

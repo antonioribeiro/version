@@ -364,13 +364,13 @@ class VersionTest extends TestCase
     {
         config(['version.git.build.mode' => 'git-local']);
 
-        config(['version.git.version.matcher' => '/(\d{4})(\d{2})(\d{2})\##/']);
+        config(['version.git.version.matcher' => '/(\d{4})(\d{2})(\d{2})(?:\d{2})/']);
 
         config(['version.format.compact' => 'v.{$major}{$minor}{$patch}-{$build}']);
 
         config(['version.version_source' => 'git-local']);
 
-        $this->createGitTag('20171202##');
+        $this->createGitTag('2017120299');
 
         $this->assertEquals($version = "v.20171202-{$this->build}", $this->version->format('compact'));
     }
