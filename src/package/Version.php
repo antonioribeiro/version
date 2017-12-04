@@ -42,11 +42,11 @@ class Version
     /**
      * Version constructor.
      *
-     * @param Cache|null $cache
-     * @param Config|null $config
-     * @param Git|null $git
+     * @param Cache|null     $cache
+     * @param Config|null    $config
+     * @param Git|null       $git
      * @param Increment|null $increment
-     * @param Yaml $yaml
+     * @param Yaml           $yaml
      */
     public function __construct(Cache $cache = null,
                                 Config $config = null,
