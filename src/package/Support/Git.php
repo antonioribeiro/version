@@ -13,12 +13,13 @@ class Git
      * Cache constructor.
      *
      * @param Config|null $config
+     * @param Cache|null $cache
      */
-    public function __construct(Config $config = null)
+    public function __construct(Config $config, Cache $cache)
     {
-        $this->config = is_null($config)
-            ? app(Config::class)
-            : $config;
+        $this->config = $config;
+
+        $this->cache = $cache;
     }
 
     /**
@@ -26,7 +27,7 @@ class Git
      *
      * @return string
      */
-    protected function getGitRepository()
+    public function getGitRepository()
     {
         return $this->config->get('git.repository');
     }
@@ -36,7 +37,7 @@ class Git
      *
      * @return string
      */
-    protected function makeGitVersionRetrieverCommand()
+    public function makeGitVersionRetrieverCommand()
     {
         return $this->searchAndReplaceRepository(
             $this->config->get('git.version.'.$this->config->get('version_source'))
@@ -48,11 +49,11 @@ class Git
      *
      * @return string
      */
-    protected function getGitCommit()
+    public function getCommit()
     {
         return $this->getFromGit(
             $this->makeGitHashRetrieverCommand(),
-            static::VERSION_CACHE_KEY,
+            Constants::VERSION_CACHE_KEY,
             $this->config->get('build.length')
         );
     }
@@ -62,7 +63,7 @@ class Git
      *
      * @return \Illuminate\Config\Repository|mixed
      */
-    protected function getGitHashRetrieverCommand()
+    public function getGitHashRetrieverCommand()
     {
         return  $this->config->get('git.'.$this->config->get('build.mode'));
     }
@@ -76,15 +77,15 @@ class Git
      *
      * @return bool|mixed|null|string
      */
-    private function getFromGit($command, $keySuffix, $length = 256)
+    protected function getFromGit($command, $keySuffix, $length = 256)
     {
-        if ($value = $this->cacheGet($key = $this->key($keySuffix))) {
+        if ($value = $this->cache->get($key = $this->cache->key($keySuffix))) {
             return $value;
         }
 
         $value = substr($this->shell($command), 0, $length);
 
-        $this->cachePut($key, $value);
+        $this->cache->put($key, $value);
 
         return $value;
     }
@@ -92,11 +93,11 @@ class Git
     /**
      * Get the current app version from Git.
      */
-    protected function getVersionFromGit()
+    public function getVersionFromGit()
     {
         return $this->getFromGit(
             $this->makeGitVersionRetrieverCommand(),
-            static::BUILD_CACHE_KEY
+            Constants::BUILD_CACHE_KEY
         );
     }
 
@@ -109,7 +110,7 @@ class Git
      *
      * @return string
      */
-    protected function gitVersion($type)
+    public function version($type)
     {
         preg_match_all($this->config->get('git.version.matcher'), $this->getVersionFromGit(), $matches);
 
@@ -133,9 +134,9 @@ class Git
      *
      * @return bool
      */
-    protected function isVersionComingFromGit()
+    public function isVersionComingFromGit()
     {
-        return $this->config->get('version_source') !== static::VERSION_SOURCE_CONFIG;
+        return $this->config->get('version_source') !== Constants::VERSION_SOURCE_CONFIG;
     }
 
     /**
@@ -143,7 +144,7 @@ class Git
      *
      * @return mixed
      */
-    protected function makeGitHashRetrieverCommand()
+    public function makeGitHashRetrieverCommand()
     {
         return $this->searchAndReplaceRepository(
             $this->getGitHashRetrieverCommand()
@@ -169,7 +170,7 @@ class Git
      *
      * @return string
      */
-    private function shell($command)
+    protected function shell($command)
     {
         $process = new Process($command, base_path());
 

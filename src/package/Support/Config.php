@@ -3,6 +3,7 @@
 namespace PragmaRX\Version\Package\Support;
 
 use Illuminate\Support\Collection;
+use PragmaRX\Yaml\Package\Yaml;
 
 class Config
 {
@@ -28,6 +29,16 @@ class Config
     protected $configFile;
 
     /**
+     * Cache constructor.
+     *
+     * @param Yaml|null $yaml
+     */
+    public function __construct(Yaml $yaml)
+    {
+        $this->yaml = $yaml;
+    }
+
+    /**
      * Get config value.
      *
      * @param $string
@@ -35,7 +46,7 @@ class Config
      *
      * @return \Illuminate\Config\Repository|mixed
      */
-    protected function get($string, $default = null)
+    public function get($string, $default = null)
     {
         return config("version.{$string}", $default);
     }
@@ -47,7 +58,7 @@ class Config
      *
      * @internal param $string
      */
-    protected function getRoot()
+    public function getRoot()
     {
         return config('version');
     }
@@ -116,8 +127,10 @@ class Config
 
     /**
      * Update the config file.
+     *
+     * @param $config
      */
-    protected function updateConfig($config)
+    public function update($config)
     {
         config(['version' => $config]);
 

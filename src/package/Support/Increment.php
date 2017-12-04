@@ -13,9 +13,7 @@ class Increment
      */
     public function __construct(Config $config = null)
     {
-        $this->config = is_null($config)
-            ? app(Config::class)
-            : $config;
+        $this->config = $config;
     }
 
     /**
@@ -30,7 +28,7 @@ class Increment
     {
         $config = $incrementer($this->config->getRoot());
 
-        $this->updateConfig($config);
+        $this->config->update($config);
 
         return array_get($config, $returnKey);
     }

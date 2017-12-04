@@ -5,38 +5,36 @@ namespace PragmaRX\Version\Package;
 use PragmaRX\Version\Package\Exceptions\MethodNotFound;
 use PragmaRX\Version\Package\Support\Cache;
 use PragmaRX\Version\Package\Support\Config;
+use PragmaRX\Version\Package\Support\Constants;
 use PragmaRX\Version\Package\Support\Git;
 use PragmaRX\Version\Package\Support\Increment;
 use PragmaRX\Yaml\Package\Yaml;
 
 class Version
 {
-    const VERSION_CACHE_KEY = 'version';
-
-    const BUILD_CACHE_KEY = 'build';
-
-    const BUILD_MODE_NUMBER = 'number';
-
-    const BUILD_MODE_GIT_LOCAL = 'git-local';
-
-    const BUILD_MODE_GIT_REMOTE = 'git-remote';
-
-    const DEFAULT_FORMAT = 'full';
-
-    const VERSION_SOURCE_CONFIG = 'config';
-
-    const VERSION_SOURCE_GIT_LOCAL = 'git-local';
-
-    const VERSION_SOURCE_GIT_REMOTE = 'git-remote';
-
+    /**
+     * @var \PragmaRX\Yaml\Package\Yaml
+     */
     protected $yaml;
 
+    /**
+     * @var \PragmaRX\Version\Package\Support\Cache
+     */
     protected $cache;
 
+    /**
+     * @var \PragmaRX\Version\Package\Support\Config
+     */
     protected $config;
 
+    /**
+     * @var \PragmaRX\Version\Package\Support\Git
+     */
     protected $git;
 
+    /**
+     * @var \PragmaRX\Version\Package\Support\Increment
+     */
     protected $increment;
 
     /**
@@ -52,7 +50,7 @@ class Version
                                 Config $config = null,
                                 Git $git = null,
                                 Increment $increment = null,
-                                Yaml $yaml)
+                                Yaml $yaml = null)
     {
         $this->instantiate($cache, $config, $git, $increment, $yaml);
     }
@@ -69,6 +67,10 @@ class Version
      */
     public function __call($name, array $arguments)
     {
+        if (starts_with($name, 'increment')) {
+            return $this->increment->$name(...$arguments);
+        }
+
         if (!is_null($version = $this->format($name))) {
             return $version;
         }
@@ -85,9 +87,9 @@ class Version
      */
     private function getVersion($type)
     {
-        return $this->isVersionComingFromGit()
-                ? $this->gitVersion($type)
-                : $this->config("current.{$type}");
+        return $this->git->isVersionComingFromGit()
+                ? $this->git->version($type)
+                : $this->config->get("current.{$type}");
     }
 
     /**
@@ -101,15 +103,15 @@ class Version
      */
     private function instantiate($cache, $config, $git, $increment, $yaml)
     {
-        $this->instantiateClass($cache, 'cache', Cache::class);
+        $yaml = $this->instantiateClass(app('pragmarx.yaml'), 'yaml');
 
-        $this->instantiateClass($config, 'config', Config::class);
+        $config = $this->instantiateClass($config, 'config', Config::class, [$yaml]);
 
-        $this->instantiateClass($git, 'git', Git::class);
+        $cache = $this->instantiateClass($cache, 'cache', Cache::class, [$config]);
 
-        $this->instantiateClass($increment, 'increment', Increment::class);
+        $this->instantiateClass($git, 'git', Git::class, [$config, $cache]);
 
-        $this->instantiateClass($yaml, 'yaml', 'pragmarx.yaml');
+        $this->instantiateClass($increment, 'increment', Increment::class, [$config]);
     }
 
     /**
@@ -118,11 +120,12 @@ class Version
      * @param $instance  object
      * @param $property  string
      * @param $class     string
+     * @return Yaml|object
      */
-    private function instantiateClass($instance, $property, $class)
+    private function instantiateClass($instance, $property, $class = null, $arguments = [])
     {
-        $this->{$property} = is_null($instance)
-            ? $instance = app($class)
+        return $this->{$property} = is_null($instance)
+            ? $instance = new $class(...$arguments)
             : $instance;
     }
 
@@ -165,7 +168,7 @@ class Version
                 $this->getVersion('major'),
                 $this->getVersion('minor'),
                 $this->getVersion('patch'),
-                $this->getGitRepository(),
+                $this->git->getGitRepository(),
                 $this->getBuild(),
             ],
             $string
@@ -189,15 +192,15 @@ class Version
      */
     public function getBuild()
     {
-        if ($this->isVersionComingFromGit() && $value = $this->gitVersion('build')) {
+        if ($this->git->isVersionComingFromGit() && $value = $this->git->version('build')) {
             return $value;
         }
 
-        if ($value = $this->config('build.mode') === static::BUILD_MODE_NUMBER) {
-            return $this->config('build.number');
+        if ($value = $this->config->get('build.mode') === Constants::BUILD_MODE_NUMBER) {
+            return $this->config->get('build.number');
         }
 
-        return $this->getGitCommit();
+        return $this->git->getCommit();
     }
 
     /**
@@ -207,7 +210,7 @@ class Version
      */
     protected function makeVersion()
     {
-        return $this->config('current.format');
+        return $this->config->get('current.format');
     }
 
     /**
@@ -229,9 +232,9 @@ class Version
      */
     public function format($type = null)
     {
-        $type = $type ?: static::DEFAULT_FORMAT;
+        $type = $type ?: Constants::DEFAULT_FORMAT;
 
-        if (!is_null($value = $this->config("format.{$type}"))) {
+        if (!is_null($value = $this->config->get("format.{$type}"))) {
             return $this->replaceVariables($value);
         }
     }
@@ -251,10 +254,20 @@ class Version
      *
      * @param $path
      *
-     * @return Collection
+     * @return \Illuminate\Support\Collection
      */
     public function loadConfig($path = null)
     {
         return $this->config->loadConfig($path);
+    }
+
+    /**
+     * Refresh cache.
+     */
+    public function refresh()
+    {
+        $this->cache->flush();
+
+        return $this->build();
     }
 }

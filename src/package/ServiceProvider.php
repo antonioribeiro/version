@@ -131,7 +131,9 @@ class ServiceProvider extends IlluminateServiceProvider
     private function registerService()
     {
         $this->app->singleton('pragmarx.version', function (Application $app) {
-            $version = $app->make(Version::class);
+            $version = new Version(
+
+            );
 
             $version->setConfigFileStub($this->getConfigFileStub());
 

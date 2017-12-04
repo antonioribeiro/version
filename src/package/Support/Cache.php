@@ -13,11 +13,9 @@ class Cache
      *
      * @param Config|null $config
      */
-    public function __construct(Config $config = null)
+    public function __construct(Config $config)
     {
-        $this->config = is_null($config)
-            ? app(Config::class)
-            : $config;
+        $this->config = $config;
     }
 
     /**
@@ -27,7 +25,7 @@ class Cache
      * @param $value
      * @param int $minutes
      */
-    protected function cachePut($key, $value, $minutes = 10)
+    public function put($key, $value, $minutes = 10)
     {
         IlluminateCache::put($key, $value, $this->config->get('cache.time', $minutes));
     }
@@ -39,7 +37,7 @@ class Cache
      *
      * @return null|mixed
      */
-    protected function cacheGet($key)
+    public function get($key)
     {
         return $this->config->get('cache.enabled')
             ? IlluminateCache::get($key)
@@ -53,7 +51,7 @@ class Cache
      *
      * @return string
      */
-    protected function key($string)
+    public function key($string)
     {
         return $this->config->get('cache.key').'-'.$string;
     }
@@ -61,20 +59,10 @@ class Cache
     /**
      * Get the current object instance.
      */
-    public function clearCache()
+    public function flush()
     {
-        IlluminateCache::forget($this->key(static::BUILD_CACHE_KEY));
+        IlluminateCache::forget($this->key(Constants::BUILD_CACHE_KEY));
 
-        IlluminateCache::forget($this->key(static::VERSION_CACHE_KEY));
-    }
-
-    /**
-     * Get the current object instance.
-     */
-    public function refresh()
-    {
-        $this->clearCache();
-
-        return $this->build();
+        IlluminateCache::forget($this->key(Constants::VERSION_CACHE_KEY));
     }
 }
