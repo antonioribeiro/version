@@ -13,7 +13,7 @@ class Git
      * Cache constructor.
      *
      * @param Config|null $config
-     * @param Cache|null $cache
+     * @param Cache|null  $cache
      */
     public function __construct(Config $config, Cache $cache)
     {

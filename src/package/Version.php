@@ -120,6 +120,7 @@ class Version
      * @param $instance  object
      * @param $property  string
      * @param $class     string
+     *
      * @return Yaml|object
      */
     private function instantiateClass($instance, $property, $class = null, $arguments = [])

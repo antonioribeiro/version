@@ -95,7 +95,6 @@ class VersionTest extends TestCase
         $this->assertInstanceOf(VersionService::class, $this->version);
     }
 
-
     public function test_config_is_properly_loaded()
     {
         $this->assertEquals('version {$major}.{$minor}.{$patch} (build {$build})', config('version.format.full'));
