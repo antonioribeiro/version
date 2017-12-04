@@ -105,6 +105,7 @@ class Git
 
     /**
      * @param $matches
+     *
      * @return null
      */
     private function getMatchedVersionItem($matches, $index)
