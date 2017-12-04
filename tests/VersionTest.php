@@ -325,7 +325,7 @@ class VersionTest extends TestCase
 
         $this->expectException(MethodNotFound::class);
 
-        $this->assertEquals("v1.0.0-{$this->build}", $this->version->inexistentMethod());
+        $this->version->inexistentMethod();
     }
 
     public function test_can_call_basic_types_dynamically()

@@ -16,9 +16,10 @@ trait Increment
      *
      * @param $string
      *
+     * @param int $minutes
      * @return \Illuminate\Config\Repository|mixed
      */
-    abstract protected function config($string);
+    abstract protected function config($string, $minutes = null);
 
     /**
      * Get a properly formatted version.

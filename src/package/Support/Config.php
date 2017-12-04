@@ -25,11 +25,12 @@ trait Config
      *
      * @param $string
      *
+     * @param mixed|null $default
      * @return \Illuminate\Config\Repository|mixed
      */
-    protected function config($string)
+    protected function config($string, $default = null)
     {
-        return config("version.{$string}");
+        return config("version.{$string}", $default);
     }
 
     /**

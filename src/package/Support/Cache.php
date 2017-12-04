@@ -37,9 +37,10 @@ trait Cache
      *
      * @param $string
      *
+     * @param mixed|null $default
      * @return \Illuminate\Config\Repository|mixed
      */
-    abstract protected function config($string);
+    abstract protected function config($string, $default = null);
 
     /**
      * Make the cache key.

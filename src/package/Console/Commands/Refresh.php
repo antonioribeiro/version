@@ -2,8 +2,6 @@
 
 namespace PragmaRX\Version\Package\Console\Commands;
 
-use PragmaRX\Version\Package\Version;
-
 class Refresh extends Base
 {
     /**
