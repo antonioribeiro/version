@@ -85,7 +85,7 @@ class Version
      *
      * @return string
      */
-    private function getVersion($type)
+    protected function getVersion($type)
     {
         return $this->git->isVersionComingFromGit()
                 ? $this->git->version($type)
@@ -101,9 +101,9 @@ class Version
      * @param $increment
      * @param $yaml
      */
-    private function instantiate($cache, $config, $git, $increment, $yaml)
+    protected function instantiate($cache, $config, $git, $increment, $yaml)
     {
-        $yaml = $this->instantiateClass(app('pragmarx.yaml'), 'yaml');
+        $yaml = $this->instantiateClass($yaml ?: app('pragmarx.yaml'), 'yaml');
 
         $config = $this->instantiateClass($config, 'config', Config::class, [$yaml]);
 
@@ -123,7 +123,7 @@ class Version
      *
      * @return Yaml|object
      */
-    private function instantiateClass($instance, $property, $class = null, $arguments = [])
+    protected function instantiateClass($instance, $property, $class = null, $arguments = [])
     {
         return $this->{$property} = is_null($instance)
             ? $instance = new $class(...$arguments)
@@ -197,7 +197,7 @@ class Version
             return $value;
         }
 
-        if ($value = $this->config->get('build.mode') === Constants::BUILD_MODE_NUMBER) {
+        if ($this->config->get('build.mode') === Constants::BUILD_MODE_NUMBER) {
             return $this->config->get('build.number');
         }
 
@@ -238,6 +238,8 @@ class Version
         if (!is_null($value = $this->config->get("format.{$type}"))) {
             return $this->replaceVariables($value);
         }
+
+        return null;
     }
 
     /**
@@ -269,6 +271,6 @@ class Version
     {
         $this->cache->flush();
 
-        return $this->build();
+        return $this->format('build');
     }
 }

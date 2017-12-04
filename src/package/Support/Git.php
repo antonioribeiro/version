@@ -9,6 +9,8 @@ class Git
 {
     protected $config;
 
+    protected $cache;
+
     /**
      * Cache constructor.
      *

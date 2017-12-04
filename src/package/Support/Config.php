@@ -80,7 +80,7 @@ class Config
      *
      * @return mixed
      */
-    private function loadToLaravelConfig($path)
+    protected function loadToLaravelConfig($path)
     {
         return app('pragmarx.yaml')->loadToConfig($path, 'version');
     }

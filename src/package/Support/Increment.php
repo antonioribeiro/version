@@ -36,16 +36,17 @@ class Increment
     /**
      * Increment the build number.
      *
-     * @param null $increment
-     *
+     * @param null $by
      * @return int
+     * @internal param null $increment
+     *
      */
-    public function incrementBuild($increment = null)
+    public function incrementBuild($by = null)
     {
-        return $this->increment(function ($config) use ($increment) {
-            $increment = $increment ?: $config['build']['increment_by'];
+        return $this->increment(function ($config) use ($by) {
+            $increment_by = $by ?: $config['build']['increment_by'];
 
-            $config['build']['number'] = $config['build']['number'] + $increment;
+            $config['build']['number'] = $config['build']['number'] + $increment_by;
 
             return $config;
         }, 'build.number');

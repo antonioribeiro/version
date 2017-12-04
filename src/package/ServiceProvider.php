@@ -51,7 +51,7 @@ class ServiceProvider extends IlluminateServiceProvider
      *
      * @return string
      */
-    private function getConfigFile()
+    protected function getConfigFile()
     {
         return config_path('version.yml');
     }
@@ -61,7 +61,7 @@ class ServiceProvider extends IlluminateServiceProvider
      *
      * @return string
      */
-    private function getConfigFileStub()
+    protected function getConfigFileStub()
     {
         return __DIR__.'/../config/version.yml';
     }
@@ -69,7 +69,7 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Configure config path.
      */
-    private function publishConfiguration()
+    protected function publishConfiguration()
     {
         $this->publishes([
              $this->getConfigFileStub() => $this->getConfigFile(),
@@ -93,7 +93,7 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Register Blade directives.
      */
-    private function registerBlade()
+    protected function registerBlade()
     {
         Blade::directive('version', function ($format = Version::DEFAULT_FORMAT) {
             return "<?php echo app('pragmarx.version')->format($format); ?>";
@@ -106,7 +106,7 @@ class ServiceProvider extends IlluminateServiceProvider
      * @param $name
      * @param $commandClass string
      */
-    private function registerCommand($name, $commandClass)
+    protected function registerCommand($name, $commandClass)
     {
         $this->app->singleton($name, function () use ($commandClass) {
             return new $commandClass();
@@ -118,7 +118,7 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Register Artisan commands.
      */
-    private function registerCommands()
+    protected function registerCommands()
     {
         collect($this->commandList)->each(function ($commandClass, $key) {
             $this->registerCommand($key, $commandClass);
@@ -128,12 +128,10 @@ class ServiceProvider extends IlluminateServiceProvider
     /**
      * Register service service.
      */
-    private function registerService()
+    protected function registerService()
     {
-        $this->app->singleton('pragmarx.version', function (Application $app) {
-            $version = new Version(
-
-            );
+        $this->app->singleton('pragmarx.version', function () {
+            $version = new Version();
 
             $version->setConfigFileStub($this->getConfigFileStub());
 
