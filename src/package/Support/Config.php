@@ -24,8 +24,8 @@ trait Config
      * Get config value.
      *
      * @param $string
-     *
      * @param mixed|null $default
+     *
      * @return \Illuminate\Config\Repository|mixed
      */
     protected function config($string, $default = null)

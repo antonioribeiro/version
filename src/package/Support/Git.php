@@ -12,6 +12,7 @@ trait Git
      *
      * @param $string
      * @param mixed|null $default
+     *
      * @return \Illuminate\Config\Repository|mixed
      */
     abstract protected function config($string, $default = null);
