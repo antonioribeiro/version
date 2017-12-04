@@ -37,9 +37,10 @@ class Increment
      * Increment the build number.
      *
      * @param null $by
-     * @return int
-     * @internal param null $increment
      *
+     * @return int
+     *
+     * @internal param null $increment
      */
     public function incrementBuild($by = null)
     {

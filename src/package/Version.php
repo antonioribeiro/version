@@ -238,8 +238,6 @@ class Version
         if (!is_null($value = $this->config->get("format.{$type}"))) {
             return $this->replaceVariables($value);
         }
-
-        return null;
     }
 
     /**
