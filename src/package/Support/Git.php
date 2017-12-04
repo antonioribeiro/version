@@ -104,6 +104,17 @@ class Git
     }
 
     /**
+     * @param $matches
+     * @return null
+     */
+    private function getMatchedVersionItem($matches, $index)
+    {
+        return isset($matches[$index][0])
+            ? $matches[$index][0]
+            : null;
+    }
+
+    /**
      * Get version from the git repository.
      *
      * @param $type
@@ -121,14 +132,14 @@ class Git
         }
 
         return [
-                   'major' => isset($matches[1][0]) ? $matches[1][0] : null,
+                   'major' => $this->getMatchedVersionItem($matches, 1),
 
-                   'minor' => isset($matches[2][0]) ? $matches[2][0] : null,
+                   'minor' => $this->getMatchedVersionItem($matches, 2),
 
-                   'patch' => isset($matches[3][0]) ? $matches[3][0] : null,
+                   'patch' => $this->getMatchedVersionItem($matches, 3),
 
-                   'build' => isset($matches[4][0]) ? $matches[4][0] : null,
-               ][$type];
+                   'build' => $this->getMatchedVersionItem($matches, 4),
+        ][$type];
     }
 
     /**
