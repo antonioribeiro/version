@@ -2,24 +2,21 @@
 
 namespace PragmaRX\Version\Package\Support;
 
-trait Increment
+class Increment
 {
-    /**
-     * The config file.
-     *
-     * @var string
-     */
-    private $configFile;
+    protected $config;
 
     /**
-     * Get config value.
+     * Cache constructor.
      *
-     * @param $string
-     *
-     * @param int $minutes
-     * @return \Illuminate\Config\Repository|mixed
+     * @param Config|null $config
      */
-    abstract protected function config($string, $minutes = null);
+    public function __construct(Config $config = null)
+    {
+        $this->config = is_null($config)
+            ? app(Config::class)
+            : $config;
+    }
 
     /**
      * Get a properly formatted version.
@@ -31,7 +28,7 @@ trait Increment
      */
     public function increment(\Closure $incrementer, $returnKey)
     {
-        $config = $incrementer(config('version'));
+        $config = $incrementer($this->config->getRoot());
 
         $this->updateConfig($config);
 

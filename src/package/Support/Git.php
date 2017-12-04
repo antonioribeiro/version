@@ -5,16 +5,21 @@ namespace PragmaRX\Version\Package\Support;
 use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
 use Symfony\Component\Process\Process;
 
-trait Git
+class Git
 {
+    protected $config;
+
     /**
-     * Get config value.
+     * Cache constructor.
      *
-     * @param $string
-     * @param mixed|null $default
-     * @return \Illuminate\Config\Repository|mixed
+     * @param Config|null $config
      */
-    abstract protected function config($string, $default = null);
+    public function __construct(Config $config = null)
+    {
+        $this->config = is_null($config)
+            ? app(Config::class)
+            : $config;
+    }
 
     /**
      * Get the build git repository url.
@@ -23,7 +28,7 @@ trait Git
      */
     protected function getGitRepository()
     {
-        return $this->config('git.repository');
+        return $this->config->get('git.repository');
     }
 
     /**
@@ -34,7 +39,7 @@ trait Git
     protected function makeGitVersionRetrieverCommand()
     {
         return $this->searchAndReplaceRepository(
-            $this->config('git.version.'.$this->config('version_source'))
+            $this->config->get('git.version.'.$this->config->get('version_source'))
         );
     }
 
@@ -48,7 +53,7 @@ trait Git
         return $this->getFromGit(
             $this->makeGitHashRetrieverCommand(),
             static::VERSION_CACHE_KEY,
-            $this->config('build.length')
+            $this->config->get('build.length')
         );
     }
 
@@ -59,7 +64,7 @@ trait Git
      */
     protected function getGitHashRetrieverCommand()
     {
-        return  $this->config('git.'.$this->config('build.mode'));
+        return  $this->config->get('git.'.$this->config->get('build.mode'));
     }
 
     /**
@@ -106,7 +111,7 @@ trait Git
      */
     protected function gitVersion($type)
     {
-        preg_match_all($this->config('git.version.matcher'), $this->getVersionFromGit(), $matches);
+        preg_match_all($this->config->get('git.version.matcher'), $this->getVersionFromGit(), $matches);
 
         if (empty($matches[0])) {
             throw new GitTagNotFound('No git tags not found in this repository');
@@ -130,7 +135,7 @@ trait Git
      */
     protected function isVersionComingFromGit()
     {
-        return $this->config('version_source') !== static::VERSION_SOURCE_CONFIG;
+        return $this->config->get('version_source') !== static::VERSION_SOURCE_CONFIG;
     }
 
     /**

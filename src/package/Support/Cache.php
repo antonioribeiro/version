@@ -4,8 +4,22 @@ namespace PragmaRX\Version\Package\Support;
 
 use Illuminate\Support\Facades\Cache as IlluminateCache;
 
-trait Cache
+class Cache
 {
+    protected $config;
+
+    /**
+     * Cache constructor.
+     *
+     * @param Config|null $config
+     */
+    public function __construct(Config $config = null)
+    {
+        $this->config = is_null($config)
+            ? app(Config::class)
+            : $config;
+    }
+
     /**
      * Add something to the cache.
      *
@@ -15,7 +29,7 @@ trait Cache
      */
     protected function cachePut($key, $value, $minutes = 10)
     {
-        IlluminateCache::put($key, $value, $this->config('cache.time', $minutes));
+        IlluminateCache::put($key, $value, $this->config->get('cache.time', $minutes));
     }
 
     /**
@@ -27,20 +41,10 @@ trait Cache
      */
     protected function cacheGet($key)
     {
-        return $this->config('cache.enabled')
+        return $this->config->get('cache.enabled')
             ? IlluminateCache::get($key)
             : null;
     }
-
-    /**
-     * Get config value.
-     *
-     * @param $string
-     *
-     * @param mixed|null $default
-     * @return \Illuminate\Config\Repository|mixed
-     */
-    abstract protected function config($string, $default = null);
 
     /**
      * Make the cache key.
@@ -51,7 +55,7 @@ trait Cache
      */
     protected function key($string)
     {
-        return $this->config('cache.key').'-'.$string;
+        return $this->config->get('cache.key').'-'.$string;
     }
 
     /**

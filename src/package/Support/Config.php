@@ -4,7 +4,7 @@ namespace PragmaRX\Version\Package\Support;
 
 use Illuminate\Support\Collection;
 
-trait Config
+class Config
 {
     /**
      * The config loader.
@@ -21,6 +21,13 @@ trait Config
     protected $configFileStub;
 
     /**
+     * The config file.
+     *
+     * @var string
+     */
+    protected $configFile;
+
+    /**
      * Get config value.
      *
      * @param $string
@@ -28,9 +35,20 @@ trait Config
      * @param mixed|null $default
      * @return \Illuminate\Config\Repository|mixed
      */
-    protected function config($string, $default = null)
+    protected function get($string, $default = null)
     {
         return config("version.{$string}", $default);
+    }
+
+    /**
+     * Get config root.
+     *
+     * @return \Illuminate\Config\Repository|mixed
+     * @internal param $string
+     */
+    protected function getRoot()
+    {
+        return config('version');
     }
 
     /**
