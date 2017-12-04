@@ -31,8 +31,8 @@ class Config
      * Get config value.
      *
      * @param $string
-     *
      * @param mixed|null $default
+     *
      * @return \Illuminate\Config\Repository|mixed
      */
     protected function get($string, $default = null)
@@ -44,6 +44,7 @@ class Config
      * Get config root.
      *
      * @return \Illuminate\Config\Repository|mixed
+     *
      * @internal param $string
      */
     protected function getRoot()
