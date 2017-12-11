@@ -1,8 +1,6 @@
 {
     "name": "pragmarx/version",
 
-    "title": "Version",
-    
     "description": "Take control over your Laravel app version",
 
     "keywords": [
