@@ -10,6 +10,7 @@ use PragmaRX\Version\Package\Console\Commands\Minor;
 use PragmaRX\Version\Package\Console\Commands\Patch;
 use PragmaRX\Version\Package\Console\Commands\Refresh;
 use PragmaRX\Version\Package\Console\Commands\Show;
+use PragmaRX\Version\Package\Console\Commands\Absorb;
 use PragmaRX\Version\Package\Console\Commands\Version as VersionCommand;
 
 class ServiceProvider extends IlluminateServiceProvider
@@ -35,6 +36,8 @@ class ServiceProvider extends IlluminateServiceProvider
         'pragmarx.version.patch.command' => Patch::class,
 
         'pragmarx.version.refresh.command' => Refresh::class,
+
+        'pragmarx.version.refresh.absorb' => Absorb::class,
     ];
 
     /**

@@ -3,6 +3,7 @@
 namespace PragmaRX\Version\Package;
 
 use PragmaRX\Version\Package\Exceptions\MethodNotFound;
+use PragmaRX\Version\Package\Support\Absorb;
 use PragmaRX\Version\Package\Support\Cache;
 use PragmaRX\Version\Package\Support\Config;
 use PragmaRX\Version\Package\Support\Constants;
@@ -38,21 +39,28 @@ class Version
     protected $increment;
 
     /**
+     * @var Absorb
+     */
+    private $absorb;
+
+    /**
      * Version constructor.
      *
-     * @param Cache|null     $cache
-     * @param Config|null    $config
-     * @param Git|null       $git
+     * @param Cache|null $cache
+     * @param Config|null $config
+     * @param Git|null $git
      * @param Increment|null $increment
-     * @param Yaml           $yaml
+     * @param Yaml $yaml
+     * @param Absorb|null $absorb
      */
     public function __construct(Cache $cache = null,
                                 Config $config = null,
                                 Git $git = null,
                                 Increment $increment = null,
-                                Yaml $yaml = null)
+                                Yaml $yaml = null,
+                                Absorb $absorb = null)
     {
-        $this->instantiate($cache, $config, $git, $increment, $yaml);
+        $this->instantiate($cache, $config, $git, $increment, $yaml, $absorb);
     }
 
     /**
@@ -69,6 +77,10 @@ class Version
     {
         if (starts_with($name, 'increment')) {
             return $this->increment->$name(...$arguments);
+        }
+
+        if (starts_with($name, 'absorb')) {
+            return $this->absorb->$name(...$arguments);
         }
 
         if (!is_null($version = $this->format($name))) {
@@ -101,7 +113,7 @@ class Version
      * @param $increment
      * @param $yaml
      */
-    protected function instantiate($cache, $config, $git, $increment, $yaml)
+    protected function instantiate($cache, $config, $git, $increment, $yaml, $absorb)
     {
         $yaml = $this->instantiateClass($yaml ?: app('pragmarx.yaml'), 'yaml');
 
@@ -109,9 +121,11 @@ class Version
 
         $cache = $this->instantiateClass($cache, 'cache', Cache::class, [$config]);
 
-        $this->instantiateClass($git, 'git', Git::class, [$config, $cache]);
+        $git = $this->instantiateClass($git, 'git', Git::class, [$config, $cache]);
 
         $this->instantiateClass($increment, 'increment', Increment::class, [$config]);
+
+        $this->instantiateClass($absorb, 'absorb', Absorb::class, [$config, $git]);
     }
 
     /**
@@ -238,6 +252,20 @@ class Version
         if (!is_null($value = $this->config->get("format.{$type}"))) {
             return $this->replaceVariables($value);
         }
+
+        return null;
+    }
+
+    /**
+     * Get a properly formatted version.
+     *
+     * @param $type
+     *
+     * @return boolean
+     */
+    public function isInAbsorbMode($type)
+    {
+        return $this->config->get("{$type}.git_absorb") !== false;
     }
 
     /**

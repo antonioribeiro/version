@@ -3,6 +3,10 @@
 ## [0.2.2] - 2017-12-02
 ### Added
 - Allow users to suppress app name in version:show Artisan command
+- Ability to absorb current git version and build to the config file
+
+* Dont let people increment versions if it's in absorb mode
+* Create command to absorb
 
 ## [0.2.1] - 2017-12-03
 ### Fixed

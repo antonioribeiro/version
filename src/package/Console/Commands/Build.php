@@ -23,10 +23,12 @@ class Build extends Base
      */
     public function handle()
     {
-        $build = app('pragmarx.version')->incrementBuild($this->option('increment-by'));
+        if ($this->checkIfCanIncrement('current')) {
+            $build = app('pragmarx.version')->incrementBuild($this->option('increment-by'));
 
-        $this->info("New build: {$build}");
+            $this->info("New build: {$build}");
 
-        $this->displayAppVersion();
+            $this->displayAppVersion();
+        }
     }
 }

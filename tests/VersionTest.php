@@ -377,6 +377,114 @@ class VersionTest extends TestCase
         $this->assertEquals($version = "v.20171202-{$this->build}", $this->version->format('compact'));
     }
 
+    public function test_version_absorb_does_nothing_when_not_configured()
+    {
+        $configFile = base_path('config/version.yml');
+
+        $this->version->loadConfig($configFile);
+
+        $this->assertFalse(config('version.current.git_absorb'));
+        $this->assertFalse(config('version.build.git_absorb'));
+
+        Artisan::call('version:absorb');
+    }
+
+    public function test_version_absorb_raises_exception_when_no_tag_is_available()
+    {
+        config(['version.current.git_absorb' => 'git-local']);
+        config(['version.build.git_absorb' => 'git-local']);
+
+        $this->expectException(GitTagNotFound::class);
+
+        Artisan::call('version:absorb');
+    }
+
+    public function test_version_absorb_off()
+    {
+        config(['version.version_source' => 'git-local']);
+
+        $this->createGitTag('v1.5.12');
+        $this->assertEquals("v1.5.12-{$this->build}", $this->version->format('compact'));
+
+        /// Absorb off
+        Artisan::call('version:absorb');
+        $this->version->loadConfig(base_path('config/version.yml'));
+        $this->assertEquals("v1.0.0-701031", $this->version->format('compact'));
+    }
+
+    public function test_version_absorb_version_on()
+    {
+        config(['version.version_source' => 'git-local']);
+
+        $this->createGitTag('v1.5.12');
+        $this->assertEquals("v1.5.12-{$this->build}", $this->version->format('compact'));
+
+        config(['version.current.git_absorb' => 'git-local']);
+        Artisan::call('version:absorb');
+        $this->version->loadConfig(base_path('config/version.yml'));
+        config(['version.version_source' => 'config']);
+        config(['version.build.mode' => 'number']);
+        $this->assertEquals("v1.5.12-701031", $this->version->format('compact'));
+    }
+
+    public function test_version_absorb_build_on()
+    {
+        config(['version.version_source' => 'git-local']);
+
+        $this->createGitTag('v1.5.12');
+        $this->assertEquals("v1.5.12-{$this->build}", $this->version->format('compact'));
+
+        config(['version.current.git_absorb' => false]);
+        config(['version.build.git_absorb' => 'git-local']);
+        config(['version.version_source' => 'config']);
+        Artisan::call('version:absorb');
+        $this->version->loadConfig(base_path('config/version.yml'));
+        config(['version.version_source' => 'config']);
+        $this->assertEquals("v1.0.0-{$this->build}", $this->version->format('compact'));
+    }
+
+    public function test_version_absorb_both_on()
+    {
+        config(['version.version_source' => 'git-local']);
+
+        $this->createGitTag('v1.5.12');
+        $this->assertEquals("v1.5.12-{$this->build}", $this->version->format('compact'));
+
+        config(['version.build.git_absorb' => 'git-local']);
+        config(['version.current.git_absorb' => 'git-local']);
+
+        Artisan::call('version:absorb');
+
+        config(['version.version_source' => 'config']);
+        config(['version.build.mode' => 'number']);
+
+        $this->assertEquals(1, config('version.current.major'));
+        $this->assertEquals(5, config('version.current.minor'));
+        $this->assertEquals(12, config('version.current.patch'));
+        $this->assertEquals($this->build, config('version.build.number'));
+    }
+
+    public function test_version_cannot_be_incremented_when_absorb_is_on()
+    {
+        config(['version.build.git_absorb' => 'git-local']);
+        config(['version.current.git_absorb' => 'git-local']);
+
+        Artisan::call('version:major');
+
+        $this->version->loadConfig(base_path('config/version.yml'));
+
+        $this->assertEquals(config('version.current.major'), 1);
+
+        config(['version.current.git_absorb' => false]);
+        config(['version.build.git_absorb' => false]);
+
+        Artisan::call('version:major');
+
+        $this->version->loadConfig(base_path('config/version.yml'));
+
+        $this->assertEquals(config('version.current.major'), 2);
+    }
+
     public function tearDown()
     {
         $this->removeGitTag();

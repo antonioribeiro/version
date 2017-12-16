@@ -264,6 +264,22 @@ Clear cache and refresh versions
 > PragmaRX version 1.0.0 (build 4f76c)
 ```
 
+#### version:absorb
+
+Version can absorb git version and build to the config file, so you can delete the .git folder and still keep your version and build cached for fast access. You have to configure `git_absorb` in your config file:
+
+``` yaml
+build:
+  #...  
+  git_absorb: git-local # "false", "git-local" or "git-remote"
+```
+
+And run it 
+
+``` bash
+php artisan version:absorb
+```
+
 ## Install
 
 Via Composer

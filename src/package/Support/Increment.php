@@ -9,9 +9,9 @@ class Increment
     /**
      * Cache constructor.
      *
-     * @param Config|null $config
+     * @param Config $config
      */
-    public function __construct(Config $config = null)
+    public function __construct(Config $config)
     {
         $this->config = $config;
     }

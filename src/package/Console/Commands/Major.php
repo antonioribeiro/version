@@ -23,10 +23,12 @@ class Major extends Base
      */
     public function handle()
     {
-        $number = app('pragmarx.version')->incrementMajor();
+        if ($this->checkIfCanIncrement('current')) {
+            $number = app('pragmarx.version')->incrementMajor();
 
-        $this->info("New major version: {$number}");
+            $this->info("New major version: {$number}");
 
-        $this->displayAppVersion();
+            $this->displayAppVersion();
+        }
     }
 }
