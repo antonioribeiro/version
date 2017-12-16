@@ -9,5 +9,5 @@ class Version extends Show
      *
      * @var string
      */
-    protected $signature = 'version {--format= : Use a different format (default: full)}';
+    protected $signature = 'version {--format= : Use a different format (default: full)} {--suppress-app-name : Do not include the app name in the version}';
 }
