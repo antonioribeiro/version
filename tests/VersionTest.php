@@ -409,7 +409,7 @@ class VersionTest extends TestCase
         /// Absorb off
         Artisan::call('version:absorb');
         $this->version->loadConfig(base_path('config/version.yml'));
-        $this->assertEquals("v1.0.0-701031", $this->version->format('compact'));
+        $this->assertEquals('v1.0.0-701031', $this->version->format('compact'));
     }
 
     public function test_version_absorb_version_on()
@@ -424,7 +424,7 @@ class VersionTest extends TestCase
         $this->version->loadConfig(base_path('config/version.yml'));
         config(['version.version_source' => 'config']);
         config(['version.build.mode' => 'number']);
-        $this->assertEquals("v1.5.12-701031", $this->version->format('compact'));
+        $this->assertEquals('v1.5.12-701031', $this->version->format('compact'));
     }
 
     public function test_version_absorb_build_on()
