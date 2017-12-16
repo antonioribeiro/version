@@ -33,8 +33,10 @@ class Git
      * Break and extract version from string.
      *
      * @param $string
-     * @return array
+     *
      * @throws GitTagNotFound
+     *
+     * @return array
      */
     public function extractVersion($string)
     {
@@ -61,6 +63,7 @@ class Git
      * Make a git version command.
      *
      * @param string|null $mode
+     *
      * @return string
      */
     public function makeGitVersionRetrieverCommand($mode = null)
@@ -78,6 +81,7 @@ class Git
      * Get the current git commit number, to be used as build number.
      *
      * @param string|null $mode
+     *
      * @return string
      */
     public function getCommit($mode = null)
@@ -93,6 +97,7 @@ class Git
      * Get the git hash retriever command.
      *
      * @param string|null $mode
+     *
      * @return \Illuminate\Config\Repository|mixed
      */
     public function getGitHashRetrieverCommand($mode = null)
@@ -128,7 +133,9 @@ class Git
 
     /**
      * Get the current app version from Git.
+     *
      * @param null $mode
+     *
      * @return bool|mixed|null|string
      */
     public function getVersionFromGit($mode = null)
@@ -189,6 +196,7 @@ class Git
      * Make the git hash retriever command.
      *
      * @param string|null $mode
+     *
      * @return mixed
      */
     public function makeGitHashRetrieverCommand($mode)

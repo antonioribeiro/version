@@ -46,12 +46,12 @@ class Version
     /**
      * Version constructor.
      *
-     * @param Cache|null $cache
-     * @param Config|null $config
-     * @param Git|null $git
+     * @param Cache|null     $cache
+     * @param Config|null    $config
+     * @param Git|null       $git
      * @param Increment|null $increment
-     * @param Yaml $yaml
-     * @param Absorb|null $absorb
+     * @param Yaml           $yaml
+     * @param Absorb|null    $absorb
      */
     public function __construct(Cache $cache = null,
                                 Config $config = null,
@@ -252,8 +252,6 @@ class Version
         if (!is_null($value = $this->config->get("format.{$type}"))) {
             return $this->replaceVariables($value);
         }
-
-        return null;
     }
 
     /**
@@ -261,7 +259,7 @@ class Version
      *
      * @param $type
      *
-     * @return boolean
+     * @return bool
      */
     public function isInAbsorbMode($type)
     {
