@@ -27,7 +27,7 @@ class Absorb
     /**
      * Get a properly formatted version.
      *
-     * @return boolean
+     * @return bool
      */
     public function absorb()
     {
