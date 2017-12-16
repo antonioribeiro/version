@@ -229,26 +229,39 @@ format:
 
 Those are the commands you have at your disposal:
 
+#### version:show
+
+Show the current app version:
+
 ``` text
-  version:show     Show current app version and build
+> php artisan version:show
+> PragmaRX version 1.0.0 (build 701031)
 
-  version:major    Increment app major version
+> php artisan version:show --format=compact
+> PragmaRX v1.0.0-701031
 
-  version:minor    Increment app minor version
-
-  version:patch    Increment app patch version
-
-  version:build    Increment app build number
-  
-  version:refresh  Clear cache and refresh versions
+> php artisan version:show --format=compact --suppress-app-name
+> v1.0.0-701031
 ```
 
-Here's an example of `version:minor`:
+#### version:(major|minor|patch|build)
+
+Increment the version item:
 
 ``` text
 $ php artisan version:minor
 New minor version: 5
 MyApp version 1.5.0 (build 701045)
+```
+
+#### version:refresh
+
+Clear cache and refresh versions
+
+``` text
+> a version:refresh
+> Version was refreshed.
+> PragmaRX version 1.0.0 (build 4f76c)
 ```
 
 ## Install
