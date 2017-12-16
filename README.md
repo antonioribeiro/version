@@ -280,6 +280,21 @@ And run it
 php artisan version:absorb
 ```
 
+The usual configuration setup to implement absorb is:
+
+``` yaml
+version_source: config             ## must be set as config
+current:
+    major: 1                       ## |
+    minor: 0                       ## | --> will be changed by absorb
+    patch: 0                       ## |
+    git_absorb: git-local          ## configure to get from local or remote
+build:
+    mode: number                   ## must be set as number
+    number: f477c8                 ## will be changed by absorb
+    git_absorb: git-local          ## configure to get from local or remote 
+```
+
 ## Install
 
 Via Composer
