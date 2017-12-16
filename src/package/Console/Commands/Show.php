@@ -9,7 +9,7 @@ class Show extends Base
      *
      * @var string
      */
-    protected $signature = 'version:show {--format= : Use a different format (default: full)}';
+    protected $signature = 'version:show {--format= : Use a different format (default: full)} {--suppress-app-name : Do not include the app name in the version}';
 
     /**
      * The console command description.
@@ -25,6 +25,10 @@ class Show extends Base
     {
         $format = $this->option('format') ?: 'full';
 
-        $this->info(config('app.name').' '.app('pragmarx.version')->format($format));
+        $appName = $this->option('suppress-app-name')
+            ? ''
+            : config('app.name').' ';
+
+        $this->info($appName.app('pragmarx.version')->format($format));
     }
 }
