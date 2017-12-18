@@ -248,6 +248,8 @@ class VersionTest extends TestCase
 
         Artisan::call('version:show');
 
+        Artisan::call('version:show', ['--suppress-app-name' => true]);
+
         Artisan::call('version:build');
 
         Artisan::call('version:patch');
