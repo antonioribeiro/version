@@ -43,7 +43,7 @@ class Absorb
      */
     private function absorbVersion()
     {
-        if ($type = $this->config->get('current.git_absorb') === false) {
+        if (($type = $this->config->get('current.git_absorb')) === false) {
             return;
         }
 
