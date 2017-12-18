@@ -48,6 +48,13 @@ class VersionTest extends TestCase
         $this->retrieveRemoteVersion();
     }
 
+    private function dropAllGitTags()
+    {
+        chdir(base_path());
+
+        exec('git tag | xargs git tag -d');
+    }
+
     private function getBuild()
     {
         return substr(exec('git rev-parse --verify HEAD'), 0, 6);
@@ -391,6 +398,8 @@ class VersionTest extends TestCase
 
     public function test_version_absorb_raises_exception_when_no_tag_is_available()
     {
+        $this->dropAllGitTags();
+
         config(['version.current.git_absorb' => 'git-local']);
         config(['version.build.git_absorb' => 'git-local']);
 
