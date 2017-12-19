@@ -337,6 +337,12 @@ VERSION_GIT_REMOTE_REPOSITORY=https://github.com/antonioribeiro/version.git
 - Laravel 5.5
 - PHP 7.0
 
+## Testing
+
+``` bash
+$ composer test
+```
+
 ## Troubleshooting
 
 - If you are having trouble to install because of symfony/router (3.3/3.4) or symfony/yaml (3.3/3.4), you can try to:
