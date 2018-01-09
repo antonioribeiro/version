@@ -1,6 +1,8 @@
 # Changelog
 
 ## [0.2.4] - 2018-01-09
+### Fixed
+- Package booting Blade too soon
 ### Added
 - Blade directive is now configurable
 
