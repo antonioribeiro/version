@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use PragmaRX\Version\Package\Console\Commands\Absorb;
 use PragmaRX\Version\Package\Console\Commands\Build;
-use PragmaRX\Version\Package\Console\Commands\Changelog;
 use PragmaRX\Version\Package\Console\Commands\Major;
 use PragmaRX\Version\Package\Console\Commands\Minor;
 use PragmaRX\Version\Package\Console\Commands\Patch;
@@ -53,8 +52,6 @@ class ServiceProvider extends IlluminateServiceProvider
         'pragmarx.version.refresh.command' => Refresh::class,
 
         'pragmarx.version.absorb.command' => Absorb::class,
-
-        'pragmarx.version.changelog.command' => Changelog::class,
     ];
 
     /**
