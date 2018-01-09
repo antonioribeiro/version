@@ -223,8 +223,10 @@ class Git
      * Execute an shell command.
      *
      * @param $command
-     * @return string
+     *
      * @throws Exception
+     *
+     * @return string
      */
     protected function shell($command)
     {
