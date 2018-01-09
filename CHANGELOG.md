@@ -5,6 +5,7 @@
 - Package booting Blade too soon
 ### Added
 - Blade directive is now configurable
+- Default value for build.length
 
 ## [0.2.3] - 2017-12-18
 ### Fixed
