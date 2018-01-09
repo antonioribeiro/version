@@ -3,15 +3,18 @@
 namespace PragmaRX\Version\Package;
 
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
-use PragmaRX\Version\Package\Console\Commands\Absorb;
+use PragmaRX\Version\Package\Console\Commands\Show;
 use PragmaRX\Version\Package\Console\Commands\Build;
 use PragmaRX\Version\Package\Console\Commands\Major;
 use PragmaRX\Version\Package\Console\Commands\Minor;
 use PragmaRX\Version\Package\Console\Commands\Patch;
+use PragmaRX\Version\Package\Console\Commands\Absorb;
 use PragmaRX\Version\Package\Console\Commands\Refresh;
-use PragmaRX\Version\Package\Console\Commands\Show;
+use PragmaRX\Version\Package\Console\Commands\Changelog;
+use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use PragmaRX\Version\Package\Console\Commands\Version as VersionCommand;
+use PragmaRX\Version\Package\Support\Config;
+use PragmaRX\Yaml\Package\Yaml;
 
 class ServiceProvider extends IlluminateServiceProvider
 {
@@ -22,6 +25,18 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected $defer = false;
 
+    /**
+     * The package config.
+     *
+     * @var Config
+     */
+    protected $config;
+
+    /**
+     * Console commands to be instantiated.
+     *
+     * @var array
+     */
     protected $commandList = [
         'pragmarx.version.command' => VersionCommand::class,
 
@@ -37,7 +52,9 @@ class ServiceProvider extends IlluminateServiceProvider
 
         'pragmarx.version.refresh.command' => Refresh::class,
 
-        'pragmarx.version.refresh.absorb' => Absorb::class,
+        'pragmarx.version.absorb.command' => Absorb::class,
+
+        'pragmarx.version.changelog.command' => Changelog::class,
     ];
 
     /**
@@ -69,6 +86,18 @@ class ServiceProvider extends IlluminateServiceProvider
     }
 
     /**
+     * Load config.
+     */
+    protected function loadConfig()
+    {
+        $this->config = new Config(new Yaml());
+
+        $this->config->setConfigFile($this->getConfigFile());
+
+        $this->config->loadConfig();
+    }
+
+    /**
      * Configure config path.
      */
     protected function publishConfiguration()
@@ -87,6 +116,8 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $this->registerService();
 
+        $this->loadConfig();
+
         $this->registerBlade();
 
         $this->registerCommands();
@@ -97,7 +128,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerBlade()
     {
-        Blade::directive('version', function ($format = Version::DEFAULT_FORMAT) {
+        Blade::directive($this->config->get('blade_directive', 'version'), function ($format = Version::DEFAULT_FORMAT) {
             return "<?php echo app('pragmarx.version')->format($format); ?>";
         });
     }
@@ -133,11 +164,9 @@ class ServiceProvider extends IlluminateServiceProvider
     protected function registerService()
     {
         $this->app->singleton('pragmarx.version', function () {
-            $version = new Version();
+            $version = new Version($this->config);
 
             $version->setConfigFileStub($this->getConfigFileStub());
-
-            $version->loadConfig($this->getConfigFile());
 
             return $version;
         });

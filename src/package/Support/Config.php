@@ -82,7 +82,7 @@ class Config
      */
     protected function loadToLaravelConfig($path)
     {
-        return app('pragmarx.yaml')->loadToConfig($path, 'version');
+        return $this->yaml->loadToConfig($path, 'version');
     }
 
     /**
@@ -98,15 +98,16 @@ class Config
     /**
      * Load package YAML configuration.
      *
-     * @param $path
-     *
+     * @param null $config
      * @return Collection
      */
-    public function loadConfig($path = null)
+    public function loadConfig($config = null)
     {
-        return $this->loadToLaravelConfig(
-            $this->setConfigFile($this->getConfigFile($path))
-        );
+        $config = !is_null($config) || !file_exists($this->configFile)
+            ? $this->setConfigFile($this->getConfigFile($config))
+            : $this->configFile;
+
+        return $this->loadToLaravelConfig($config);
     }
 
     /**

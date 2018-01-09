@@ -176,6 +176,18 @@ Or choose the format:
 @version('compact')
 ```
 
+You can configure the directive name:
+
+``` yaml
+blade_directive: printversion
+```
+
+Then 
+
+``` php
+@printversion('compact')
+```
+
 ### Git tags
 
 You can use your git tags as application versions, all you need is to set the version source to "git":

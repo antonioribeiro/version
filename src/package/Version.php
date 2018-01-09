@@ -53,8 +53,8 @@ class Version
      * @param Yaml           $yaml
      * @param Absorb|null    $absorb
      */
-    public function __construct(Cache $cache = null,
-                                Config $config = null,
+    public function __construct(Config $config = null,
+                                Cache $cache = null,
                                 Git $git = null,
                                 Increment $increment = null,
                                 Yaml $yaml = null,

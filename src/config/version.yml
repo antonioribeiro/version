@@ -1,4 +1,5 @@
 version_source: config # "config", "git-local" or "git-remote"
+blade_directive: version
 current:
   major: 1
   minor: 0

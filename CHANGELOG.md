@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.4] - 2018-01-08
+### Added
+- Blade directive is now configurable
+
 ## [0.2.3] - 2017-12-18
 ### Fixed
 - A problem with absorb where git tags were not found
