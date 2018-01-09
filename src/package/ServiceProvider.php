@@ -60,6 +60,8 @@ class ServiceProvider extends IlluminateServiceProvider
     public function boot()
     {
         $this->publishConfiguration();
+
+        $this->registerBlade();
     }
 
     /**
@@ -114,8 +116,6 @@ class ServiceProvider extends IlluminateServiceProvider
         $this->registerService();
 
         $this->loadConfig();
-
-        $this->registerBlade();
 
         $this->registerCommands();
     }
