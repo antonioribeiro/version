@@ -99,6 +99,7 @@ class Config
      * Load package YAML configuration.
      *
      * @param null $config
+     *
      * @return Collection
      */
     public function loadConfig($config = null)
