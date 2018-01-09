@@ -73,8 +73,8 @@ class VersionTest extends TestCase
     {
         chdir(base_path());
 
-        if (exec('git tag') && $this->currentVersion) {
-            exec("git tag -d v{$this->currentVersion}");
+        while ($version = exec('git describe 2>/dev/null')) {
+            exec("git tag -d $version");
         }
     }
 
@@ -431,11 +431,16 @@ class VersionTest extends TestCase
         $this->assertEquals("v1.5.12-{$this->build}", $this->version->format('compact'));
 
         config(['version.current.git_absorb' => 'git-local']);
+        config(['version.build.git_absorb' => 'git-local']);
+
         Artisan::call('version:absorb');
+
         $this->version->loadConfig(base_path('config/version.yml'));
+
         config(['version.version_source' => 'config']);
         config(['version.build.mode' => 'number']);
-        $this->assertEquals('v1.5.12-701031', $this->version->format('compact'));
+
+        $this->assertEquals("v1.5.12-{$this->build}", $this->version->format('compact'));
     }
 
     public function test_version_absorb_build_on()

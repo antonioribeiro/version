@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Version\Package\Support;
 
+use Exception;
 use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
 use Symfony\Component\Process\Process;
 
@@ -89,7 +90,7 @@ class Git
         return $this->getFromGit(
             $this->makeGitHashRetrieverCommand($mode),
             Constants::VERSION_CACHE_KEY,
-            $this->config->get('build.length')
+            $this->config->get('build.length', 6)
         );
     }
 
@@ -222,8 +223,8 @@ class Git
      * Execute an shell command.
      *
      * @param $command
-     *
      * @return string
+     * @throws Exception
      */
     protected function shell($command)
     {
