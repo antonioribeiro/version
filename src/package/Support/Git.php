@@ -44,7 +44,7 @@ class Git
         preg_match_all($this->config->get('git.version.matcher'), $string, $matches);
 
         if (empty($matches[0])) {
-            throw new GitTagNotFound('No git tags not found in this repository');
+            throw new GitTagNotFound('No git tags found in this repository');
         }
 
         return $matches;
