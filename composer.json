@@ -19,14 +19,14 @@
 
     "require": {
         "php": "^7.0",
-        "laravel/framework": "5.5.*",
+        "laravel/framework": ">=5.5.33",
         "pragmarx/yaml": "^0.1",
-        "symfony/process": "^3.3"
+        "symfony/process": "^3.3|^4.0"
     },
 
     "require-dev": {
-        "phpunit/phpunit": "^6.4",
-        "orchestra/testbench": "^3.5"
+        "phpunit/phpunit": "^6.4|^7.0",
+        "orchestra/testbench": "^3.5|^3.6"
     },
 
     "autoload": {

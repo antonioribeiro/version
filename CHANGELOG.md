@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.5] - 2018-02-10
+### Added
+- Support for Laravel 5.6 and Symfony 4
+
 ## [0.2.4] - 2018-01-09
 ### Fixed
 - Package booting Blade too soon
