@@ -334,7 +334,15 @@ As git versions are cached, you can tell composer to refresh your version number
     ...
     "@php artisan version:refresh"
 ]
-``` 
+```
+
+[Optional] You may also can automated this process by set inside your `.git/hooks/post-commit`. It will automatic run the command once you have make a commit.
+
+``` bash
+#!/bin/sh
+
+php artisan version:refresh
+```
 
 If you are using Git commits on your build numbers, you may have to add the git repository to your .env file
 
