@@ -13,6 +13,7 @@ use PragmaRX\Version\Package\Console\Commands\Refresh;
 use PragmaRX\Version\Package\Console\Commands\Show;
 use PragmaRX\Version\Package\Console\Commands\Version as VersionCommand;
 use PragmaRX\Version\Package\Support\Config;
+use PragmaRX\Version\Package\Support\Constants;
 use PragmaRX\Yaml\Package\Yaml;
 
 class ServiceProvider extends IlluminateServiceProvider
@@ -125,7 +126,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerBlade()
     {
-        Blade::directive($this->config->get('blade_directive', 'version'), function ($format = Version::DEFAULT_FORMAT) {
+        Blade::directive($this->config->get('blade_directive', 'version'), function ($format = Constants::DEFAULT_FORMAT) {
             return "<?php echo app('pragmarx.version')->format($format); ?>";
         });
     }
