@@ -34,7 +34,7 @@ class Absorb extends Base
 
             $this->info('Version was absorbed.');
         } catch (\Exception $exception) {
-            if (! $this->option('ignore-errors')) {
+            if (!$this->option('ignore-errors')) {
                 throw $exception;
             }
 
