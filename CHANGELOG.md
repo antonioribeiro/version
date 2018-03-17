@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.6] - 2018-03-16
+### Added
+- Option "--ignore-errors" to version:absorb Artisan command
+
 ## [0.2.5] - 2018-02-10
 ### Added
 - Support for Laravel 5.6 and Symfony 4

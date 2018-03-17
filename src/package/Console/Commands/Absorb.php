@@ -9,7 +9,7 @@ class Absorb extends Base
      *
      * @var string
      */
-    protected $signature = 'version:absorb';
+    protected $signature = 'version:absorb {--ignore-errors}';
 
     /**
      * The console command description.
@@ -29,9 +29,17 @@ class Absorb extends Base
             return;
         }
 
-        app('pragmarx.version')->absorb();
+        try {
+            app('pragmarx.version')->absorb();
 
-        $this->info('Version was absorbed.');
+            $this->info('Version was absorbed.');
+        } catch (\Exception $exception) {
+            if (! $this->option('ignore-errors')) {
+                throw $exception;
+            }
+
+            $this->info('Errors were ignored.');
+        }
 
         $this->displayAppVersion();
     }
