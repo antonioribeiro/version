@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.6] - 2018-03-16
+## [0.2.7] - 2018-03-16
 ### Added
 - Option "--ignore-errors" to version:absorb Artisan command
 
