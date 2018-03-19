@@ -163,6 +163,8 @@ Version::compact() // v.1.0.0-703110 -- dynamic method
 
 ### Instantiating it
 
+If you prefer not to use the Façade:
+
 ``` php
 dd(
     Version::format()
@@ -181,7 +183,7 @@ dd(
 );
 ```
 
-Or get the instance from the container
+Or to get an already instantiated Version object from the container:
 
 ``` php
 dd(
