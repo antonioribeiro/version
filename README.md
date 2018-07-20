@@ -161,6 +161,38 @@ Version::format('compact') // v.1.0.0-703110
 Version::compact() // v.1.0.0-703110 -- dynamic method
 ```
 
+### Instantiating it
+
+If you prefer not to use the Façade:
+
+``` php
+dd(
+    Version::format()
+);
+```
+
+The best ways to instantiate it are:
+
+A simple PHP object instantiation:
+
+``` php
+$version = new \PragmaRX\Version\Package\Version();
+
+dd(
+    $version->format()
+);
+```
+
+Or to get an already instantiated Version object from the container:
+
+``` php
+dd(
+    app(\PragmaRX\Version\Package\Version::class)->format()
+);
+```
+
+But you have to make sure you [published the config file](/install)
+
 ### A Blade directive is also ready to be used in your views
 
 You can use this directive to render a full version format:
