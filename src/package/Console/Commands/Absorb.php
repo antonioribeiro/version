@@ -9,7 +9,7 @@ class Absorb extends Base
      *
      * @var string
      */
-    protected $signature = 'version:absorb {--ignore-errors}';
+    protected $signature = 'version:absorb {--ignore-errors : Ignore all errors} {--force : Flush cache before absorbing}';
 
     /**
      * The console command description.
@@ -30,7 +30,7 @@ class Absorb extends Base
         }
 
         try {
-            app('pragmarx.version')->absorb();
+            app('pragmarx.version')->absorb($this->option('force'));
 
             $this->info('Version was absorbed.');
         } catch (\Exception $exception) {

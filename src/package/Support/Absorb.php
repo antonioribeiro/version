@@ -11,26 +11,36 @@ class Absorb
      */
     protected $git;
 
+    protected $cache;
+
     /**
-     * Cache constructor.
+     * Absorb constructor.
      *
      * @param Config
      * @param Git
      */
-    public function __construct(Config $config, Git $git)
+    public function __construct(Config $config, Git $git, Cache $cache)
     {
         $this->config = $config;
 
         $this->git = $git;
+
+        $this->cache = $cache;
     }
 
     /**
      * Get a properly formatted version.
      *
+     * @param bool $force
+     *
      * @return bool
      */
-    public function absorb()
+    public function absorb($force = false)
     {
+        if ($force) {
+            $this->cache->flush();
+        }
+
         $this->absorbVersion();
 
         $this->absorbBuild();

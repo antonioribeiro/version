@@ -125,7 +125,7 @@ class Version
 
         $this->instantiateClass($increment, 'increment', Increment::class, [$config]);
 
-        $this->instantiateClass($absorb, 'absorb', Absorb::class, [$config, $git]);
+        $this->instantiateClass($absorb, 'absorb', Absorb::class, [$config, $git, $cache]);
     }
 
     /**
