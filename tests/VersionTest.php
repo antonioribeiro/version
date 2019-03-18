@@ -340,10 +340,10 @@ class VersionTest extends TestCase
 
         $this->assertEquals(
             "{$version}",
-            $this->version->major() .
-                '.' .
-                $this->version->minor() .
-                '.' .
+            $this->version->major().
+                '.'.
+                $this->version->minor().
+                '.'.
                 $this->version->patch()
         );
     }
@@ -382,7 +382,7 @@ class VersionTest extends TestCase
 
     public function test_can_reload_config()
     {
-        exec('rm ' . base_path('config/version.yml'));
+        exec('rm '.base_path('config/version.yml'));
 
         $this->version->loadConfig();
 
@@ -402,8 +402,7 @@ class VersionTest extends TestCase
         $this->assertEquals("v1.0.0-{$this->build}", $this->version->compact());
 
         config([
-            'version.format.awesome' =>
-                'awesome version {$major}.{$minor}.{$patch}',
+            'version.format.awesome' => 'awesome version {$major}.{$minor}.{$patch}',
         ]);
 
         $this->assertEquals('awesome version 1.0.0', $this->version->awesome());
@@ -438,7 +437,7 @@ class VersionTest extends TestCase
 
         $this->assertEquals(config('version.build.mode'), 'number');
 
-        exec('rm ' . $configFile);
+        exec('rm '.$configFile);
 
         $this->version->loadConfig($configFile);
 
@@ -611,7 +610,7 @@ class VersionTest extends TestCase
 
         ob_start();
 
-        eval('?' . '>' . $view);
+        eval('?'.'>'.$view);
 
         return ob_get_clean();
     }

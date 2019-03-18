@@ -14,7 +14,7 @@ class Base extends Command
     public function displayAppVersion($format = 'full')
     {
         $this->info(
-            config('app.name') . ' ' . app('pragmarx.version')->format($format)
+            config('app.name').' '.app('pragmarx.version')->format($format)
         );
     }
 
