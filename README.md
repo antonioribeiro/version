@@ -269,6 +269,30 @@ format:
   compact: "v{$major}{$minor}{$patch}-{$build}"
 ```
 
+### Using the current application version in your code 
+
+Here's a community example on how to send the app version number when logging an exception to Bugsnag:
+
+```
+<?php
+
+namespace App\Exceptions;
+
+use PragmaRX\Version\Package\Version;
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
+
+class Handler extends ExceptionHandler
+{
+    public function report(Exception $exception)
+    {
+        if ($this->shouldReport($exception)) {
+            Bugsnag::setAppVersion((new Version())->format('version'));
+            Bugsnag::notifyException($exception);
+        }
+    }
+}
+``` 
+
 ### Artisan commands
 
 Those are the commands you have at your disposal:
