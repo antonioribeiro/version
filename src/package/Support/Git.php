@@ -76,7 +76,7 @@ class Git
         $mode = is_null($mode) ? $this->config->get('version_source') : $mode;
 
         return $this->searchAndReplaceRepository(
-            $this->config->get('git.version.' . $mode)
+            $this->config->get('git.version.'.$mode)
         );
     }
 
@@ -107,7 +107,7 @@ class Git
     {
         $mode = is_null($mode) ? $this->config->get('build.mode') : $mode;
 
-        return $this->config->get('git.' . $mode);
+        return $this->config->get('git.'.$mode);
     }
 
     /**

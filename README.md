@@ -83,7 +83,7 @@ MyApp version 1.0.0 (build 701036)
 ### Easily increment your version numbers, using Artisan commands
 
 ``` bash
-php artisan version:build
+$ php artisan version:build
 ```
 
 Which should print the new version number 
@@ -96,10 +96,10 @@ MyApp version 1.0.0 (build 701037)
 Available for all of them:
 
 ``` bash
-php artisan version:major   
-php artisan version:minor   
-php artisan version:patch   
-php artisan version:build   
+$ php artisan version:major   
+$ php artisan version:minor   
+$ php artisan version:patch   
+$ php artisan version:build   
 ``` 
 
 ### The output format is highly configurable
@@ -231,7 +231,7 @@ version_source: git
 And if you add a build number to your tags:
 
 ``` bash
-git tag -a -f v0.1.1.3128
+$ git tag -a -f v0.1.1.3128
 ```
 
 Version will use it as your app build number
@@ -302,14 +302,14 @@ Those are the commands you have at your disposal:
 Show the current app version:
 
 ``` text
-> php artisan version:show
-> PragmaRX version 1.0.0 (build 701031)
+$ php artisan version:show
+PragmaRX version 1.0.0 (build 701031)
 
-> php artisan version:show --format=compact
-> PragmaRX v1.0.0-701031
+$ php artisan version:show --format=compact
+PragmaRX v1.0.0-701031
 
-> php artisan version:show --format=compact --suppress-app-name
-> v1.0.0-701031
+$ php artisan version:show --format=compact --suppress-app-name
+v1.0.0-701031
 ```
 
 #### version:(major|minor|patch|build)
@@ -327,12 +327,14 @@ MyApp version 1.5.0 (build 701045)
 Clear cache and refresh versions
 
 ``` text
-> a version:refresh
-> Version was refreshed.
-> PragmaRX version 1.0.0 (build 4f76c)
+$ php artisan version:refresh
+Version was refreshed.
+PragmaRX version 1.0.0 (build 4f76c)
 ```
 
 #### version:absorb
+
+> This requires that you use annotated tags.
 
 Version can absorb git version and build to the config file, so you can delete the .git folder and still keep your version and build cached for fast access. You have to configure `git_absorb` in your config file:
 
@@ -345,7 +347,7 @@ build:
 And run it 
 
 ``` bash
-php artisan version:absorb
+$ php artisan version:absorb
 ```
 
 The usual configuration setup to implement absorb is:
@@ -368,13 +370,13 @@ build:
 Via Composer
 
 ``` bash
-composer require pragmarx/version
+$ composer require pragmarx/version
 ```
 
 Then publish the configuration file you'll have to:
 
 ``` bash
-php artisan vendor:publish --provider="PragmaRX\Version\Package\ServiceProvider"
+$ php artisan vendor:publish --provider="PragmaRX\Version\Package\ServiceProvider"
 ```
 
 And you should be good to use it in your views:
