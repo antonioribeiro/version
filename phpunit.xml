@@ -9,7 +9,6 @@
          processIsolation="false"
          stopOnError="false"
          stopOnFailure="false"
-         syntaxCheck="true"
          verbose="true"
 >
     <testsuites>
@@ -29,5 +28,6 @@
     </filter>
     <php>
         <env name="CACHE_DRIVER" value="file" />
+        <const name="PHPUNIT_VERSION_TESTSUITE" value="true"/>
     </php>
 </phpunit>
