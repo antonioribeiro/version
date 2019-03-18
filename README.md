@@ -310,6 +310,8 @@ PragmaRX version 1.0.0 (build 4f76c)
 
 #### version:absorb
 
+> This requires that you use annotated tags.
+
 Version can absorb git version and build to the config file, so you can delete the .git folder and still keep your version and build cached for fast access. You have to configure `git_absorb` in your config file:
 
 ``` yaml
