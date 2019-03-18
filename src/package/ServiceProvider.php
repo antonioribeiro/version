@@ -82,7 +82,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function getConfigFileStub()
     {
-        return __DIR__ . '/../config/version.yml';
+        return __DIR__.'/../config/version.yml';
     }
 
     /**

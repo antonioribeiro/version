@@ -57,7 +57,7 @@ class Cache
      */
     public function key($string)
     {
-        return $this->config->get('cache.key') . '-' . $string;
+        return $this->config->get('cache.key').'-'.$string;
     }
 
     /**

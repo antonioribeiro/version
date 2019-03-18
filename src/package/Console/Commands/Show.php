@@ -27,8 +27,8 @@ class Show extends Base
 
         $appName = $this->option('suppress-app-name')
             ? ''
-            : config('app.name') . ' ';
+            : config('app.name').' ';
 
-        $this->info($appName . app('pragmarx.version')->format($format));
+        $this->info($appName.app('pragmarx.version')->format($format));
     }
 }

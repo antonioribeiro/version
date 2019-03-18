@@ -11,7 +11,7 @@ abstract class TestCase extends OrchestraTestCase
     protected function getPackageProviders($app)
     {
         copy(
-            __DIR__ . '/../src/config/version.yml',
+            __DIR__.'/../src/config/version.yml',
             config_path('version.yml')
         );
 
