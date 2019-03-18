@@ -33,13 +33,16 @@ class VersionTest extends TestCase
             return;
         }
 
-        chdir(base_path());
+        $base = realpath(base_path());
+
+        chdir($base);
 
         exec('rm -rf .git');
         exec('git init');
         exec('git add -A');
         exec('git commit -m "First commit"');
         exec("git tag -a -f v{$version} -m \"version {$version}\"");
+        exec("git remote add origin {$base}");
 
         $this->currentVersion = $version;
 
@@ -66,7 +69,13 @@ class VersionTest extends TestCase
             return static::$remoteVersion;
         }
 
-        return static::$remoteVersion = substr(exec('git ls-remote https://github.com/antonioribeiro/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2 | sort --version-sort | tail -1'), 0, 6);
+        return static::$remoteVersion = substr(
+            exec(
+                'git ls-remote https://github.com/antonioribeiro/version.git | grep tags/ | grep -v {} | cut -d \/ -f 3 | cut -d v -f 2 | sort --version-sort | tail -1'
+            ),
+            0,
+            6
+        );
     }
 
     private function removeGitTag()
@@ -78,7 +87,7 @@ class VersionTest extends TestCase
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setup();
 
@@ -86,7 +95,9 @@ class VersionTest extends TestCase
 
         $this->createGitTag();
 
-        putenv('VERSION_GIT_REMOTE_REPOSITORY=https://github.com/antonioribeiro/version.git');
+        putenv(
+            'VERSION_GIT_REMOTE_REPOSITORY=https://github.com/antonioribeiro/version.git'
+        );
 
         $this->version = VersionFacade::instance();
 
@@ -104,7 +115,10 @@ class VersionTest extends TestCase
 
     public function test_config_is_properly_loaded()
     {
-        $this->assertEquals('version {$major}.{$minor}.{$patch} (build {$build})', config('version.format.full'));
+        $this->assertEquals(
+            'version {$major}.{$minor}.{$patch} (build {$build})',
+            config('version.format.full')
+        );
     }
 
     public function test_can_get_version()
@@ -170,17 +184,28 @@ class VersionTest extends TestCase
 
     public function test_format()
     {
-        $this->assertEquals("version 1.0.0 (build {$this->build})", $this->version->format('full'));
-        $this->assertEquals("v1.0.0-{$this->build}", $this->version->format('compact'));
+        $this->assertEquals(
+            "version 1.0.0 (build {$this->build})",
+            $this->version->format('full')
+        );
+        $this->assertEquals(
+            "v1.0.0-{$this->build}",
+            $this->version->format('compact')
+        );
     }
 
     public function test_blade()
     {
         $result = $this->render(Blade::compileString('MyApp @version'));
 
-        $this->assertEquals("MyApp version 1.0.0 (build {$this->build})", $result);
+        $this->assertEquals(
+            "MyApp version 1.0.0 (build {$this->build})",
+            $result
+        );
 
-        $result = $this->render(Blade::compileString("Compact: @version('compact')"));
+        $result = $this->render(
+            Blade::compileString("Compact: @version('compact')")
+        );
 
         $this->assertEquals("Compact: v1.0.0-{$this->build}", $result);
     }
@@ -195,7 +220,10 @@ class VersionTest extends TestCase
 
     public function test_config()
     {
-        $this->assertEquals('version {$major}.{$minor}.{$patch} (build {$build})', config('version.format.full'));
+        $this->assertEquals(
+            'version {$major}.{$minor}.{$patch} (build {$build})',
+            config('version.format.full')
+        );
     }
 
     public function test_increment_build()
@@ -219,23 +247,38 @@ class VersionTest extends TestCase
 
         $this->version->incrementMinor();
 
-        $this->assertEquals('version 1.1.0 (build 701031)', $this->version->format('full'));
+        $this->assertEquals(
+            'version 1.1.0 (build 701031)',
+            $this->version->format('full')
+        );
 
         $this->version->incrementPatch();
 
-        $this->assertEquals('version 1.1.1 (build 701031)', $this->version->format('full'));
+        $this->assertEquals(
+            'version 1.1.1 (build 701031)',
+            $this->version->format('full')
+        );
 
         $this->version->incrementMajor();
 
-        $this->assertEquals('version 2.0.0 (build 701031)', $this->version->format('full'));
+        $this->assertEquals(
+            'version 2.0.0 (build 701031)',
+            $this->version->format('full')
+        );
 
         $this->version->incrementMinor();
 
-        $this->assertEquals('version 2.1.0 (build 701031)', $this->version->format('full'));
+        $this->assertEquals(
+            'version 2.1.0 (build 701031)',
+            $this->version->format('full')
+        );
 
         $this->version->incrementPatch();
 
-        $this->assertEquals('version 2.1.1 (build 701031)', $this->version->format('full'));
+        $this->assertEquals(
+            'version 2.1.1 (build 701031)',
+            $this->version->format('full')
+        );
 
         $this->assertEquals('701031', $this->version->build());
     }
@@ -258,7 +301,10 @@ class VersionTest extends TestCase
 
         Artisan::call('version:major');
 
-        $this->assertEquals('version 2.0.0 (build 701032)', $this->version->format('full'));
+        $this->assertEquals(
+            'version 2.0.0 (build 701032)',
+            $this->version->format('full')
+        );
     }
 
     public function test_can_get_version_from_git_local()
@@ -267,7 +313,10 @@ class VersionTest extends TestCase
 
         $this->createGitTag();
 
-        $this->assertEquals('version 0.1.1 (build 3128)', $this->version->format('full'));
+        $this->assertEquals(
+            'version 0.1.1 (build 3128)',
+            $this->version->format('full')
+        );
 
         Cache::flush();
 
@@ -275,18 +324,28 @@ class VersionTest extends TestCase
 
         $this->expectException(GitTagNotFound::class);
 
-        $this->assertEquals('version 0.1.1 (build 3128)', $this->version->format('full'));
+        $this->assertEquals(
+            'version 0.1.1 (build 3128)',
+            $this->version->format('full')
+        );
     }
 
     public function test_can_get_version_from_git_remote()
     {
         config(['version.version_source' => 'git-remote']);
 
-        $this->createGitTag();
-
         $version = static::$remoteVersion;
 
-        $this->assertEquals("version {$version} (build {$this->build})", $this->version->format('full'));
+        $this->createGitTag("{$version}.{$this->build}");
+
+        $this->assertEquals(
+            "{$version}",
+            $this->version->major() .
+                '.' .
+                $this->version->minor() .
+                '.' .
+                $this->version->patch()
+        );
     }
 
     public function test_can_cache_version_and_build()
@@ -298,8 +357,14 @@ class VersionTest extends TestCase
 
         $this->createGitTag($version = '1.2.35');
 
-        $this->assertEquals("version {$version} (build {$this->build})", $this->version->format('full'));
-        $this->assertEquals("v1.2.35-{$this->build}", $this->version->format('compact'));
+        $this->assertEquals(
+            "version {$version} (build {$this->build})",
+            $this->version->format('full')
+        );
+        $this->assertEquals(
+            "v1.2.35-{$this->build}",
+            $this->version->format('compact')
+        );
     }
 
     public function test_can_use_default_config()
@@ -317,20 +382,29 @@ class VersionTest extends TestCase
 
     public function test_can_reload_config()
     {
-        exec('rm '.base_path('config/version.yml'));
+        exec('rm ' . base_path('config/version.yml'));
 
         $this->version->loadConfig();
 
-        $this->assertEquals('version 1.0.0 (build 701031)', $this->version->format());
+        $this->assertEquals(
+            'version 1.0.0 (build 701031)',
+            $this->version->format()
+        );
     }
 
     public function test_can_call_format_types_dinamically()
     {
-        $this->assertEquals("version 1.0.0 (build {$this->build})", $this->version->full());
+        $this->assertEquals(
+            "version 1.0.0 (build {$this->build})",
+            $this->version->full()
+        );
 
         $this->assertEquals("v1.0.0-{$this->build}", $this->version->compact());
 
-        config(['version.format.awesome' => 'awesome version {$major}.{$minor}.{$patch}']);
+        config([
+            'version.format.awesome' =>
+                'awesome version {$major}.{$minor}.{$patch}',
+        ]);
 
         $this->assertEquals('awesome version 1.0.0', $this->version->awesome());
 
@@ -364,7 +438,7 @@ class VersionTest extends TestCase
 
         $this->assertEquals(config('version.build.mode'), 'number');
 
-        exec('rm '.$configFile);
+        exec('rm ' . $configFile);
 
         $this->version->loadConfig($configFile);
 
@@ -375,15 +449,22 @@ class VersionTest extends TestCase
     {
         config(['version.git.build.mode' => 'git-local']);
 
-        config(['version.git.version.matcher' => '/(\d{4})(\d{2})(\d{2})(?:\d{2})/']);
+        config([
+            'version.git.version.matcher' => '/(\d{4})(\d{2})(\d{2})(?:\d{2})/',
+        ]);
 
-        config(['version.format.compact' => 'v.{$major}{$minor}{$patch}-{$build}']);
+        config([
+            'version.format.compact' => 'v.{$major}{$minor}{$patch}-{$build}',
+        ]);
 
         config(['version.version_source' => 'git-local']);
 
         $this->createGitTag('2017120299');
 
-        $this->assertEquals($version = "v.20171202-{$this->build}", $this->version->format('compact'));
+        $this->assertEquals(
+            $version = "v.20171202-{$this->build}",
+            $this->version->format('compact')
+        );
     }
 
     public function test_version_absorb_does_nothing_when_not_configured()
@@ -415,7 +496,10 @@ class VersionTest extends TestCase
         config(['version.version_source' => 'git-local']);
 
         $this->createGitTag('v1.5.12');
-        $this->assertEquals("v1.5.12-{$this->build}", $this->version->format('compact'));
+        $this->assertEquals(
+            "v1.5.12-{$this->build}",
+            $this->version->format('compact')
+        );
 
         /// Absorb off
         Artisan::call('version:absorb');
@@ -428,7 +512,10 @@ class VersionTest extends TestCase
         config(['version.version_source' => 'git-local']);
 
         $this->createGitTag('v1.5.12');
-        $this->assertEquals("v1.5.12-{$this->build}", $this->version->format('compact'));
+        $this->assertEquals(
+            "v1.5.12-{$this->build}",
+            $this->version->format('compact')
+        );
 
         config(['version.current.git_absorb' => 'git-local']);
         config(['version.build.git_absorb' => 'git-local']);
@@ -440,7 +527,10 @@ class VersionTest extends TestCase
         config(['version.version_source' => 'config']);
         config(['version.build.mode' => 'number']);
 
-        $this->assertEquals("v1.5.12-{$this->build}", $this->version->format('compact'));
+        $this->assertEquals(
+            "v1.5.12-{$this->build}",
+            $this->version->format('compact')
+        );
     }
 
     public function test_version_absorb_build_on()
@@ -448,7 +538,10 @@ class VersionTest extends TestCase
         config(['version.version_source' => 'git-local']);
 
         $this->createGitTag('v1.5.12');
-        $this->assertEquals("v1.5.12-{$this->build}", $this->version->format('compact'));
+        $this->assertEquals(
+            "v1.5.12-{$this->build}",
+            $this->version->format('compact')
+        );
 
         config(['version.current.git_absorb' => false]);
         config(['version.build.git_absorb' => 'git-local']);
@@ -456,7 +549,10 @@ class VersionTest extends TestCase
         Artisan::call('version:absorb');
         $this->version->loadConfig(base_path('config/version.yml'));
         config(['version.version_source' => 'config']);
-        $this->assertEquals("v1.0.0-{$this->build}", $this->version->format('compact'));
+        $this->assertEquals(
+            "v1.0.0-{$this->build}",
+            $this->version->format('compact')
+        );
     }
 
     public function test_version_absorb_both_on()
@@ -464,7 +560,10 @@ class VersionTest extends TestCase
         config(['version.version_source' => 'git-local']);
 
         $this->createGitTag('v1.5.12');
-        $this->assertEquals("v1.5.12-{$this->build}", $this->version->format('compact'));
+        $this->assertEquals(
+            "v1.5.12-{$this->build}",
+            $this->version->format('compact')
+        );
 
         config(['version.build.git_absorb' => 'git-local']);
         config(['version.current.git_absorb' => 'git-local']);
@@ -501,7 +600,7 @@ class VersionTest extends TestCase
         $this->assertEquals(config('version.current.major'), 2);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->removeGitTag();
     }
@@ -512,7 +611,7 @@ class VersionTest extends TestCase
 
         ob_start();
 
-        eval('?'.'>'.$view);
+        eval('?' . '>' . $view);
 
         return ob_get_clean();
     }
