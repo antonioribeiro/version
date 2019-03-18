@@ -27,7 +27,11 @@ class Cache
      */
     public function put($key, $value, $minutes = 10)
     {
-        IlluminateCache::put($key, $value, $this->config->get('cache.time', $minutes));
+        IlluminateCache::put(
+            $key,
+            $value,
+            $this->config->get('cache.time', $minutes)
+        );
     }
 
     /**
@@ -53,7 +57,7 @@ class Cache
      */
     public function key($string)
     {
-        return $this->config->get('cache.key').'-'.$string;
+        return $this->config->get('cache.key') . '-' . $string;
     }
 
     /**

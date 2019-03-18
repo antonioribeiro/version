@@ -82,7 +82,7 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function getConfigFileStub()
     {
-        return __DIR__.'/../config/version.yml';
+        return __DIR__ . '/../config/version.yml';
     }
 
     /**
@@ -103,7 +103,7 @@ class ServiceProvider extends IlluminateServiceProvider
     protected function publishConfiguration()
     {
         $this->publishes([
-             $this->getConfigFileStub() => $this->getConfigFile(),
+            $this->getConfigFileStub() => $this->getConfigFile(),
         ]);
     }
 
@@ -126,9 +126,12 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     protected function registerBlade()
     {
-        Blade::directive($this->config->get('blade_directive', 'version'), function ($format = Constants::DEFAULT_FORMAT) {
-            return "<?php echo app('pragmarx.version')->format($format); ?>";
-        });
+        Blade::directive(
+            $this->config->get('blade_directive', 'version'),
+            function ($format = Constants::DEFAULT_FORMAT) {
+                return "<?php echo app('pragmarx.version')->format($format); ?>";
+            }
+        );
     }
 
     /**

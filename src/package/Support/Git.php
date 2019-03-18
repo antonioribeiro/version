@@ -41,7 +41,11 @@ class Git
      */
     public function extractVersion($string)
     {
-        preg_match_all($this->config->get('git.version.matcher'), $string, $matches);
+        preg_match_all(
+            $this->config->get('git.version.matcher'),
+            $string,
+            $matches
+        );
 
         if (empty($matches[0])) {
             throw new GitTagNotFound('No git tags found in this repository');
@@ -69,12 +73,10 @@ class Git
      */
     public function makeGitVersionRetrieverCommand($mode = null)
     {
-        $mode = is_null($mode)
-            ? $this->config->get('version_source')
-            : $mode;
+        $mode = is_null($mode) ? $this->config->get('version_source') : $mode;
 
         return $this->searchAndReplaceRepository(
-            $this->config->get('git.version.'.$mode)
+            $this->config->get('git.version.' . $mode)
         );
     }
 
@@ -103,11 +105,9 @@ class Git
      */
     public function getGitHashRetrieverCommand($mode = null)
     {
-        $mode = is_null($mode)
-            ? $this->config->get('build.mode')
-            : $mode;
+        $mode = is_null($mode) ? $this->config->get('build.mode') : $mode;
 
-        return $this->config->get('git.'.$mode);
+        return $this->config->get('git.' . $mode);
     }
 
     /**
@@ -154,9 +154,7 @@ class Git
      */
     private function getMatchedVersionItem($matches, $index)
     {
-        return isset($matches[$index][0])
-            ? $matches[$index][0]
-            : null;
+        return isset($matches[$index][0]) ? $matches[$index][0] : null;
     }
 
     /**
@@ -173,13 +171,13 @@ class Git
         $version = $this->extractVersion($this->getVersionFromGit());
 
         return [
-           'major' => $this->getMatchedVersionItem($version, 1),
+            'major' => $this->getMatchedVersionItem($version, 1),
 
-           'minor' => $this->getMatchedVersionItem($version, 2),
+            'minor' => $this->getMatchedVersionItem($version, 2),
 
-           'patch' => $this->getMatchedVersionItem($version, 3),
+            'patch' => $this->getMatchedVersionItem($version, 3),
 
-           'build' => $this->getMatchedVersionItem($version, 4),
+            'build' => $this->getMatchedVersionItem($version, 4),
         ][$type];
     }
 
@@ -190,7 +188,8 @@ class Git
      */
     public function isVersionComingFromGit()
     {
-        return $this->config->get('version_source') !== Constants::VERSION_SOURCE_CONFIG;
+        return $this->config->get('version_source') !==
+            Constants::VERSION_SOURCE_CONFIG;
     }
 
     /**
@@ -230,7 +229,7 @@ class Git
      */
     protected function shell($command)
     {
-        $process = new Process($command, base_path());
+        $process = new Process($command, $this->getBasePath());
 
         $process->run();
 
@@ -239,5 +238,15 @@ class Git
         }
 
         return $this->cleanOutput($process->getOutput());
+    }
+
+    /**
+     * Get the current git root path.
+     *
+     * @return string
+     */
+    public function getBasePath()
+    {
+        return base_path();
     }
 }

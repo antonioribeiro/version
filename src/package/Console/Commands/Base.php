@@ -13,7 +13,9 @@ class Base extends Command
      */
     public function displayAppVersion($format = 'full')
     {
-        $this->info(config('app.name').' '.app('pragmarx.version')->format($format));
+        $this->info(
+            config('app.name') . ' ' . app('pragmarx.version')->format($format)
+        );
     }
 
     /**
@@ -26,7 +28,9 @@ class Base extends Command
     public function checkIfCanIncrement($type)
     {
         if (app('pragmarx.version')->isInAbsorbMode($type)) {
-            $this->error('Version is in git absorb mode, cannot be incremented');
+            $this->error(
+                'Version is in git absorb mode, cannot be incremented'
+            );
 
             return false;
         }

@@ -47,7 +47,8 @@ class Increment
         return $this->increment(function ($config) use ($by) {
             $increment_by = $by ?: $config['build']['increment_by'];
 
-            $config['build']['number'] = $config['build']['number'] + $increment_by;
+            $config['build']['number'] =
+                $config['build']['number'] + $increment_by;
 
             return $config;
         }, 'build.number');

@@ -104,9 +104,10 @@ class Config
      */
     public function loadConfig($config = null)
     {
-        $config = !is_null($config) || !file_exists($this->configFile)
-            ? $this->setConfigFile($this->getConfigFile($config))
-            : $this->configFile;
+        $config =
+            !is_null($config) || !file_exists($this->configFile)
+                ? $this->setConfigFile($this->getConfigFile($config))
+                : $this->configFile;
 
         return $this->loadToLaravelConfig($config);
     }
@@ -122,9 +123,7 @@ class Config
     {
         $file = $file ?: $this->configFile;
 
-        return file_exists($file)
-            ? $file
-            : $this->getConfigFileStub();
+        return file_exists($file) ? $file : $this->getConfigFileStub();
     }
 
     /**

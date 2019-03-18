@@ -53,13 +53,14 @@ class Version
      * @param Yaml           $yaml
      * @param Absorb|null    $absorb
      */
-    public function __construct(Config $config = null,
-                                Cache $cache = null,
-                                Git $git = null,
-                                Increment $increment = null,
-                                Yaml $yaml = null,
-                                Absorb $absorb = null)
-    {
+    public function __construct(
+        Config $config = null,
+        Cache $cache = null,
+        Git $git = null,
+        Increment $increment = null,
+        Yaml $yaml = null,
+        Absorb $absorb = null
+    ) {
         $this->instantiate($cache, $config, $git, $increment, $yaml, $absorb);
     }
 
@@ -87,7 +88,9 @@ class Version
             return $version;
         }
 
-        throw new MethodNotFound("Method '{$name}' doesn't exists in this object.");
+        throw new MethodNotFound(
+            "Method '{$name}' doesn't exists in this object."
+        );
     }
 
     /**
@@ -100,8 +103,8 @@ class Version
     protected function getVersion($type)
     {
         return $this->git->isVersionComingFromGit()
-                ? $this->git->version($type)
-                : $this->config->get("current.{$type}");
+            ? $this->git->version($type)
+            : $this->config->get("current.{$type}");
     }
 
     /**
@@ -113,19 +116,38 @@ class Version
      * @param $increment
      * @param $yaml
      */
-    protected function instantiate($cache, $config, $git, $increment, $yaml, $absorb)
-    {
+    protected function instantiate(
+        $cache,
+        $config,
+        $git,
+        $increment,
+        $yaml,
+        $absorb
+    ) {
         $yaml = $this->instantiateClass($yaml ?: app('pragmarx.yaml'), 'yaml');
 
-        $config = $this->instantiateClass($config, 'config', Config::class, [$yaml]);
+        $config = $this->instantiateClass($config, 'config', Config::class, [
+            $yaml,
+        ]);
 
-        $cache = $this->instantiateClass($cache, 'cache', Cache::class, [$config]);
+        $cache = $this->instantiateClass($cache, 'cache', Cache::class, [
+            $config,
+        ]);
 
-        $git = $this->instantiateClass($git, 'git', Git::class, [$config, $cache]);
+        $git = $this->instantiateClass($git, 'git', Git::class, [
+            $config,
+            $cache,
+        ]);
 
-        $this->instantiateClass($increment, 'increment', Increment::class, [$config]);
+        $this->instantiateClass($increment, 'increment', Increment::class, [
+            $config,
+        ]);
 
-        $this->instantiateClass($absorb, 'absorb', Absorb::class, [$config, $git, $cache]);
+        $this->instantiateClass($absorb, 'absorb', Absorb::class, [
+            $config,
+            $git,
+            $cache,
+        ]);
     }
 
     /**
@@ -137,10 +159,14 @@ class Version
      *
      * @return Yaml|object
      */
-    protected function instantiateClass($instance, $property, $class = null, $arguments = [])
-    {
+    protected function instantiateClass(
+        $instance,
+        $property,
+        $class = null,
+        $arguments = []
+    ) {
         return $this->{$property} = is_null($instance)
-            ? $instance = new $class(...$arguments)
+            ? ($instance = new $class(...$arguments))
             : $instance;
     }
 
@@ -172,13 +198,7 @@ class Version
     protected function searchAndReplaceVariables($string)
     {
         return str_replace(
-            [
-                '{$major}',
-                '{$minor}',
-                '{$patch}',
-                '{$repository}',
-                '{$build}',
-            ],
+            ['{$major}', '{$minor}', '{$patch}', '{$repository}', '{$build}'],
             [
                 $this->getVersion('major'),
                 $this->getVersion('minor'),
@@ -207,7 +227,10 @@ class Version
      */
     public function getBuild()
     {
-        if ($this->git->isVersionComingFromGit() && $value = $this->git->version('build')) {
+        if (
+            $this->git->isVersionComingFromGit() &&
+            ($value = $this->git->version('build'))
+        ) {
             return $value;
         }
 
