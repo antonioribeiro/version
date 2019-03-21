@@ -87,7 +87,7 @@ class VersionTest extends TestCase
         }
     }
 
-    public function setUp(): void
+    public function setUp()
     {
         parent::setup();
 
