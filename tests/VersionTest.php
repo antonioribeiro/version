@@ -599,7 +599,7 @@ class VersionTest extends TestCase
         $this->assertEquals(config('version.current.major'), 2);
     }
 
-    public function tearDown(): void
+    public function tearDown()
     {
         $this->removeGitTag();
     }
