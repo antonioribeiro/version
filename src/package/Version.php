@@ -198,13 +198,14 @@ class Version
     protected function searchAndReplaceVariables($string)
     {
         return str_replace(
-            ['{$major}', '{$minor}', '{$patch}', '{$repository}', '{$build}'],
+            ['{$major}', '{$minor}', '{$patch}', '{$repository}', '{$build}', '{$date}'],
             [
                 $this->getVersion('major'),
                 $this->getVersion('minor'),
                 $this->getVersion('patch'),
                 $this->git->getGitRepository(),
                 $this->getBuild(),
+                $this->getVersion('date'),
             ],
             $string
         );

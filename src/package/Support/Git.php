@@ -178,6 +178,8 @@ class Git
             'patch' => $this->getMatchedVersionItem($version, 3),
 
             'build' => $this->getMatchedVersionItem($version, 4),
+
+            'date'  => $this->getMatchedVersionItem($version, 5),
         ][$type];
     }
 

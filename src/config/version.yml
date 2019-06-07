@@ -4,7 +4,9 @@ current:
   major: 1
   minor: 0
   patch: 0
-  format: "{$major}.{$minor}.{$patch}"
+  date: '06-07-2019 11:17'
+  format: '{$major}.{$minor}.{$patch}.{$date}'
+  dateFormat: 'm-d-Y H:i'
   git_absorb: false # "false", "git-local" or "git-remote"
 cache:
   enabled: true
@@ -26,11 +28,12 @@ git:
     git-remote: "git ls-remote {$repository} | grep tags/ | grep -v {} | cut -d \/ -f 3 | sort --version-sort | tail -1"
     matcher: "/[V|v]*[ersion]*\\s*\\.*(\\d+)\\.(\\d+)\\.(\\d+)\\.*(\\w*)/"
 format:
-  major: "{$major}"
-  minor: "{$minor}"
-  patch: "{$patch}"
-  build: "{$build}"
-  version: "{$major}.{$minor}.{$patch} (build {$build})"
-  full: "version {{'format.version'}}"
-  compact: "v{$major}.{$minor}.{$patch}-{$build}"
+    major: '{$major}'
+    minor: '{$minor}'
+    patch: '{$patch}'
+    build: '{$build}'
+    date: '{$date}'
+    version: '{$major}.{$minor}.{$patch} (build {$build}) - date {$date}'
+    full: 'version {$major}.{$minor}.{$patch} (build {$build}) - date {$date}'
+    compact: 'v{$major}.{$minor}.{$patch} - {$build} - {$date}'
   ## add as many formats as you need !!!!

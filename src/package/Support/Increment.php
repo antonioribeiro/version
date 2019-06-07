@@ -28,6 +28,8 @@ class Increment
     {
         $config = $incrementer($this->config->getRoot());
 
+        $config['current']['date'] = array_key_exists('dateFormat', $config['current']) ? date($config['current']['dateFormat']) : date('m/d/Y H:i');
+
         $this->config->update($config);
 
         return array_get($config, $returnKey);
