@@ -4,11 +4,11 @@ current:
   major: 1
   minor: 0
   patch: 0
-  year:
-  month:
-  day:
-  hour:
-  minute:
+  year: 2011
+  month: 02
+  day: 11
+  hour: 14
+  minute: 53
   format: '{$major}.{$minor}.{$patch}.{$year}-{$month}-{$day}-{$year} - {$hour}:{$minute}'
   git_absorb: false # "false", "git-local" or "git-remote"
 cache:
