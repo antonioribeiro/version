@@ -45,6 +45,11 @@ version:
         major: 1
         minor: 0
         patch: 0
+        year: 2011
+        month: 02
+        day: 16
+        hour: 14
+        minute: 53
         format: '{$major}.{$minor}.{$patch}'
     build:
         mode: number
@@ -108,16 +113,16 @@ You can configure the :
 
 ``` yaml
 format:
-  version: "{$major}.{$minor}.{$patch}"
-  full: "version {{'format.version'}} (build {$build})"
-  compact: "v{{'format.version'}}-{$build}"
+  version: "{$major}.{$minor}.{$patch} - date {$year}-{$month}-{$day} {$hour}:{$minute}"
+  full: "version {{'format.version'}} (build {$build}) - date {$year}-{$month}-{$day} {$hour}:{$minute}"
+  compact: "v{{'format.version'}}-{$build} - {$year}-{$month}-{$day} {$hour}:{$minute}"
 ```
 
 Those are the results for `full` and `compact` formats
 
 ```
-MyApp version 1.0.0 (build 701037)
-MyApp v1.0.0-701037
+MyApp version 1.0.0 (build 701037) - date 2011-02-16 14:53
+MyApp v1.0.0-701037 - 2011-02-16 14:53
 ```
 
 It gives you access to dynamic methods:

@@ -28,7 +28,11 @@ class Increment
     {
         $config = $incrementer($this->config->getRoot());
 
-        $config['current']['date'] = isset($config['current']['dateFormat']) ? date($config['current']['dateFormat']) : date('m/d/Y H:i');
+        $config['current']['year']      = isset($config['current']['year'])     ? date($config['current']['year'])      : date('Y');
+        $config['current']['month']     = isset($config['current']['month'])    ? date($config['current']['month'])     : date('m');
+        $config['current']['day']       = isset($config['current']['day'])      ? date($config['current']['day'])       : date('d');
+        $config['current']['hour']      = isset($config['current']['hour'])     ? date($config['current']['hour'])      : date('H');
+        $config['current']['minute']    = isset($config['current']['minute'])   ? date($config['current']['minute'])    : date('i');
 
         $this->config->update($config);
 
