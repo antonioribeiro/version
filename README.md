@@ -19,7 +19,7 @@
 
 ## Description
 
-TThis package is a Laravel (5.5+) utility which helps you keep and manage your application version, increment version numbers (major, minor, patch, build), and can also use your last commit hash as build number.
+This package is a Laravel (5.5+) utility which helps you keep and manage your application version, increment version numbers (major, minor, patch, build), and can also use your last commit hash as build number.
 
 #### The end results of this package are:
 
