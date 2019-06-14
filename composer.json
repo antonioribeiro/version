@@ -1,6 +1,6 @@
 {
-    "name": "pragmarx/version",
-    "description": "Take control over your Laravel app version",
+    "name": "luanrodrigues/version",
+    "description": "Take control over your Laravel app version - a fork from: pragmarx/version",
     "keywords": [
         "laravel",
         "version",
@@ -26,18 +26,18 @@
     },
     "autoload": {
         "psr-4": {
-            "PragmaRX\\Version\\Package\\": "src/package",
-            "PragmaRX\\Version\\Tests\\": "tests/"
+            "LuanRodrigues\\Version\\Package\\": "src/package",
+            "LuanRodrigues\\Version\\Tests\\": "tests/"
         }
     },
     "extra": {
         "component": "package",
         "laravel": {
             "providers": [
-                "PragmaRX\\Version\\Package\\ServiceProvider"
+                "LuanRodrigues\\Version\\Package\\ServiceProvider"
             ],
             "aliases": {
-                "Version": "PragmaRX\\Version\\Package\\Facade"
+                "Version": "LuanRodrigues\\Version\\Package\\Facade"
             }
         }
     },
