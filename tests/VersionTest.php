@@ -1,14 +1,14 @@
 <?php
 
-namespace PragmaRX\Version\Tests;
+namespace LuanRodrigues\Version\Tests;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
-use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
-use PragmaRX\Version\Package\Exceptions\MethodNotFound;
-use PragmaRX\Version\Package\Facade as VersionFacade;
-use PragmaRX\Version\Package\Version as VersionService;
+use LuanRodrigues\Version\Package\Exceptions\GitTagNotFound;
+use LuanRodrigues\Version\Package\Exceptions\MethodNotFound;
+use LuanRodrigues\Version\Package\Facade as VersionFacade;
+use LuanRodrigues\Version\Package\Version as VersionService;
 
 class VersionTest extends TestCase
 {

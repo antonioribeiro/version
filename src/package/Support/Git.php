@@ -1,9 +1,9 @@
 <?php
 
-namespace PragmaRX\Version\Package\Support;
+namespace LuanRodrigues\Version\Package\Support;
 
 use Exception;
-use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
+use LuanRodrigues\Version\Package\Exceptions\GitTagNotFound;
 use Symfony\Component\Process\Process;
 
 class Git

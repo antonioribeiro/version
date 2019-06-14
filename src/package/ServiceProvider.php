@@ -1,20 +1,20 @@
 <?php
 
-namespace PragmaRX\Version\Package;
+namespace LuanRodrigues\Version\Package;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
-use PragmaRX\Version\Package\Console\Commands\Absorb;
-use PragmaRX\Version\Package\Console\Commands\Build;
-use PragmaRX\Version\Package\Console\Commands\Major;
-use PragmaRX\Version\Package\Console\Commands\Minor;
-use PragmaRX\Version\Package\Console\Commands\Patch;
-use PragmaRX\Version\Package\Console\Commands\Refresh;
-use PragmaRX\Version\Package\Console\Commands\Show;
-use PragmaRX\Version\Package\Console\Commands\Version as VersionCommand;
-use PragmaRX\Version\Package\Support\Config;
-use PragmaRX\Version\Package\Support\Constants;
-use PragmaRX\Yaml\Package\Yaml;
+use LuanRodrigues\Version\Package\Console\Commands\Absorb;
+use LuanRodrigues\Version\Package\Console\Commands\Build;
+use LuanRodrigues\Version\Package\Console\Commands\Major;
+use LuanRodrigues\Version\Package\Console\Commands\Minor;
+use LuanRodrigues\Version\Package\Console\Commands\Patch;
+use LuanRodrigues\Version\Package\Console\Commands\Refresh;
+use LuanRodrigues\Version\Package\Console\Commands\Show;
+use LuanRodrigues\Version\Package\Console\Commands\Version as VersionCommand;
+use LuanRodrigues\Version\Package\Support\Config;
+use LuanRodrigues\Version\Package\Support\Constants;
+use LuanRodrigues\Yaml\Package\Yaml;
 
 class ServiceProvider extends IlluminateServiceProvider
 {

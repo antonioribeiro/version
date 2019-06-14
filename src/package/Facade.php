@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Version\Package;
+namespace LuanRodrigues\Version\Package;
 
 use Illuminate\Support\Facades\Facade as LaravelFacade;
 

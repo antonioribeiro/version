@@ -181,7 +181,7 @@ The best ways to instantiate it are:
 A simple PHP object instantiation:
 
 ``` php
-$version = new \PragmaRX\Version\Package\Version();
+$version = new \LuanRodrigues\Version\Package\Version();
 
 dd(
     $version->format()
@@ -192,7 +192,7 @@ Or to get an already instantiated Version object from the container:
 
 ``` php
 dd(
-    app(\PragmaRX\Version\Package\Version::class)->format()
+    app(\LuanRodrigues\Version\Package\Version::class)->format()
 );
 ```
 
@@ -283,7 +283,7 @@ Here's a community example on how to send the app version number when logging an
 
 namespace App\Exceptions;
 
-use PragmaRX\Version\Package\Version;
+use LuanRodrigues\Version\Package\Version;
 use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 
 class Handler extends ExceptionHandler
@@ -308,10 +308,10 @@ Show the current app version:
 
 ``` text
 $ php artisan version:show
-PragmaRX version 1.0.0 (build 701031)
+LuanRodrigues version 1.0.0 (build 701031)
 
 $ php artisan version:show --format=compact
-PragmaRX v1.0.0-701031
+LuanRodrigues v1.0.0-701031
 
 $ php artisan version:show --format=compact --suppress-app-name
 v1.0.0-701031
@@ -334,7 +334,7 @@ Clear cache and refresh versions
 ``` text
 $ php artisan version:refresh
 Version was refreshed.
-PragmaRX version 1.0.0 (build 4f76c)
+LuanRodrigues version 1.0.0 (build 4f76c)
 ```
 
 #### version:absorb
@@ -381,7 +381,7 @@ $ composer require pragmarx/version
 Then publish the configuration file you'll have to:
 
 ``` bash
-$ php artisan vendor:publish --provider="PragmaRX\Version\Package\ServiceProvider"
+$ php artisan vendor:publish --provider="LuanRodrigues\Version\Package\ServiceProvider"
 ```
 
 And you should be good to use it in your views:

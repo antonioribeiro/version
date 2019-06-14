@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Version\Package\Console\Commands;
+namespace LuanRodrigues\Version\Package\Console\Commands;
 
 class Version extends Show
 {

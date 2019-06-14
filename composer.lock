@@ -832,17 +832,17 @@
                 "component": "package",
                 "laravel": {
                     "providers": [
-                        "PragmaRX\\Yaml\\Package\\ServiceProvider"
+                        "LuanRodrigues\\Yaml\\Package\\ServiceProvider"
                     ],
                     "aliases": {
-                        "Yaml": "PragmaRX\\Yaml\\Package\\Facade"
+                        "Yaml": "LuanRodrigues\\Yaml\\Package\\Facade"
                     }
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "PragmaRX\\Yaml\\Package\\": "src/package",
-                    "PragmaRX\\Yaml\\Tests\\": "tests/"
+                    "LuanRodrigues\\Yaml\\Package\\": "src/package",
+                    "LuanRodrigues\\Yaml\\Tests\\": "tests/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
