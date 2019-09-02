@@ -14,10 +14,16 @@
             "role": "Creator & Designer"
         }
     ],
+    "repositories": [
+        {
+          "url": "https://github.com/AraneaDev/yaml.git",
+          "type": "git"
+        }
+    ],
     "require": {
         "php": "^7.0",
         "laravel/framework": ">=5.5.33",
-        "pragmarx/yaml": "^0.1",
+        "pragmarx/yaml": "master",
         "symfony/process": "^3.3|^4.0"
     },
     "require-dev": {
