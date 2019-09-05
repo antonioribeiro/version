@@ -2,6 +2,8 @@
 
 namespace PragmaRX\Version\Package\Support;
 
+use Illuminate\Support\Arr;
+
 class Increment
 {
     protected $config;
@@ -30,7 +32,7 @@ class Increment
 
         $this->config->update($config);
 
-        return array_get($config, $returnKey);
+        return Arr::get($config, $returnKey);
     }
 
     /**
