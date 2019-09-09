@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Version\Package;
 
+use Illuminate\Support\Str;
 use PragmaRX\Version\Package\Exceptions\MethodNotFound;
 use PragmaRX\Version\Package\Support\Absorb;
 use PragmaRX\Version\Package\Support\Cache;
@@ -10,7 +11,6 @@ use PragmaRX\Version\Package\Support\Constants;
 use PragmaRX\Version\Package\Support\Git;
 use PragmaRX\Version\Package\Support\Increment;
 use PragmaRX\Yaml\Package\Yaml;
-use Illuminate\Support\Str;
 
 class Version
 {
