@@ -2,14 +2,15 @@
 
 namespace PragmaRX\Version\Package;
 
-use PragmaRX\Version\Package\Exceptions\MethodNotFound;
-use PragmaRX\Version\Package\Support\Absorb;
+use Illuminate\Support\Str;
+use PragmaRX\Yaml\Package\Yaml;
+use PragmaRX\Version\Package\Support\Git;
 use PragmaRX\Version\Package\Support\Cache;
+use PragmaRX\Version\Package\Support\Absorb;
 use PragmaRX\Version\Package\Support\Config;
 use PragmaRX\Version\Package\Support\Constants;
-use PragmaRX\Version\Package\Support\Git;
 use PragmaRX\Version\Package\Support\Increment;
-use PragmaRX\Yaml\Package\Yaml;
+use PragmaRX\Version\Package\Exceptions\MethodNotFound;
 
 class Version
 {
@@ -76,11 +77,11 @@ class Version
      */
     public function __call($name, array $arguments)
     {
-        if (starts_with($name, 'increment')) {
+        if (Str::startsWith($name, 'increment')) {
             return $this->increment->$name(...$arguments);
         }
 
-        if (starts_with($name, 'absorb')) {
+        if (Str::startsWith($name, 'absorb')) {
             return $this->absorb->$name(...$arguments);
         }
 

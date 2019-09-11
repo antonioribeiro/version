@@ -87,7 +87,7 @@ class VersionTest extends TestCase
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setup();
 
@@ -599,7 +599,7 @@ class VersionTest extends TestCase
         $this->assertEquals(config('version.current.major'), 2);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->removeGitTag();
     }
