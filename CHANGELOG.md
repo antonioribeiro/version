@@ -1,6 +1,9 @@
 # Changelog
 
 ## [1.0.0] - 2019-09-16
+
+#### This is a complete refactor, things will break if you don't review the `version.yml` file.
+
 ### Changed
 - Complete refactor to fully comply with SemVer (https://semver.org/) specification
 - "Build" renamed to "Commit"
