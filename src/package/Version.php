@@ -2,9 +2,9 @@
 
 namespace PragmaRX\Version\Package;
 
+use PragmaRX\Version\Package\Support\Timestamp;
 use PragmaRX\Version\Package\Exceptions\MethodNotFound;
 use PragmaRX\Version\Package\Support\Absorb;
-use PragmaRX\Version\Package\Support\Cache;
 use PragmaRX\Version\Package\Support\Config;
 use PragmaRX\Version\Package\Support\Constants;
 use PragmaRX\Version\Package\Support\Git;
@@ -17,11 +17,6 @@ class Version
      * @var \PragmaRX\Yaml\Package\Yaml
      */
     protected $yaml;
-
-    /**
-     * @var \PragmaRX\Version\Package\Support\Cache
-     */
-    protected $cache;
 
     /**
      * @var \PragmaRX\Version\Package\Support\Config
@@ -44,9 +39,13 @@ class Version
     private $absorb;
 
     /**
+     * @var Timestamp
+     */
+    private $timestamp;
+
+    /**
      * Version constructor.
      *
-     * @param Cache|null     $cache
      * @param Config|null    $config
      * @param Git|null       $git
      * @param Increment|null $increment
@@ -55,13 +54,13 @@ class Version
      */
     public function __construct(
         Config $config = null,
-        Cache $cache = null,
         Git $git = null,
         Increment $increment = null,
         Yaml $yaml = null,
-        Absorb $absorb = null
+        Absorb $absorb = null,
+        Timestamp $timestamp = null
     ) {
-        $this->instantiate($cache, $config, $git, $increment, $yaml, $absorb);
+        $this->instantiate($config, $git, $increment, $yaml, $absorb, $timestamp);
     }
 
     /**
@@ -78,6 +77,10 @@ class Version
     {
         if (starts_with($name, 'increment')) {
             return $this->increment->$name(...$arguments);
+        }
+
+        if (starts_with($name, 'timestamp')) {
+            return $this->timestamp->$name(...$arguments);
         }
 
         if (starts_with($name, 'absorb')) {
@@ -100,29 +103,38 @@ class Version
      *
      * @return string
      */
-    protected function getVersion($type)
+    protected function getCurrent($type)
     {
-        return $this->git->isVersionComingFromGit()
-            ? $this->git->version($type)
-            : $this->config->get("current.{$type}");
+        return $this->config->has("current.{$type}") ? ($this->config->get("current.{$type}") ?? '') : null;
+    }
+
+    /**
+     * Get a version.
+     *
+     * @param $type
+     *
+     * @return string
+     */
+    public function getGit()
+    {
+        return $this->git;
     }
 
     /**
      * Instantiate all dependencies.
      *
-     * @param $cache
      * @param $config
      * @param $git
      * @param $increment
      * @param $yaml
      */
     protected function instantiate(
-        $cache,
         $config,
         $git,
         $increment,
         $yaml,
-        $absorb
+        $absorb,
+        $timestamp
     ) {
         $yaml = $this->instantiateClass($yaml ?: app('pragmarx.yaml'), 'yaml');
 
@@ -130,23 +142,22 @@ class Version
             $yaml,
         ]);
 
-        $cache = $this->instantiateClass($cache, 'cache', Cache::class, [
-            $config,
-        ]);
-
         $git = $this->instantiateClass($git, 'git', Git::class, [
             $config,
-            $cache,
         ]);
 
         $this->instantiateClass($increment, 'increment', Increment::class, [
             $config,
         ]);
 
+        $timestamp = $this->instantiateClass($increment, 'timestamp', Timestamp::class, [
+            $config,
+        ]);
+
         $this->instantiateClass($absorb, 'absorb', Absorb::class, [
             $config,
             $git,
-            $cache,
+            $timestamp
         ]);
     }
 
@@ -197,17 +208,23 @@ class Version
      */
     protected function searchAndReplaceVariables($string)
     {
-        return str_replace(
-            ['{$major}', '{$minor}', '{$patch}', '{$repository}', '{$build}'],
-            [
-                $this->getVersion('major'),
-                $this->getVersion('minor'),
-                $this->getVersion('patch'),
-                $this->git->getGitRepository(),
-                $this->getBuild(),
-            ],
-            $string
-        );
+        while (preg_match('/(\{\$(.*)\})/U', $string, $matches)) {
+            if (!is_null($value = $this->getCurrent($matches[2]))) {
+                $string = str_replace($matches[0], $value, $string);
+            }
+
+            if ($format = $this->config->get('format.'.$matches[2])) {
+                $string = str_replace($matches[0], $format, $string);
+            }
+
+            return $this->searchAndReplaceVariables($string);
+        }
+
+        while (preg_match('/'.$this->config->get('format.regex.optional_bracket').'/', $string, $matches)) {
+            $string = str_replace($matches[0], trim($matches['optional']) ? $matches['prefix'].$matches['spaces'].$matches['optional'] : '', $string);
+        }
+
+        return $string;
     }
 
     /**
@@ -217,38 +234,7 @@ class Version
      */
     public function current()
     {
-        return $this->replaceVariables($this->makeVersion());
-    }
-
-    /**
-     * Get the current build.
-     *
-     * @return mixed
-     */
-    public function getBuild()
-    {
-        if (
-            $this->git->isVersionComingFromGit() &&
-            ($value = $this->git->version('build'))
-        ) {
-            return $value;
-        }
-
-        if ($this->config->get('build.mode') === Constants::BUILD_MODE_NUMBER) {
-            return $this->config->get('build.number');
-        }
-
-        return $this->git->getCommit();
-    }
-
-    /**
-     * Make version string.
-     *
-     * @return string
-     */
-    protected function makeVersion()
-    {
-        return $this->config->get('current.format');
+        return $this->replaceVariables($this->config->get('format.version'));
     }
 
     /**
@@ -284,9 +270,9 @@ class Version
      *
      * @return bool
      */
-    public function isInAbsorbMode($type)
+    public function isInAbsorbMode()
     {
-        return $this->config->get("{$type}.git_absorb") !== false;
+        return $this->config->get("mode") == Constants::MODE_ABSORB;
     }
 
     /**
@@ -309,15 +295,5 @@ class Version
     public function loadConfig($path = null)
     {
         return $this->config->loadConfig($path);
-    }
-
-    /**
-     * Refresh cache.
-     */
-    public function refresh()
-    {
-        $this->cache->flush();
-
-        return $this->format('build');
     }
 }

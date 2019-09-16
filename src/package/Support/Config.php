@@ -64,6 +64,19 @@ class Config
     }
 
     /**
+     * Checkf it has a config value.
+     *
+     * @param $string
+     * @param mixed|null $default
+     *
+     * @return \Illuminate\Config\Repository|mixed
+     */
+    public function has($string)
+    {
+        return config()->has("version.{$string}");
+    }
+
+    /**
      * Set the config file stub.
      *
      * @return string
@@ -135,7 +148,7 @@ class Config
     {
         config(['version' => $config]);
 
-        $this->yaml->saveAsYaml($config, $this->configFile);
+        $this->yaml->saveAsYaml($config, $this->configFile, 6, 2);
     }
 
     /**

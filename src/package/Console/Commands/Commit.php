@@ -2,21 +2,21 @@
 
 namespace PragmaRX\Version\Package\Console\Commands;
 
-class Build extends Base
+class Commit extends Base
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'version:build {--increment-by= : Increment by a different amount than config }';
+    protected $signature = 'version:commit {--increment-by= : Increment by a different amount than config }';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Increment app build number';
+    protected $description = 'Increment app commit number';
 
     /**
      * Execute the console command.
@@ -24,11 +24,11 @@ class Build extends Base
     public function handle()
     {
         if ($this->checkIfCanIncrement('current')) {
-            $build = app('pragmarx.version')->incrementBuild(
+            $commit = app('pragmarx.version')->incrementCommit(
                 $this->option('increment-by')
             );
 
-            $this->info("New build: {$build}");
+            $this->info("New commit: {$commit}");
 
             $this->displayAppVersion();
         }

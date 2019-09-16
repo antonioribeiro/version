@@ -10,19 +10,14 @@ class Git
 {
     protected $config;
 
-    protected $cache;
-
     /**
-     * Cache constructor.
+     * Git constructor.
      *
      * @param Config|null $config
-     * @param Cache|null  $cache
      */
-    public function __construct(Config $config, Cache $cache)
+    public function __construct(Config $config)
     {
         $this->config = $config;
-
-        $this->cache = $cache;
     }
 
     private function cleanOutput($getOutput)
@@ -55,7 +50,15 @@ class Git
     }
 
     /**
-     * Get the build git repository url.
+     * @return \Illuminate\Config\Repository|mixed
+     */
+    private function getCommitLength()
+    {
+        return $this->config->get('commit.length', 6);
+    }
+
+    /**
+     * Get the commit git repository url.
      *
      * @return string
      */
@@ -67,51 +70,77 @@ class Git
     /**
      * Make a git version command.
      *
-     * @param string|null $mode
+     * @param string|null $from
      *
      * @return string
      */
-    public function makeGitVersionRetrieverCommand($mode = null)
+    public function makeGitVersionRetrieverCommand($from = null)
     {
-        $mode = is_null($mode) ? $this->config->get('version_source') : $mode;
-
         return $this->searchAndReplaceRepository(
-            $this->config->get('git.version.'.$mode)
+            $this->config->get('git.version.' . $this->getFrom($from))
         );
     }
 
     /**
-     * Get the current git commit number, to be used as build number.
+     * Get the current git commit number, to be used as commit number.
      *
-     * @param string|null $mode
+     * @param string|null $from
      *
      * @return string
      */
-    public function getCommit($mode = null)
+    public function getCommit($from = null)
     {
         return $this->getFromGit(
-            $this->makeGitHashRetrieverCommand($mode),
-            Constants::VERSION_CACHE_KEY,
-            $this->config->get('build.length', 6)
+            $this->makeGitCommitRetrieverCommand($from),
+            $this->getCommitLength()
+        );
+    }
+
+    /**
+     * Get the current git date and time.
+     *
+     * @param string|null $from
+     *
+     * @return string
+     */
+    public function getTimestamp($from = null)
+    {
+        return $this->getFromGit(
+            $this->makeGitTimestampRetrieverCommand($from)
         );
     }
 
     /**
      * Get the git hash retriever command.
      *
-     * @param string|null $mode
+     * @param string|null $from
      *
      * @return \Illuminate\Config\Repository|mixed
      */
-    public function getGitHashRetrieverCommand($mode = null)
+    public function getGitCommitRetrieverCommand($from = null)
     {
-        $mode = is_null($mode) ? $this->config->get('build.mode') : $mode;
+        return $this->config->get('git.commit.' . $this->getFrom($from));
+    }
 
-        return $this->config->get('git.'.$mode);
+    public function getFrom($from = null)
+    {
+        return $from ? $from : $this->config->get('git.from');
     }
 
     /**
-     * Get a cached value or execute a shell command to retrieve it.
+     * Get the git date retriever command.
+     *
+     * @param string|null $from
+     *
+     * @return \Illuminate\Config\Repository|mixed
+     */
+    public function getGitTimestampRetrieverCommand($from = null)
+    {
+        return $this->config->get('git.date.' . $this->getFrom($from));
+    }
+
+    /**
+     * Execute a shell command to retrieve git values.
      *
      * @param $command
      * @param $keySuffix
@@ -119,31 +148,22 @@ class Git
      *
      * @return bool|mixed|null|string
      */
-    protected function getFromGit($command, $keySuffix, $length = 256)
+    protected function getFromGit($command, $length = 256)
     {
-        if ($value = $this->cache->get($key = $this->cache->key($keySuffix))) {
-            return $value;
-        }
-
-        $value = substr($this->shell($command), 0, $length);
-
-        $this->cache->put($key, $value);
-
-        return $value;
+        return substr($this->shell($command), 0, $length);
     }
 
     /**
      * Get the current app version from Git.
      *
-     * @param null $mode
+     * @param null $from
      *
      * @return bool|mixed|null|string
      */
-    public function getVersionFromGit($mode = null)
+    public function getVersion($from = null)
     {
         return $this->getFromGit(
-            $this->makeGitVersionRetrieverCommand($mode),
-            Constants::BUILD_CACHE_KEY
+            $this->makeGitVersionRetrieverCommand($from),
         );
     }
 
@@ -158,51 +178,41 @@ class Git
     }
 
     /**
-     * Get version from the git repository.
-     *
-     * @param $type
-     *
-     * @throws GitTagNotFound
-     *
-     * @return string
-     */
-    public function version($type)
-    {
-        $version = $this->extractVersion($this->getVersionFromGit());
-
-        return [
-            'major' => $this->getMatchedVersionItem($version, 1),
-
-            'minor' => $this->getMatchedVersionItem($version, 2),
-
-            'patch' => $this->getMatchedVersionItem($version, 3),
-
-            'build' => $this->getMatchedVersionItem($version, 4),
-        ][$type];
-    }
-
-    /**
      * Check if git is the current version source.
      *
      * @return bool
      */
     public function isVersionComingFromGit()
     {
-        return $this->config->get('version_source') !==
-            Constants::VERSION_SOURCE_CONFIG;
+        return $this->config->get('mode') ==
+            Constants::MODE_ABSORB;
     }
 
     /**
      * Make the git hash retriever command.
      *
-     * @param string|null $mode
+     * @param string|null $from
      *
      * @return mixed
      */
-    public function makeGitHashRetrieverCommand($mode)
+    public function makeGitCommitRetrieverCommand($from)
     {
         return $this->searchAndReplaceRepository(
-            $this->getGitHashRetrieverCommand($mode)
+            $this->getGitCommitRetrieverCommand($from)
+        );
+    }
+
+    /**
+     * Make the git date retriever command.
+     *
+     * @param string|null $from
+     *
+     * @return mixed
+     */
+    public function makeGitTimestampRetrieverCommand($from)
+    {
+        return $this->searchAndReplaceRepository(
+            $this->getGitTimestampRetrieverCommand($from)
         );
     }
 

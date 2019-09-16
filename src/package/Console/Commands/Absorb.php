@@ -9,14 +9,14 @@ class Absorb extends Base
      *
      * @var string
      */
-    protected $signature = 'version:absorb {--ignore-errors : Ignore all errors} {--force : Flush cache before absorbing}';
+    protected $signature = 'version:absorb {--ignore-errors : Ignore all errors}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Absorb git version and/or build';
+    protected $description = 'Absorb git version and/or commit';
 
     /**
      * Execute the console command.
@@ -30,7 +30,7 @@ class Absorb extends Base
         }
 
         try {
-            app('pragmarx.version')->absorb($this->option('force'));
+            app('pragmarx.version')->absorb();
 
             $this->info('Version was absorbed.');
         } catch (\Exception $exception) {
@@ -49,7 +49,6 @@ class Absorb extends Base
      */
     protected function isInAbsorbMode(): bool
     {
-        return app('pragmarx.version')->isInAbsorbMode('current') ||
-            app('pragmarx.version')->isInAbsorbMode('build');
+        return app('pragmarx.version')->isInAbsorbMode();
     }
 }

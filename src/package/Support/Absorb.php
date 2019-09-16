@@ -2,8 +2,13 @@
 
 namespace PragmaRX\Version\Package\Support;
 
+use Carbon\Carbon;
+
 class Absorb
 {
+    /**
+     * @var Config
+     */
     protected $config;
 
     /**
@@ -11,7 +16,10 @@ class Absorb
      */
     protected $git;
 
-    protected $cache;
+    /**
+     * @var Timestamp
+     */
+    protected $timestamp;
 
     /**
      * Absorb constructor.
@@ -19,13 +27,13 @@ class Absorb
      * @param Config
      * @param Git
      */
-    public function __construct(Config $config, Git $git, Cache $cache)
+    public function __construct(Config $config, Git $git, Timestamp $timestamp)
     {
         $this->config = $config;
 
         $this->git = $git;
 
-        $this->cache = $cache;
+        $this->timestamp = $timestamp;
     }
 
     /**
@@ -35,15 +43,13 @@ class Absorb
      *
      * @return bool
      */
-    public function absorb($force = false)
+    public function absorb()
     {
-        if ($force) {
-            $this->cache->flush();
-        }
-
         $this->absorbVersion();
 
-        $this->absorbBuild();
+        $this->absorbCommit();
+
+        $this->absorbTimestamp();
 
         return true;
     }
@@ -51,39 +57,51 @@ class Absorb
     /**
      * Absorb the version number from git.
      */
-    private function absorbVersion()
+    protected function absorbVersion()
     {
-        if (($type = $this->config->get('current.git_absorb')) === false) {
-            return;
-        }
-
         $version = $this->git->extractVersion(
-            $this->git->getVersionFromGit($type)
+            $this->git->getVersion()
         );
 
         $config = $this->config->getRoot();
 
-        $config['current']['major'] = (int) $version[1][0];
+        $config['current']['label'] = $version['label'][0];
 
-        $config['current']['minor'] = (int) $version[2][0];
+        $config['current']['major'] = (int) $version['major'][0];
 
-        $config['current']['patch'] = (int) $version[3][0];
+        $config['current']['minor'] = (int) $version['minor'][0];
+
+        $config['current']['patch'] = (int) $version['patch'][0];
+
+        $config['current']['prerelease'] = $version['prerelease'][0];
+
+        $config['current']['buildmetadata'] = $version['buildmetadata'][0];
 
         $this->config->update($config);
     }
 
     /**
-     * Absorb the build from git.
+     * Absorb the commit from git.
      */
-    private function absorbBuild()
+    protected function absorbCommit()
     {
-        if (($type = $this->config->get('build.git_absorb')) === false) {
-            return;
-        }
-
         $config = $this->config->getRoot();
 
-        $config['build']['number'] = $this->git->getCommit($type);
+        $config['current']['commit'] = $this->git->getCommit() ?? null;
+
+        $this->config->update($config);
+    }
+
+    /**
+     * Absorb the commit from git.
+     */
+    protected function absorbTimestamp()
+    {
+        $config = $this->config->getRoot();
+
+        $date = Carbon::parse($this->git->getTimestamp()) ?? Carbon::now();
+
+        $config['current']['timestamp'] = $this->timestamp->explode($date);
 
         $this->config->update($config);
     }

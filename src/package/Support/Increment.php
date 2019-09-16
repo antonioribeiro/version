@@ -2,6 +2,8 @@
 
 namespace PragmaRX\Version\Package\Support;
 
+use Illuminate\Support\Arr;
+
 class Increment
 {
     protected $config;
@@ -30,11 +32,11 @@ class Increment
 
         $this->config->update($config);
 
-        return array_get($config, $returnKey);
+        return Arr::get($config, $returnKey);
     }
 
     /**
-     * Increment the build number.
+     * Increment the commit number.
      *
      * @param null $by
      *
@@ -42,16 +44,15 @@ class Increment
      *
      * @internal param null $increment
      */
-    public function incrementBuild($by = null)
+    public function incrementCommit($by = null)
     {
         return $this->increment(function ($config) use ($by) {
-            $increment_by = $by ?: $config['build']['increment_by'];
+            $increment_by = $by ?: $config['commit']['increment-by'];
 
-            $config['build']['number'] =
-                $config['build']['number'] + $increment_by;
+            $config['current']['commit'] = $this->incrementHex($config['current']['commit'], $increment_by);
 
             return $config;
-        }, 'build.number');
+        }, 'commit.number');
     }
 
     /**
@@ -100,5 +101,10 @@ class Increment
 
             return $config;
         }, 'current.patch');
+    }
+
+    public function incrementHex($hex, $by = 1)
+    {
+        return dechex(hexdec($hex) + $by);
     }
 }

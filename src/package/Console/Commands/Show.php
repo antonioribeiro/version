@@ -16,7 +16,7 @@ class Show extends Base
      *
      * @var string
      */
-    protected $description = 'Show current app version and build';
+    protected $description = 'Show current app version and commit';
 
     /**
      * Execute the console command.
