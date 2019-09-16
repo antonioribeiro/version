@@ -46,7 +46,7 @@ class Timestamp
             'hour'     => $date->hour,
             'minute'   => $date->minute,
             'second'   => $date->second,
-            'timezone' => (string) $date->timezone,
+            'timezone' => $date->timezone->getName(),
         ];
     }
 }
