@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.0] - 2019-09-16
+### Changed
+- Complete refactor to fully comply with SemVer (https://semver.org/) specification
+- "Build" renamed to "Commit"
+- Please check the new version.yml config format
+### Added
+- "prerelease" and "buildmetadata" information to the version stack
+- Commit timestamp information to the version stack 
+
 ## [0.2.7] - 2018-03-16
 ### Added
 - Option "--ignore-errors" to version:absorb Artisan command
@@ -22,7 +31,7 @@
 ## [0.2.2] - 2017-12-14
 ### Added
 - Allow users to suppress app name in version:show Artisan command
-- Ability to absorb current git version and build to the config file
+- Ability to absorb current git version and commit to the config file
 
 ## [0.2.1] - 2017-12-03
 ### Fixed
