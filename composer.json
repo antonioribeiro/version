@@ -17,7 +17,7 @@
     "require": {
         "php": "^7.0",
         "laravel/framework": ">=5.5.33",
-        "pragmarx/yaml": "^0.2",
+        "pragmarx/yaml": "^0.3",
         "symfony/process": "^3.3|^4.0"
     },
     "require-dev": {
