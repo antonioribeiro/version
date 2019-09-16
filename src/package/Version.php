@@ -80,11 +80,11 @@ class Version
             return $this->increment->$name(...$arguments);
         }
 
-        if (starts_with($name, 'timestamp')) {
+        if (Str::startsWith($name, 'timestamp')) {
             return $this->timestamp->$name(...$arguments);
         }
 
-        if (starts_with($name, 'absorb')) {
+        if (Str::startsWith($name, 'absorb')) {
             return $this->absorb->$name(...$arguments);
         }
 
