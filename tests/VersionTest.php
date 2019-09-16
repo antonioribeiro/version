@@ -559,7 +559,7 @@ class VersionTest extends TestCase
                 config('version.current.timestamp.day'),
                 config('version.current.timestamp.hour'),
                 config('version.current.timestamp.minute'),
-                config('version.current.timestamp.second'),
+                config('version.current.timestamp.second')
             ),
 
             $this->version->format('timestamp-datetime')
