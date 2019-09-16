@@ -19,12 +19,38 @@
 
 ## Description
 
-This package is a Laravel (5.5+) utility which helps you keep and manage your application version, increment version numbers (major, minor, patch, build), and can also use your last commit hash as build number.
+This package is a Laravel (5.5+) utility which helps you keep and manage your application version, increment version numbers (major, minor, patch, commit), and can also use your last commit hash.
 
 #### The end results of this package are:
 
 - Print a version on a page.
 - Print it in the console, via an Artisan command.
+
+#### Full SemVer compatibility
+
+This package is able to parse a SemVer version:
+
+```
+v2.0.1-alpha.1227
+```
+
+And translate it to be used as:
+
+```
+label: v
+major: 2
+minor: 0
+patch: 1
+prerelease: alpha
+buildmetadata: 1227
+commit: 49ffe2
+```
+
+You can use the format function to rewrite and show it in your app, for instance, as:
+
+```
+MyApp version 2.0.1 - alpha 1227 (commit 49ffe2)
+```
 
 #### Some use cases for those results could be: 
  
@@ -46,30 +72,30 @@ version:
         minor: 0
         patch: 0
         format: '{$major}.{$minor}.{$patch}'
-    build:
+    commit:
         mode: number
         number: 701036
 ```
 
-### Use your git commit as your app build number
+### Use your git commit as your app commit hash/number
 
 Configure it
 
 ``` yaml
-build:
+commit:
     mode: git-local
 ```
 
 And you may have an output like this
 
 ```
-MyApp version 1.0.0 (build a9c03f)
+MyApp version 1.0.0 (commit a9c03f)
 ```
 
-Or just use an incremental build number:
+Or just use an incremental commit hash/number:
 
 ``` yaml
-build:
+commit:
     mode: number
     number: 701036
 ```
@@ -77,20 +103,20 @@ build:
 To get
 
 ```
-MyApp version 1.0.0 (build 701036)
+MyApp version 1.0.0 (commit 701036)
 ```
 
 ### Easily increment your version numbers, using Artisan commands
 
 ``` bash
-$ php artisan version:build
+php artisan version:commit
 ```
 
 Which should print the new version number 
 
 ``` bash
-New build: 701037
-MyApp version 1.0.0 (build 701037) 
+New commit: 701037
+MyApp version 1.0.0 (commit 701037) 
 ```
 
 Available for all of them:
@@ -109,14 +135,14 @@ You can configure the :
 ``` yaml
 format:
   version: "{$major}.{$minor}.{$patch}"
-  full: "version {{'format.version'}} (build {$build})"
-  compact: "v{{'format.version'}}-{$build}"
+  full: "version {{'format.version'}} (commit {$commit})"
+  compact: "v{{'format.version'}}-{$commit}"
 ```
 
 Those are the results for `full` and `compact` formats
 
 ```
-MyApp version 1.0.0 (build 701037)
+MyApp version 1.0.0 (commit 701037)
 MyApp v1.0.0-701037
 ```
 
@@ -144,7 +170,7 @@ Version::awesome()
 ``` php
 Version::version() // 1.2.25
 
-Version::build() // 703110
+Version::commit() // 703110
 
 Version::major() // 1
 
@@ -152,9 +178,9 @@ Version::minor() // 2
 
 Version::patch() // 25
 
-Version::format('full') // version 1.0.0 (build 703110)
+Version::format('full') // version 1.0.0 (commit 703110)
 
-Version::full() // version 1.0.0 (build 703110) -- dynamic method
+Version::full() // version 1.0.0 (commit 703110) -- dynamic method
 
 Version::format('compact') // v.1.0.0-703110
 
@@ -228,13 +254,13 @@ You can use your git tags as application versions, all you need is to set the ve
 version_source: git
 ```
 
-And if you add a build number to your tags:
+And if you add a commit hash/number to your tags:
 
 ``` bash
 $ git tag -a -f v0.1.1.3128
 ```
 
-Version will use it as your app build number
+Version will use it as your app commit hash/number
 
 ### Matching other version (git tags) formats
 
@@ -266,7 +292,7 @@ And remove dots from your formats:
 
 ``` yaml
 format:
-  compact: "v{$major}{$minor}{$patch}-{$build}"
+  compact: "v{$major}{$minor}{$patch}-{$commit}"
 ```
 
 ### Using the current application version in your code 
@@ -293,6 +319,45 @@ class Handler extends ExceptionHandler
 }
 ``` 
 
+### Commit Timestamp
+
+This package also lets you absorb the last commit timestamp or store the current date to the version.yml file. This is the format in the config file:
+
+```
+timestamp:
+  year:
+  month:
+  day:
+  hour:
+  minute:
+  second:
+  timezone:
+```
+
+To absorb you only need to configure `mode: absorb` then execute:
+
+php artisan version:absorb
+
+But you can also set `mode: increment` then execute:
+
+```
+php artisan version:timestamp
+```
+
+To store the current date and time to the config file:
+
+``` text
+$ php artisan version:minor
+New timestamp: 2019-09-16 18:23:03
+MyApp version 2.3.2 (commit 49ffe2)
+```
+
+And you can then use it to show in your app:
+
+```
+Version::format('timestamp-full')
+```
+
 ### Artisan commands
 
 Those are the commands you have at your disposal:
@@ -312,34 +377,14 @@ $ php artisan version:show --format=compact --suppress-app-name
 v1.0.0-701031
 ```
 
-#### version:(major|minor|patch|build)
-
-Increment the version item:
-
-``` text
-$ php artisan version:minor
-New minor version: 5
-MyApp version 1.5.0 (build 701045)
-```
-
-#### version:refresh
-
-Clear cache and refresh versions
-
-``` text
-$ php artisan version:refresh
-Version was refreshed.
-PragmaRX version 1.0.0 (build 4f76c)
-```
-
 #### version:absorb
 
-> This requires that you use annotated tags.
+You need to set `mode: absorb`.
 
-Version can absorb git version and build to the config file, so you can delete the .git folder and still keep your version and build cached for fast access. You have to configure `git_absorb` in your config file:
+Version can absorb git version and commit to the config file, so you can delete the .git folder and still keep your version and commit for fast access. You have to configure `git_absorb` in your config file:
 
 ``` yaml
-build:
+commit:
   #...  
   git_absorb: git-local # "false", "git-local" or "git-remote"
 ```
@@ -359,11 +404,33 @@ current:
     minor: 0                       ## | --> will be changed by absorb
     patch: 0                       ## |
     git_absorb: git-local          ## configure to get from local or remote
-build:
+commit:
     mode: number                   ## must be set as number
     number: f477c8                 ## will be changed by absorb
     git_absorb: git-local          ## configure to get from local or remote 
 ```
+
+#### version:(major|minor|patch|commit)
+
+You need to set `mode: increment`.
+
+Increment the version item:
+
+``` text
+$ php artisan version:minor
+New minor version: 5
+MyApp version 1.5.0 (commit 701045)
+```
+
+#### Regex Matcher
+
+This is the current regex used to break a version string:
+
+````
+^(?P<label>[v|V]*[er]*[sion]*)[\.|\s]*(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
+````
+
+You can test it online: https://regex101.com/r/Ly7O1x/42
 
 ## Install
 
@@ -402,7 +469,7 @@ As git versions are cached, you can tell composer to refresh your version number
 php artisan version:refresh
 ```
 
-If you are using Git commits on your build numbers, you may have to add the git repository to your .env file
+If you are using Git commits on your commit numbers, you may have to add the git repository to your .env file
 
 ``` text
 VERSION_GIT_REMOTE_REPOSITORY=https://github.com/antonioribeiro/version.git
