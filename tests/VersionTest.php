@@ -2,13 +2,13 @@
 
 namespace PragmaRX\Version\Tests;
 
-use PragmaRX\Version\Package\Version;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
-use PragmaRX\Version\Package\Support\Constants;
 use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
 use PragmaRX\Version\Package\Exceptions\MethodNotFound;
 use PragmaRX\Version\Package\Facade as VersionFacade;
+use PragmaRX\Version\Package\Support\Constants;
+use PragmaRX\Version\Package\Version;
 use PragmaRX\Version\Package\Version as VersionService;
 
 class VersionTest extends TestCase
@@ -465,7 +465,7 @@ class VersionTest extends TestCase
         $this->createGitTag(static::ABSORB_VERSION);
 
         $this->assertEquals(
-            "v".static::ABSORB_VERSION."-{$this->commit}",
+            'v'.static::ABSORB_VERSION."-{$this->commit}",
             $this->version->format('compact')
         );
 
@@ -484,7 +484,7 @@ class VersionTest extends TestCase
         config(['version.mode' => Constants::MODE_INCREMENT]);
 
         $this->assertEquals(
-            "v".static::ABSORB_VERSION."-{$this->commit}",
+            'v'.static::ABSORB_VERSION."-{$this->commit}",
             $this->version->format('compact')
         );
     }
@@ -494,7 +494,7 @@ class VersionTest extends TestCase
         $this->createGitTag(static::ABSORB_VERSION);
 
         $this->assertEquals(
-            "v".static::ABSORB_VERSION."-{$this->commit}",
+            'v'.static::ABSORB_VERSION."-{$this->commit}",
             $this->version->format('compact')
         );
 
@@ -512,7 +512,7 @@ class VersionTest extends TestCase
         $this->createGitTag(static::ABSORB_VERSION);
 
         $this->assertEquals(
-            "v".static::ABSORB_VERSION."-{$this->commit}",
+            'v'.static::ABSORB_VERSION."-{$this->commit}",
             $this->version->format('compact')
         );
 

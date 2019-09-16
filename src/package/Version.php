@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Version\Package;
 
-use PragmaRX\Version\Package\Support\Timestamp;
 use Illuminate\Support\Str;
 use PragmaRX\Version\Package\Exceptions\MethodNotFound;
 use PragmaRX\Version\Package\Support\Absorb;
@@ -10,6 +9,7 @@ use PragmaRX\Version\Package\Support\Config;
 use PragmaRX\Version\Package\Support\Constants;
 use PragmaRX\Version\Package\Support\Git;
 use PragmaRX\Version\Package\Support\Increment;
+use PragmaRX\Version\Package\Support\Timestamp;
 use PragmaRX\Yaml\Package\Yaml;
 
 class Version
@@ -158,7 +158,7 @@ class Version
         $this->instantiateClass($absorb, 'absorb', Absorb::class, [
             $config,
             $git,
-            $timestamp
+            $timestamp,
         ]);
     }
 
@@ -273,7 +273,7 @@ class Version
      */
     public function isInAbsorbMode()
     {
-        return $this->config->get("mode") == Constants::MODE_ABSORB;
+        return $this->config->get('mode') == Constants::MODE_ABSORB;
     }
 
     /**
