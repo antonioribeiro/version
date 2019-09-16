@@ -9,6 +9,10 @@
 - "prerelease" and "buildmetadata" information to the version stack
 - Commit timestamp information to the version stack 
 
+## [0.3.0] - 2019-09-11
+### Added
+- Laravel 6 support
+
 ## [0.2.7] - 2018-03-16
 ### Added
 - Option "--ignore-errors" to version:absorb Artisan command

@@ -3,6 +3,7 @@
 namespace PragmaRX\Version\Package;
 
 use PragmaRX\Version\Package\Support\Timestamp;
+use Illuminate\Support\Str;
 use PragmaRX\Version\Package\Exceptions\MethodNotFound;
 use PragmaRX\Version\Package\Support\Absorb;
 use PragmaRX\Version\Package\Support\Config;
@@ -75,7 +76,7 @@ class Version
      */
     public function __call($name, array $arguments)
     {
-        if (starts_with($name, 'increment')) {
+        if (Str::startsWith($name, 'increment')) {
             return $this->increment->$name(...$arguments);
         }
 
