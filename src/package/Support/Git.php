@@ -77,7 +77,7 @@ class Git
     public function makeGitVersionRetrieverCommand($from = null)
     {
         return $this->searchAndReplaceRepository(
-            $this->config->get('git.version.' . $this->getFrom($from))
+            $this->config->get('git.version.'.$this->getFrom($from))
         );
     }
 
@@ -119,7 +119,7 @@ class Git
      */
     public function getGitCommitRetrieverCommand($from = null)
     {
-        return $this->config->get('git.commit.' . $this->getFrom($from));
+        return $this->config->get('git.commit.'.$this->getFrom($from));
     }
 
     public function getFrom($from = null)
@@ -136,7 +136,7 @@ class Git
      */
     public function getGitTimestampRetrieverCommand($from = null)
     {
-        return $this->config->get('git.date.' . $this->getFrom($from));
+        return $this->config->get('git.date.'.$this->getFrom($from));
     }
 
     /**

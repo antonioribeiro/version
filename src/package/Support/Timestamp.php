@@ -3,7 +3,6 @@
 namespace PragmaRX\Version\Package\Support;
 
 use Carbon\Carbon;
-use Illuminate\Support\Arr;
 
 class Timestamp
 {
@@ -41,12 +40,12 @@ class Timestamp
     public function explode($date)
     {
         return [
-            'year' => $date->year,
-            'month' => $date->month,
-            'day' => $date->day,
-            'hour' => $date->hour,
-            'minute' => $date->minute,
-            'second' => $date->second,
+            'year'     => $date->year,
+            'month'    => $date->month,
+            'day'      => $date->day,
+            'hour'     => $date->hour,
+            'minute'   => $date->minute,
+            'second'   => $date->second,
             'timezone' => (string) $date->timezone,
         ];
     }
