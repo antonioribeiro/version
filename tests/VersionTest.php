@@ -136,7 +136,7 @@ class VersionTest extends TestCase
             $this->config['current']['major'],
             $this->config['current']['minor'],
             $this->config['current']['patch'],
-            $this->config['current']['commit'],
+            $this->config['current']['commit']
         );
     }
 
