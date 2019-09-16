@@ -163,7 +163,7 @@ class Git
     public function getVersion($from = null)
     {
         return $this->getFromGit(
-            $this->makeGitVersionRetrieverCommand($from),
+            $this->makeGitVersionRetrieverCommand($from)
         );
     }
 
