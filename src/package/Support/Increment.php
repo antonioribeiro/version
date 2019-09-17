@@ -46,13 +46,17 @@ class Increment
      */
     public function incrementCommit($by = null)
     {
-        return $this->increment(function ($config) use ($by) {
+        $result = $this->increment(function ($config) use ($by) {
             $increment_by = $by ?: $config['commit']['increment-by'];
 
             $config['current']['commit'] = $this->incrementHex($config['current']['commit'], $increment_by);
 
             return $config;
         }, 'commit.number');
+
+        event(Constants::EVENT_COMMIT_INCREMENTED);
+
+        return $result;
     }
 
     /**
@@ -62,7 +66,7 @@ class Increment
      */
     public function incrementMajor()
     {
-        return $this->increment(function ($config) {
+        $result = $this->increment(function ($config) {
             $config['current']['major']++;
 
             $config['current']['minor'] = 0;
@@ -71,6 +75,10 @@ class Increment
 
             return $config;
         }, 'current.major');
+
+        event(Constants::EVENT_MAJOR_INCREMENTED);
+
+        return $result;
     }
 
     /**
@@ -80,13 +88,17 @@ class Increment
      */
     public function incrementMinor()
     {
-        return $this->increment(function ($config) {
+        $result = $this->increment(function ($config) {
             $config['current']['minor']++;
 
             $config['current']['patch'] = 0;
 
             return $config;
         }, 'current.minor');
+
+        event(Constants::EVENT_MINOR_INCREMENTED);
+
+        return $result;
     }
 
     /**
@@ -96,11 +108,15 @@ class Increment
      */
     public function incrementPatch()
     {
-        return $this->increment(function ($config) {
+        $result = $this->increment(function ($config) {
             $config['current']['patch']++;
 
             return $config;
         }, 'current.patch');
+
+        event(Constants::EVENT_PATCH_INCREMENTED);
+
+        return $result;
     }
 
     public function incrementHex($hex, $by = 1)

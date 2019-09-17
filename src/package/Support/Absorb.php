@@ -51,6 +51,8 @@ class Absorb
 
         $this->absorbTimestamp();
 
+        $this->fireEvent();
+
         return true;
     }
 
@@ -104,5 +106,13 @@ class Absorb
         $config['current']['timestamp'] = $this->timestamp->explode($date);
 
         $this->config->update($config);
+    }
+
+    /**
+     * Fire absorbed event.
+     */
+    public function fireEvent()
+    {
+        event(Constants::EVENT_VERSION_ABSORBED);
     }
 }

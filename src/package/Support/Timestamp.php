@@ -34,6 +34,8 @@ class Timestamp
 
         $this->config->update($config);
 
+        event(Constants::EVENT_TIMESTAMP_UPDATED);
+
         return (string) $timestamp;
     }
 
