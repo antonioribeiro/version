@@ -25,7 +25,7 @@ git:
     local: 'git rev-parse --verify HEAD'
     remote: 'git ls-remote {$repository}'
   branch: refs/heads/master
-  repository: "{{ env('VERSION_GIT_REMOTE_REPOSITORY') }}"
+  repository: '' ### you can use config() to get it here: {{ config('version.git.remote.repository') }}. Do not use env()
   version:
     local: 'git describe'
     remote: 'git ls-remote {$repository} | grep tags/ | grep -v {} | cut -d / -f 3 | sort --version-sort | tail -1'
