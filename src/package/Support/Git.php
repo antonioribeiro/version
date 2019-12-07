@@ -43,7 +43,7 @@ class Git
         );
 
         if (empty($matches[0])) {
-            throw new GitTagNotFound('No git tags found in this repository');
+            throw new GitTagNotFound('Unable to find git tags in this repository that matches the git.version.matcher pattern in version.yml');
         }
 
         return $matches;
