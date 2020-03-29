@@ -561,7 +561,6 @@ class VersionTest extends TestCase
                 config('version.current.timestamp.minute'),
                 config('version.current.timestamp.second')
             ),
-
             $this->version->format('timestamp-datetime')
         );
     }
