@@ -2,8 +2,8 @@
 
 namespace PragmaRX\Version\Package\Console\Commands;
 
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 class Base extends Command
 {
@@ -28,7 +28,7 @@ class Base extends Command
      */
     public function checkIfCanIncrement($type, $section)
     {
-        $method = sprintf("is%sInAbsorbMode", $section = Str::studly($section));
+        $method = sprintf('is%sInAbsorbMode', $section = Str::studly($section));
 
         if (app('pragmarx.version')->$method($type)) {
             $this->error(
