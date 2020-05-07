@@ -159,7 +159,7 @@ class Version
             $config,
             $git,
             $timestamp,
-            $this
+            $this,
         ]);
     }
 
