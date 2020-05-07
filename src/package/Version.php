@@ -159,6 +159,7 @@ class Version
             $config,
             $git,
             $timestamp,
+            $this
         ]);
     }
 
@@ -265,7 +266,7 @@ class Version
     }
 
     /**
-     * Get a properly formatted version.
+     * Is it in absorb mode?
      *
      * @param $type
      *
@@ -273,7 +274,45 @@ class Version
      */
     public function isInAbsorbMode()
     {
+        return $this->isVersionInAbsorbMode() ||
+            $this->isBuildInAbsorbMode() ||
+            $this->isVersionInAbsorbMode();
+    }
+
+    /**
+     * Is version in absorb mode?
+     *
+     * @param $type
+     *
+     * @return bool
+     */
+    public function isVersionInAbsorbMode()
+    {
         return $this->config->get('mode') == Constants::MODE_ABSORB;
+    }
+
+    /**
+     * Is build in absorb mode?
+     *
+     * @param $type
+     *
+     * @return bool
+     */
+    public function isBuildInAbsorbMode()
+    {
+        return $this->config->get('commit.mode') == Constants::MODE_ABSORB;
+    }
+
+    /**
+     * Is timestamp in absorb mode?
+     *
+     * @param $type
+     *
+     * @return bool
+     */
+    public function isTimestampInAbsorbMode()
+    {
+        return $this->config->get('current.timestamp.mode') == Constants::MODE_ABSORB;
     }
 
     /**

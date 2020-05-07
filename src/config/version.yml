@@ -9,6 +9,7 @@ current:
   buildmetadata:
   commit: 100001
   timestamp:
+    mode: absorb
     year:
     month:
     day:
@@ -17,6 +18,7 @@ current:
     second:
     timezone:
 commit:
+  mode: absorb
   length: 6
   increment-by: 1
 git:

@@ -3,6 +3,7 @@
 namespace PragmaRX\Version\Package\Support;
 
 use Carbon\Carbon;
+use PragmaRX\Version\Package\Version;
 
 class Absorb
 {
@@ -22,18 +23,25 @@ class Absorb
     protected $timestamp;
 
     /**
+     * @var Version
+     */
+    protected $version;
+
+    /**
      * Absorb constructor.
      *
      * @param Config
      * @param Git
      */
-    public function __construct(Config $config, Git $git, Timestamp $timestamp)
+    public function __construct(Config $config, Git $git, Timestamp $timestamp, Version $version)
     {
         $this->config = $config;
 
         $this->git = $git;
 
         $this->timestamp = $timestamp;
+
+        $this->version = $version;
     }
 
     /**
@@ -61,6 +69,10 @@ class Absorb
      */
     protected function absorbVersion()
     {
+        if (!$this->version->isVersionInAbsorbMode()) {
+            return;
+        }
+
         $version = $this->git->extractVersion(
             $this->git->getVersion()
         );
@@ -87,6 +99,10 @@ class Absorb
      */
     protected function absorbCommit()
     {
+        if (!$this->version->isBuildInAbsorbMode()) {
+            return;
+        }
+
         $config = $this->config->getRoot();
 
         $config['current']['commit'] = $this->git->getCommit() ?? null;
@@ -99,6 +115,10 @@ class Absorb
      */
     protected function absorbTimestamp()
     {
+        if (!$this->version->isTimestampInAbsorbMode()) {
+            return;
+        }
+
         $config = $this->config->getRoot();
 
         $date = Carbon::parse($this->git->getTimestamp()) ?? Carbon::now();
