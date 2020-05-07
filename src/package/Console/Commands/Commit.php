@@ -23,7 +23,7 @@ class Commit extends Base
      */
     public function handle()
     {
-        if ($this->checkIfCanIncrement('current')) {
+        if ($this->checkIfCanIncrement('current', 'build')) {
             $commit = app('pragmarx.version')->incrementCommit(
                 $this->option('increment-by')
             );

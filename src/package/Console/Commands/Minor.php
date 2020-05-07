@@ -23,7 +23,7 @@ class Minor extends Base
      */
     public function handle()
     {
-        if ($this->checkIfCanIncrement('current')) {
+        if ($this->checkIfCanIncrement('current', 'version')) {
             $number = app('pragmarx.version')->incrementMinor();
 
             $this->info("New minor version: {$number}");

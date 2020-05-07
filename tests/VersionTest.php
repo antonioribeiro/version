@@ -293,6 +293,8 @@ class VersionTest extends TestCase
     public function testCanRunCommands()
     {
         config(['version.mode' => Constants::MODE_INCREMENT]);
+        config(['version.current.timestamp.mode' => Constants::MODE_INCREMENT]);
+        config(['version.commit.mode' => Constants::MODE_INCREMENT]);
 
         Artisan::call('version:show');
 

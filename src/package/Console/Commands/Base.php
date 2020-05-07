@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Version\Package\Console\Commands;
 
+use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 
 class Base extends Command
@@ -25,11 +26,13 @@ class Base extends Command
      *
      * @return bool
      */
-    public function checkIfCanIncrement($type)
+    public function checkIfCanIncrement($type, $section)
     {
-        if (app('pragmarx.version')->isInAbsorbMode($type)) {
+        $method = sprintf("is%sInAbsorbMode", $section = Str::studly($section));
+
+        if (app('pragmarx.version')->$method($type)) {
             $this->error(
-                'Version is in git absorb mode, cannot be incremented'
+                "{$section} is in git absorb mode, cannot be incremented"
             );
 
             return false;

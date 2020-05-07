@@ -23,7 +23,7 @@ class Timestamp extends Base
      */
     public function handle()
     {
-        if ($this->checkIfCanIncrement('current')) {
+        if ($this->checkIfCanIncrement('current', 'timestamp')) {
             $number = app('pragmarx.version')->timestampToConfig();
 
             $this->info("New timestamp: {$number}");

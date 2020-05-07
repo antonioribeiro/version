@@ -23,7 +23,7 @@ class Patch extends Base
      */
     public function handle()
     {
-        if ($this->checkIfCanIncrement('current')) {
+        if ($this->checkIfCanIncrement('current', 'version')) {
             $number = app('pragmarx.version')->incrementPatch();
 
             $this->info("New patch: {$number}");
