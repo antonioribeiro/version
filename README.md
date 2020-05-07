@@ -14,7 +14,7 @@
 <p align="center">
     <a href="https://scrutinizer-version.com/g/antonioribeiro/version/?branch=master"><img alt="Coverage" src="https://img.shields.io/scrutinizer/coverage/g/antonioribeiro/version.svg?style=flat-square"></a>
     <a href="https://styleci.io/repos/112244465"><img alt="StyleCI" src="https://styleci.io/repos/112244465/shield"></a>
-    <a href="https://insight.sensiolabs.com/projects/0fd56820-866c-4f21-a6dd-cdc5db95c651"><img alt="SensioLabsInsight" src="https://img.shields.io/sensiolabs/i/0fd56820-866c-4f21-a6dd-cdc5db95c651.svg?style=flat-square"></a>
+    <a href="https://packagist.org/packages/pragmarx/version"><img alt="Downloads" src="https://img.shields.io/packagist/dt/pragmarx/version.svg?style=flat-square"></a>
 </p>
 
 ## Description
