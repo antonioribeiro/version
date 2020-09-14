@@ -211,6 +211,8 @@ class Version
     protected function searchAndReplaceVariables($string)
     {
         while (preg_match('/(\{\$(.*)\})/U', $string, $matches)) {
+            $old = $string;
+
             if (!is_null($value = $this->getCurrent($matches[2]))) {
                 $string = str_replace($matches[0], $value, $string);
             }
@@ -219,7 +221,11 @@ class Version
                 $string = str_replace($matches[0], $format, $string);
             }
 
-            return $this->searchAndReplaceVariables($string);
+            if ($old !== $string) {
+                return $this->searchAndReplaceVariables($string);
+            }
+
+            break;
         }
 
         while (preg_match('/'.$this->config->get('format.regex.optional_bracket').'/', $string, $matches)) {
