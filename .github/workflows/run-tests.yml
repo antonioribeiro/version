@@ -25,6 +25,10 @@ jobs:
 
       - name: Install dependencies
         run: |
+          git config --global user.email "acr@antoniocarlosribeiro.com"; git config --global user.name "Antonio Ribeiro"
+
+      - name: Install dependencies
+        run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --prefer-dist --no-interaction --no-suggest
 
       - name: Execute tests
