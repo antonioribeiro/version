@@ -13,18 +13,11 @@ jobs:
       matrix:
         php: [8.0]
         laravel: [8.*]
-        dependency-version: [prefer-lowest, prefer-stable]
         include:
           - laravel: 8.*
             testbench: 6.*
-          - laravel: 7.*
-            testbench: 6.*
-          - laravel: 6.*
-            testbench: 4.*
-          - laravel: 5.8.*
-            testbench: 3.8.*
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }}
 
     steps:
       - name: Checkout code
