@@ -3,7 +3,6 @@
 namespace PragmaRX\Version\Tests;
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
 use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
