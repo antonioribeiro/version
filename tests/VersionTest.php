@@ -2,6 +2,8 @@
 
 namespace PragmaRX\Version\Tests;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Blade;
 use PragmaRX\Version\Package\Exceptions\GitTagNotFound;
@@ -148,7 +150,7 @@ class VersionTest extends TestCase
 
     public function testCanGetVersionParts()
     {
-        config(['version.mode' => 'increment']);
+        $this->setConfig('mode', 'increment');
 
         $this->version->incrementMajor();
         $this->version->incrementMajor();
@@ -172,14 +174,14 @@ class VersionTest extends TestCase
 
     public function testGetCommitByNumber()
     {
-        config(['version.mode' => Constants::MODE_INCREMENT]);
+        $this->setConfig('mode', Constants::MODE_INCREMENT);
 
         $this->assertEquals($this->config['current']['commit'], $this->version->commit());
     }
 
     public function testAddFormat()
     {
-        config(['version.format.mine' => '{$major}-{$commit}']);
+        $this->setConfig('format.mine', '{$major}-{$commit}');
 
         $this->assertEquals("1-{$this->commit}", $this->version->format('mine'));
     }
@@ -233,7 +235,7 @@ class VersionTest extends TestCase
     {
         $commit = $this->config['current']['commit'];
 
-        config(['version.mode' => 'increment']);
+        $this->setConfig('mode', 'increment');
 
         $this->version->incrementCommit(); // +1
 
@@ -246,7 +248,7 @@ class VersionTest extends TestCase
 
     public function testIncrementMajor()
     {
-        config(['version.mode' => 'increment']);
+        $this->setConfig('mode', 'increment');
 
         $commit = $this->config['current']['commit'];
 
@@ -292,9 +294,9 @@ class VersionTest extends TestCase
 
     public function testCanRunCommands()
     {
-        config(['version.mode' => Constants::MODE_INCREMENT]);
-        config(['version.current.timestamp.mode' => Constants::MODE_INCREMENT]);
-        config(['version.commit.mode' => Constants::MODE_INCREMENT]);
+        $this->setConfig('mode', Constants::MODE_INCREMENT);
+        $this->setConfig('current.timestamp.mode', Constants::MODE_INCREMENT);
+        $this->setConfig('commit.mode', Constants::MODE_INCREMENT);
 
         Artisan::call('version:show');
 
@@ -375,14 +377,13 @@ class VersionTest extends TestCase
     {
         $this->assertEquals(config('version.mode'), Constants::MODE_ABSORB);
 
-        config(['version.mode' => Constants::MODE_INCREMENT]);
+        $this->setConfig('mode', Constants::MODE_INCREMENT);
 
         $this->assertEquals(config('version.mode'), Constants::MODE_INCREMENT);
 
         $this->version->loadConfig();
 
-        $a = config('version.mode');
-        $b = Constants::MODE_ABSORB;
+        $this->setConfig('mode', Constants::MODE_ABSORB);
 
         $this->assertEquals(config('version.mode'), Constants::MODE_ABSORB);
     }
@@ -408,11 +409,15 @@ class VersionTest extends TestCase
 
         $this->assertEquals($this->getFormattedVersion('v%s.%s.%s-%s'), $this->version->compact());
 
-        config([
-            'version.format.awesome' => 'awesome version {$major}.{$minor}.{$patch}',
-        ]);
+        $this->setConfig(
+            'format.awesome',
+            'awesome version {$major}.{$minor}.{$patch}'
+        );
 
-        $this->assertEquals($this->getFormattedVersion('awesome version %s.%s.%s'), $this->version->awesome());
+        $this->assertEquals(
+            $this->getFormattedVersion('awesome version %s.%s.%s'),
+            $this->version->awesome()
+        );
 
         $this->expectException(MethodNotFound::class);
 
@@ -462,7 +467,7 @@ class VersionTest extends TestCase
 
     public function testVersionAbsorbOff()
     {
-        config(['mode' => 'increment']);
+        $this->setConfig('mode', 'increment');
 
         $this->createGitTag(static::ABSORB_VERSION);
 
@@ -483,7 +488,7 @@ class VersionTest extends TestCase
 
         $this->version->loadConfig(base_path('config/version.yml'));
 
-        config(['version.mode' => Constants::MODE_INCREMENT]);
+        $this->setConfig('mode', Constants::MODE_INCREMENT);
 
         $this->assertEquals(
             'v'.static::ABSORB_VERSION."-{$this->commit}",
@@ -520,7 +525,7 @@ class VersionTest extends TestCase
 
         $this->absorbVersion();
 
-        config(['version.mode' => Constants::MODE_INCREMENT]);
+        $this->setConfig('mode', Constants::MODE_INCREMENT);
 
         $this->assertEquals(1, config('version.current.major'));
         $this->assertEquals(5, config('version.current.minor'));
@@ -537,7 +542,7 @@ class VersionTest extends TestCase
 
         $this->assertEquals(config('version.current.major'), 1);
 
-        config(['version.mode' => Constants::MODE_INCREMENT]);
+        $this->setConfig('mode', Constants::MODE_INCREMENT);
 
         Artisan::call('version:major');
 
@@ -604,10 +609,19 @@ class VersionTest extends TestCase
             $this->createGitTag(static::ABSORB_VERSION);
         }
 
-        config(['mode' => 'absorb']);
+        $this->setConfig('mode', 'absorb');
 
         Artisan::call('version:absorb');
 
         $this->config = $this->version->loadConfig(base_path('config/version.yml'));
+    }
+
+    public function setConfig($variable, $value)
+    {
+        $array = collect(config('version'))->toArray();
+
+        Arr::set($array, $variable, $value);
+
+        config(['version' => $array]);
     }
 }

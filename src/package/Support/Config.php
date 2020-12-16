@@ -60,7 +60,7 @@ class Config
      */
     public function getRoot()
     {
-        return config('version');
+        return collect(config('version'))->toArray();
     }
 
     /**

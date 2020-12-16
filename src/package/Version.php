@@ -229,7 +229,11 @@ class Version
         }
 
         while (preg_match('/'.$this->config->get('format.regex.optional_bracket').'/', $string, $matches)) {
-            $string = str_replace($matches[0], trim($matches['optional']) ? $matches['prefix'].$matches['spaces'].$matches['optional'] : '', $string);
+            if (count($matches) > 2) {
+                $string = str_replace($matches[0], trim($matches['optional']) ? $matches['prefix'].$matches['spaces'].$matches['optional'] : '', $string);
+            } else {
+                break;
+            }
         }
 
         return $string;
