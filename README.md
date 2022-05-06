@@ -63,7 +63,7 @@ MyApp version 2.0.1 - alpha 1227 (commit 49ffe2)
 
 ## Features
 
-### Easily control you app version using a YAML config file
+### Easily control you app version using a YAML config file (located in config/version.yml after publishing)
 
 ``` yaml
 version: 
