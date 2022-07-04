@@ -1,6 +1,6 @@
 {
-    "name": "pragmarx/version",
-    "description": "Take control over your Laravel app version",
+    "name": "butcherman/version",
+    "description": "This is a forked repository of antonioribeiro/version modified to support Laravel 9",
     "keywords": [
         "laravel",
         "version",
@@ -12,6 +12,10 @@
             "name": "Antonio Carlos Ribeiro",
             "email": "acr@antoniocarlosribeiro.com",
             "role": "Creator & Designer"
+        },
+        {
+            "name": "The Butcherman",
+            "role": "Copycat"
         }
     ],
     "require": {
