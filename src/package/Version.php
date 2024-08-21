@@ -67,7 +67,7 @@ class Version
     /**
      * Dynamically call format types.
      *
-     * @param $name
+     * @param       $name
      * @param array $arguments
      *
      * @throws MethodNotFound
@@ -166,9 +166,9 @@ class Version
     /**
      * Instantiate a class.
      *
-     * @param $instance  object
-     * @param $property  string
-     * @param $class     string
+     * @param $instance object
+     * @param $property string
+     * @param $class    string
      *
      * @return Yaml|object
      */

@@ -142,8 +142,8 @@ class Git
     /**
      * Execute a shell command to retrieve git values.
      *
-     * @param $command
-     * @param $keySuffix
+     * @param     $command
+     * @param     $keySuffix
      * @param int $length
      *
      * @return bool|mixed|null|string

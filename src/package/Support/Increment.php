@@ -22,7 +22,7 @@ class Increment
      * Get a properly formatted version.
      *
      * @param \Closure $incrementer
-     * @param $returnKey
+     * @param          $returnKey
      *
      * @return string
      */

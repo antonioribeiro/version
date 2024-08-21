@@ -41,7 +41,7 @@ class Config
     /**
      * Get config value.
      *
-     * @param $string
+     * @param            $string
      * @param mixed|null $default
      *
      * @return \Illuminate\Config\Repository|mixed
@@ -66,7 +66,7 @@ class Config
     /**
      * Checkf it has a config value.
      *
-     * @param $string
+     * @param            $string
      * @param mixed|null $default
      *
      * @return \Illuminate\Config\Repository|mixed
