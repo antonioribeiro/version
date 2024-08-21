@@ -21,8 +21,8 @@ class Cache
     /**
      * Add something to the cache.
      *
-     * @param $key
-     * @param $value
+     * @param     $key
+     * @param     $value
      * @param int $minutes
      */
     public function put($key, $value, $minutes = 10)
